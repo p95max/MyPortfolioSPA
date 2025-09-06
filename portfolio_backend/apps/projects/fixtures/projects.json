@@ -1,0 +1,14 @@
+[
+  {
+    "model": "projects.project",
+    "pk": 1,
+    "fields": {
+      "title": "My Portfolio SPA",
+      "description": "Test",
+      "tech_stack": "Django, DRF, React",
+      "github_link": "https://github.com/p95max/myportfolio-spa",
+      "demo_link": "",
+      "created_at": "2025-09-06T13:00:00Z"
+    }
+  }
+]

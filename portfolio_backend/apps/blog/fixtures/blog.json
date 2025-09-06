@@ -1,0 +1,20 @@
+[
+  {
+    "model": "blog.Post",
+    "pk": 1,
+    "fields": {
+      "title": "1st post",
+      "content": "post text",
+      "created_at": "2025-09-06T13:00:00Z"
+    }
+  },
+  {
+    "model": "blog.Post",
+    "pk": 2,
+    "fields": {
+      "title": "2nd post",
+      "content": "post text API.",
+      "created_at": "2025-09-06T14:00:00Z"
+    }
+  }
+]

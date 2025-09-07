@@ -17,7 +17,7 @@ services:
       context: ./portfolio_backend
       dockerfile: Dockerfile
     container_name: myportfoliospa-web
-    command: gunicorn portfolio_backend.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn portfolio_backend.wsgi:application --bind 0.0.0.0:8000 --workers 4
     volumes:
       - ./portfolio_backend:/app
     env_file:
@@ -30,28 +30,15 @@ services:
   frontend:
     build:
       context: ./portfolio_frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: myportfoliospa-frontend
-    command: npm run build
+    command: npm run dev
     volumes:
       - ./portfolio_frontend:/app
-    depends_on:
-      - web
-
-  nginx:
-    image: nginx:1.29
-    container_name: myportfoliospa-nginx
     ports:
-      - "80:80"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - static_volume:/app/static
-      - media_volume:/app/media
+      - "5173:5173"
     depends_on:
       - web
-      - frontend
 
 volumes:
   postgres_data:
-  static_volume:
-  media_volume:

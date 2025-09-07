@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: myportfoliospa-db
+    restart: always
+    env_file:
+      - .env.postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build:
+      context: ./portfolio_backend
+      dockerfile: Dockerfile
+    container_name: myportfoliospa-web
+    command: gunicorn portfolio_backend.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./portfolio_backend:/app
+    env_file:
+      - .env.backend
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./portfolio_frontend
+      dockerfile: Dockerfile
+    container_name: myportfoliospa-frontend
+    command: npm run build
+    volumes:
+      - ./portfolio_frontend:/app
+    depends_on:
+      - web
+
+  nginx:
+    image: nginx:1.29
+    container_name: myportfoliospa-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/app/static
+      - media_volume:/app/media
+    depends_on:
+      - web
+      - frontend
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

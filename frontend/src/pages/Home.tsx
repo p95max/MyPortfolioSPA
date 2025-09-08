@@ -1,3 +1,5 @@
+import aboutText from '../components/aboutText';
+
 export const Home = () => (
   <div
     style={{
@@ -27,18 +29,17 @@ export const Home = () => (
     >
       Welcome <br /> to My SPA (Single Page Application) Portfolio
     </h1>
-    <p
+    <pre
       style={{
-        fontSize: '1.2rem',
+        whiteSpace: 'pre-wrap',
+        fontSize: '1.1rem',
         lineHeight: 1.6,
         marginBottom: 24,
         color: '#0070f3',
-        whiteSpace: 'normal',
-        wordWrap: 'break-word',
-        wordBreak: 'break-word',
+        textAlign: 'left',
       }}
     >
-      Hi! I’m a full-stack developer passionate about building modern web applications. Explore my projects and feel free to get in touch.
-    </p>
+      {aboutText}
+    </pre>
   </div>
 );

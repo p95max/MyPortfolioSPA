@@ -35,7 +35,7 @@ export const Navbar = () => {
         WebkitBackdropFilter: 'blur(10px)',
       }}
     >
-      <Link to="/" style={{ marginRight: 15 }}>Home</Link>
+      <Link to="/" style={{ marginRight: 15 }}>About me</Link>
       <Link to="/projects" style={{ marginRight: 15 }}>Projects</Link>
       <Link to="/contact">Contact</Link>
     </nav>

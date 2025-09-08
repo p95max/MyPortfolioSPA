@@ -16,6 +16,5 @@ I am looking for an opportunity for professional growth in a friendly team with 
 My core values are stability, development, honesty, and humanity.
 I have a residence permit in Germany and am open to remote work.
 
-Telegram: @max_p95
 `;
 export default aboutText;

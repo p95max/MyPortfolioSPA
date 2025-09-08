@@ -1,136 +1,51 @@
-# Portfolio Backend
+# Backend - Django API
 
-This is the backend for the Portfolio SPA project. It is built with **Django 5** and **Django REST Framework** and provides APIs for projects, blog posts, and contact messages. The backend uses **PostgreSQL** as the database and **Gunicorn** as the WSGI server. Static and media files are served via **Nginx** in Docker.
-
----
+This is the backend service for the portfolio SPA project, built with Django and Django REST Framework.
 
 ## Features
 
-* REST API endpoints for:
+- REST API for portfolio data
+- PostgreSQL database integration
+- Environment variables support via `.env`
+- Dependency management with Poetry
 
-  * Projects
-  * Blog posts
-  * Contacts
-* CORS enabled via `django-cors-headers`
-* API schema and documentation with `drf-spectacular`
-* PostgreSQL database integration
-* Dockerized setup with separate containers for backend, database, and Nginx
-* Gunicorn for production-ready WSGI server
+## Setup
 
----
-
-## Requirements
-
-* Python 3.12
-* Poetry
-* Docker & Docker Compose
-* PostgreSQL (for local development if not using Docker)
-
----
-
-## Installation
-
-1. Clone the repository:
+1. Install dependencies:
 
 ```bash
-    git clone https://github.com/yourusername/portfolio-backend.git
-    cd portfolio-backend
+  poetry install
 ```
 
-2. Install dependencies with Poetry:
-
-```bash
-    poetry install
-```
-
-3. Set up environment variables:
-
-Create a `.env` file with the following content:
+2. Configure environment variables in `.env` file:
 
 ```env
-POSTGRES_DB=portfolio_db
-POSTGRES_USER=youruser
-POSTGRES_PASSWORD=yourpassword
-DB_PORT=5432
-SECRET_KEY=your_django_secret_key
-DEBUG=True
+POSTGRES_DB=your_db_name
+POSTGRES_USER=your_db_user
+POSTGRES_PASSWORD=your_db_password
+DATABASE_URL=postgres://user:password@db:5432/your_db_name
 ```
 
----
-
-## Running with Docker
-
-1. Build and start the containers:
+3. Run migrations:
 
 ```bash
-    docker compose up --build
+  poetry run python manage.py migrate
 ```
 
-2. Access the services:
-
-* Backend API: `http://localhost:8000/api/`
-* Swagger docs: `http://localhost:8000/api/docs/`
-
----
-
-## Running Locally (Without Docker)
-
-1. Apply migrations:
+4. Start the development server:
 
 ```bash
-    python manage.py migrate
+  poetry run python manage.py runserver 0.0.0.0:8000
 ```
 
-2. Create a superuser (optional, for admin panel):
+## Docker
+
+Build and run with Docker Compose:
 
 ```bash
-    python manage.py createsuperuser
+  docker-compose up --build
 ```
-
-3. Run the development server:
-
-```bash
-    python manage.py runserver
-```
-
----
 
 ## API Documentation
 
-API schema is available at:
-
-```
-http://localhost:8000/api/schema/
-```
-
-Swagger UI:
-
-```
-http://localhost:8000/api/docs/
-```
-
----
-
-## Project Structure
-
-```
-portfolio_backend/
-├── apps/
-│   ├── projects/
-│   ├── blog/
-│   └── contacts/
-├── portfolio_backend/
-│   ├── settings.py
-│   └── urls.py
-├── staticfiles/
-├── media/
-├── Dockerfile
-├── docker-compose.yml
-└── pyproject.toml
-```
-
----
-
-## License
-
-This project is licensed under the MIT License.
+Swagger UI is available at `/swagger/` endpoint.

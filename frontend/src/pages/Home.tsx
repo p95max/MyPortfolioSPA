@@ -21,7 +21,7 @@ export const Home = () => (
       style={{
         fontSize: '2.8rem',
         marginBottom: 16,
-        color: '#0070f3',
+        color: '#073872',
         whiteSpace: 'normal',
         wordWrap: 'break-word',
         wordBreak: 'break-word',

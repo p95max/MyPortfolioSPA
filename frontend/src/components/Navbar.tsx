@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export const Navbar = () => {
+  const location = useLocation();
+
   const [isDark, setIsDark] = useState(
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   );
@@ -16,6 +18,12 @@ export const Navbar = () => {
 
   const bgColor = isDark ? 'rgba(36, 36, 36, 0.8)' : 'rgba(255, 255, 255, 0.8)';
   const boxShadowColor = isDark ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)';
+
+  const links = [
+    { to: '/', label: 'About me' },
+    { to: '/projects', label: 'My Projects' },
+    { to: '/contact', label: 'Contact me' },
+  ];
 
   return (
     <nav
@@ -35,9 +43,13 @@ export const Navbar = () => {
         WebkitBackdropFilter: 'blur(10px)',
       }}
     >
-      <Link to="/" style={{ marginRight: 15 }}>About me</Link>
-      <Link to="/projects" style={{ marginRight: 15 }}>Projects</Link>
-      <Link to="/contact">Contact</Link>
+      {links.map(({ to, label }) =>
+        location.pathname === to ? null : (
+          <Link key={to} to={to} style={{ marginRight: 15 }}>
+            {label}
+          </Link>
+        )
+      )}
     </nav>
   );
 };

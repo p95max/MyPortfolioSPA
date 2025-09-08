@@ -15,8 +15,8 @@ This project is a Single Page Application portfolio consisting of a React fronte
 1. Clone the repository:
 
 ```bash
-    git clone https://github.com/yourusername/yourrepo.git
-    cd yourrepo
+git clone https://github.com/yourusername/yourrepo.git
+cd yourrepo
 ```
 
 2. Create `.env` file with database credentials.
@@ -24,7 +24,7 @@ This project is a Single Page Application portfolio consisting of a React fronte
 3. Build and start all services:
 
 ```bash
-    docker-compose up --build
+docker-compose up --build
 ```
 
 4. Access frontend at `http://localhost:3000` and backend API at `http://localhost:8000`.

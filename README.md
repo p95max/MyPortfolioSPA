@@ -43,20 +43,20 @@ For your models to appear in the Django Admin, you need to register them in the 
 In `backend/your_app_name/admin.py`:
 
 ```python
-    from django.contrib import admin
-    from .models import Project, Skill, Contact  # Replace with your actual models
-    
-    @admin.register(Project)
-    class ProjectAdmin(admin.ModelAdmin):
-        list_display = ('title', 'status', 'created_at')  # Customize displayed fields
-    
-    @admin.register(Skill)
-    class SkillAdmin(admin.ModelAdmin):
-        list_display = ('name', 'level')
-    
-    @admin.register(Contact)
-    class ContactAdmin(admin.ModelAdmin):
-        list_display = ('name', 'email', 'subject')
+from django.contrib import admin
+from .models import Project, Skill, Contact  # Replace with your actual models
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('title', 'status', 'created_at')  # Customize displayed fields
+
+@admin.register(Skill)
+class SkillAdmin(admin.ModelAdmin):
+    list_display = ('name', 'level')
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject')
 ```
 
 ### 2. Create a Superuser

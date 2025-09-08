@@ -22,6 +22,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
+ADMIN_URL = os.getenv('DJANGO_ADMIN_URL', 'admin')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

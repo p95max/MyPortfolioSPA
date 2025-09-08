@@ -33,6 +33,7 @@ DATABASES = {
     }
 }
 
+
 ALLOWED_HOSTS = []
 
 

@@ -16,5 +16,5 @@ export const projects: Project[] = [
     techStack: ['Django', 'React', 'PostgreSQL'],
     githubUrl: 'https://github.com/yourusername/blog-platform',
   },
-  // Добавь свои проекты
+
 ];

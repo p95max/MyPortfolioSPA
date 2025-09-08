@@ -1,44 +1,49 @@
-version: "3.9"
-
 services:
   db:
-    image: postgres:16
-    container_name: myportfoliospa-db
-    restart: always
+    image: postgres:15
     env_file:
-      - .env.postgres
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - mynetwork
 
   web:
     build:
-      context: ./portfolio_backend
-      dockerfile: Dockerfile
-    container_name: myportfoliospa-web
-    command: gunicorn portfolio_backend.wsgi:application --bind 0.0.0.0:8000 --workers 4
+      context: .
+      dockerfile: backend/Dockerfile
+    command: poetry run python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./portfolio_backend:/app
-    env_file:
-      - .env.backend
-    depends_on:
-      - db
+      - ./backend:/app
     ports:
       - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
 
   frontend:
-    build:
-      context: ./portfolio_frontend
-      dockerfile: Dockerfile.dev
-    container_name: myportfoliospa-frontend
-    command: npm run dev
-    volumes:
-      - ./portfolio_frontend:/app
+    image: nginx:alpine
     ports:
-      - "5173:5173"
+      - "3000:80"
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - web
+    networks:
+      - mynetwork
 
 volumes:
-  postgres_data:
+  pgdata:
+
+networks:
+  mynetwork:

@@ -4,7 +4,6 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
-import { ProjectDetails } from './pages/ProjectDetails';
 import { Contact } from './pages/Contact';
 
 export const App = () => {
@@ -18,7 +17,6 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/project/:id" element={<ProjectDetails />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
       <Footer />

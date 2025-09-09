@@ -18,6 +18,6 @@ export const Footer = () => (
       zIndex: 1000,
     }}
   >
-    © 2025 p95max. All rights reserved.
+    © 2025 by p95max. All rights reserved.
   </footer>
 );

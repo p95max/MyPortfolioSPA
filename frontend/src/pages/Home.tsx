@@ -27,7 +27,7 @@ export const Home = () => {
         style={{
           fontSize: '2.8rem',
           marginBottom: 16,
-          color: '#073872',
+          color: '#9fbce3',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
           wordBreak: 'break-word',

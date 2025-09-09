@@ -83,7 +83,7 @@ export const Home = () => {
       </div>
 
       <iframe
-        src={lang === 'DE' ? '/resumeDE.pdf' : '/resumeDE.pdf'}
+        src={lang === 'DE' ? '/resumeDE.pdf' : '/resumeENG.pdf'}
         width="100%"
         height="800px"
         title={`Resume ${lang}`}

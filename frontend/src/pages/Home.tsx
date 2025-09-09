@@ -1,10 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import aboutText from '../components/aboutText';
 
 export const Home = () => {
   useEffect(() => {
     document.title = 'My SPA Portfolio';
   }, []);
+
+  const [lang, setLang] = useState('DE'); // 'DE' или 'EN'
 
   return (
     <div
@@ -35,18 +38,57 @@ export const Home = () => {
       >
         Welcome <br /> to My SPA (Single Page Application) Portfolio
       </h1>
-      <pre
+      <div
         style={{
-          whiteSpace: 'pre-wrap',
           fontSize: '1.1rem',
           lineHeight: 1.6,
           marginBottom: 24,
           color: '#0070f3',
           textAlign: 'left',
+          whiteSpace: 'normal',
         }}
       >
-        {aboutText}
-      </pre>
+        <ReactMarkdown>{aboutText}</ReactMarkdown>
+      </div>
+
+        <h1 style={{color: '#0070f3'}}>My resumes:</h1>
+      <div style={{ marginBottom: 20 }}>
+        <button
+          onClick={() => setLang('DE')}
+          style={{
+            padding: '10px 20px',
+            marginRight: 10,
+            backgroundColor: lang === 'DE' ? '#0070f3' : '#eee',
+            color: lang === 'DE' ? '#fff' : '#000',
+            border: 'none',
+            borderRadius: 4,
+            cursor: 'pointer',
+          }}
+        >
+          Deutsch
+        </button>
+        <button
+          onClick={() => setLang('EN')}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: lang === 'EN' ? '#0070f3' : '#eee',
+            color: lang === 'EN' ? '#fff' : '#000',
+            border: 'none',
+            borderRadius: 4,
+            cursor: 'pointer',
+          }}
+        >
+          English
+        </button>
+      </div>
+
+      <iframe
+        src={lang === 'DE' ? '/resumeDE.pdf' : '/resumeDE.pdf'}
+        width="100%"
+        height="800px"
+        title={`Resume ${lang}`}
+        style={{ border: '1px solid #ccc', borderRadius: 8 }}
+      />
     </div>
   );
 };

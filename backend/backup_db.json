@@ -1,7 +1,7 @@
 [
   {
-    "model": "yourappname.project",
-    "pk": 4,
+    "model": "portfolio_backup.project",
+    "pk": 1,
     "fields": {
       "title": "Portfolio SPA Project",
       "description": "This project is a Single Page Application portfolio consisting of a React frontend and a Django backend, containerized with Docker.",
@@ -10,14 +10,27 @@
       "demo_url": ""
     }
   },
+
   {
-    "model": "yourappname.project",
-    "pk": 3,
+    "model": "portfolio_backup.project",
+    "pk": 2,
     "fields": {
       "title": "DemoWallet",
       "description": "DemoWallet is a modern MVP for a digital wallet and payment system, built with Django 5, Django REST Framework, and PostgreSQL. It supports user registration, KYC, P2P transfers, merchant payments, transaction ledger, and dispute management.",
       "tech_stack": "#Django #Python #Monolith #Docker #nginx #PostgreSQL",
       "github_url": "https://github.com/p95max/DemoWallet",
+      "demo_url": ""
+    }
+  },
+
+    {
+    "model": "portfolio_backup.project",
+    "pk": 3,
+    "fields": {
+      "title": "AutoService_Book",
+      "description": "AutoService Book is your reliable assistant for tracking and managing your car’s service history. This web application, built as a portfolio project, showcases skills in Django development, database management, and creating user-friendly interfaces.",
+      "tech_stack": "#Django #Python #Finance #Docker #nginx #PostgreSQL",
+      "github_url": "https://github.com/p95max/AutoService_Book",
       "demo_url": ""
     }
   }

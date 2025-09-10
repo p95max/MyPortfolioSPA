@@ -3,7 +3,7 @@ python manage.py dumpdata portfolio_backend > backup_db.json
 
 # docker
 docker compose up --build
-docker down
+docker compose down
 
 # front
 npm run build

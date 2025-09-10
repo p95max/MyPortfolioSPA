@@ -50,7 +50,6 @@ export const Home = () => {
       >
         <ReactMarkdown>{aboutText}</ReactMarkdown>
       </div>
-
         <h1 style={{color: '#0070f3'}}>My resumes:</h1>
       <div style={{ marginBottom: 20 }}>
         <button
@@ -81,7 +80,6 @@ export const Home = () => {
           English
         </button>
       </div>
-
       <iframe
         src={lang === 'DE' ? '/resumeDE.pdf' : '/resumeENG.pdf'}
         width="100%"

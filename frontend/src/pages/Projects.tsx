@@ -16,7 +16,14 @@ function toCamelCase(project: any): Project {
   };
 }
 
-const USE_TEST_DATA = false; // switcher local=true/backend=false
+
+const USE_TEST_DATA = false;
+
+
+const API_HOST = import.meta.env.VITE_API_URL;
+const API_BASE = API_HOST && API_HOST.startsWith('http')
+  ? API_HOST
+  : (API_HOST ? `https://${API_HOST}` : 'http://localhost:8000');
 
 export const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -25,56 +32,40 @@ export const Projects = () => {
 
   useEffect(() => {
     if (USE_TEST_DATA) {
-      console.log('Using test projects:', testProjects);
       setProjects(testProjects);
       setLoading(false);
-    } else {
-      fetch('http://localhost:8000/api/projects/')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data: any) => {
-          console.log('API response:', data);
-          const projectsArray = Array.isArray(data) ? data : data.projects || [];
-          const projects = projectsArray.map(toCamelCase);
-          console.log('Mapped projects:', projects);
-          setProjects(projects);
-          setLoading(false);
-        })
-        .catch(err => {
-          setError(err.message);
-          setLoading(false);
-        });
+      return;
     }
+
+    fetch(`${API_BASE}/api/projects/`)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json();
+      })
+      .then((data: any) => {
+        const projectsArray = Array.isArray(data) ? data : data.projects || [];
+        const mapped = projectsArray.map(toCamelCase);
+        setProjects(mapped);
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <p>Loading projects...</p>;
   if (error) return <p>Error loading projects: {error}</p>;
 
   return (
-    <div
-      style={{
-        padding: 20,
-        maxWidth: 800,
-        margin: '0 auto',
-      }}
-    >
+    <div style={{ padding: 20, maxWidth: 800, margin: '0 auto' }}>
       <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Projects</h1>
       {projects.length === 0 ? (
         <p style={{ textAlign: 'center' }}>No projects found.</p>
       ) : (
-        <div style={{ display: 'block' }}>
-          {projects.map(project => {
-            console.log('Rendering project:', project);
-            return (
-              <div key={project.id} style={{ marginBottom: 20 }}>
-                <ProjectCard project={project} />
-              </div>
-            );
-          })}
+        <div>
+          {projects.map(project => (
+            <div key={project.id} style={{ marginBottom: 20 }}>
+              <ProjectCard project={project} />
+            </div>
+          ))}
         </div>
       )}
     </div>

@@ -18,6 +18,11 @@ RUN poetry install --no-interaction --no-ansi
 
 COPY . /app/
 
+RUN poetry run python manage.py collectstatic --no-input
+
+COPY entrypoint.sh /app/
+RUN chmod +x /app/entrypoint.sh
+
 EXPOSE 8000
 
-CMD ["poetry", "run", "gunicorn", "portfolio_backend.wsgi", "--bind", "0.0.0.0:8000", "--log-file", "-"]
+CMD ["/app/entrypoint.sh"]

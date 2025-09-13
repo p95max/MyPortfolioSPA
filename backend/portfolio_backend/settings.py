@@ -15,7 +15,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
 
-ADMIN_URL = os.getenv('DJANGO_ADMIN_URL', 'admin')
+ADMIN_URL = os.getenv('DJANGO_ADMIN_URL', 'admin/')
 
 ALLOWED_HOSTS = [
     'localhost',

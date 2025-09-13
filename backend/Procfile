@@ -1,0 +1,1 @@
+web: poetry run gunicorn portfolio_backend.wsgi --bind 0.0.0.0:$PORT --log-file -

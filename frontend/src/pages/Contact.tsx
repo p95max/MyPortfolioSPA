@@ -12,28 +12,28 @@ export const Contact = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
+  e.preventDefault();
+  setError(null);
 
-    try {
-      const response = await fetch('http://localhost:8000/api/contact/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(form),
-      });
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contact/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+    });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Failed to send message');
-      }
-
-      setSubmitted(true);
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong');
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || 'Failed to send message');
     }
-  };
+
+    setSubmitted(true);
+  } catch (err: any) {
+    setError(err.message || 'Something went wrong');
+  }
+};
 
   if (submitted)
     return (

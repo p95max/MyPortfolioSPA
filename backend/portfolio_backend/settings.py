@@ -118,7 +118,8 @@ if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
     CORS_ALLOWED_ORIGINS = [
-        "https://portfolio-frontend.onrender.com",
+        "https://myportfoliospa-frontend.onrender.com"
+
     ]
 
 if not DEBUG:

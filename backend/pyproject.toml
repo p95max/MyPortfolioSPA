@@ -13,6 +13,9 @@ django-cors-headers = "^4.7.0"
 drf-yasg = "^1.21.10"
 psycopg2-binary = "^2.9.10"
 python-dotenv = "^1.1.1"
+dj-database-url = "^3.0.1"
+whitenoise = "^6.10.0"
+gunicorn = "^23.0.0"
 
 
 [build-system]

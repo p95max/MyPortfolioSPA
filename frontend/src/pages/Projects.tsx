@@ -19,7 +19,11 @@ function toCamelCase(project: any): Project {
 
 const USE_TEST_DATA = false;
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+const API_HOST = import.meta.env.VITE_API_URL;
+const API_BASE = API_HOST && API_HOST.startsWith('http')
+  ? API_HOST
+  : (API_HOST ? `https://${API_HOST}` : 'http://localhost:8000');
 
 export const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -28,30 +32,23 @@ export const Projects = () => {
 
   useEffect(() => {
     if (USE_TEST_DATA) {
-      console.log('Using test projects:', testProjects);
       setProjects(testProjects);
       setLoading(false);
-    } else {
-      fetch(`${API_URL}/api/projects/`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data: any) => {
-          console.log('API response:', data);
-          const projectsArray = Array.isArray(data) ? data : data.results || data.projects || [];
-          const projects = projectsArray.map(toCamelCase);
-          setProjects(projects);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error('Error loading projects:', err);
-          setError(err.message);
-          setLoading(false);
-        });
+      return;
     }
+
+    fetch(`${API_BASE}/api/projects/`)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json();
+      })
+      .then((data: any) => {
+        const projectsArray = Array.isArray(data) ? data : data.projects || [];
+        const mapped = projectsArray.map(toCamelCase);
+        setProjects(mapped);
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <p>Loading projects...</p>;
@@ -63,7 +60,7 @@ export const Projects = () => {
       {projects.length === 0 ? (
         <p style={{ textAlign: 'center' }}>No projects found.</p>
       ) : (
-        <div style={{ display: 'block' }}>
+        <div>
           {projects.map(project => (
             <div key={project.id} style={{ marginBottom: 20 }}>
               <ProjectCard project={project} />

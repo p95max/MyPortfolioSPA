@@ -13,15 +13,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY pyproject.toml poetry.lock* /app/
 
 RUN pip install --upgrade pip && pip install "poetry==1.7.1"
-
 RUN poetry install --no-interaction --no-ansi
 
 COPY . /app/
 
 RUN poetry run python manage.py collectstatic --no-input
 
-COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
+COPY entrypoint.sh /app/entrypoint.sh
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 EXPOSE 8000
 

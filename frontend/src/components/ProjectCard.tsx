@@ -3,7 +3,7 @@ import type { Project } from '../types';
 const iconStyle = { width: 20, height: 20, marginRight: 8, verticalAlign: 'middle' };
 
 type TechStackProps = {
-  techStack: string[]; // массив строк
+  techStack: string[];
 };
 
 

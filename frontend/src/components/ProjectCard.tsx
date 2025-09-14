@@ -6,6 +6,7 @@ type TechStackProps = {
   techStack: string[];
 };
 
+
 const TechStack = ({ techStack }: TechStackProps) => {
   return (
     <p style={{ whiteSpace: 'normal', wordWrap: 'break-word', wordBreak: 'break-word' }}>

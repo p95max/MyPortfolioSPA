@@ -16,7 +16,9 @@ function toCamelCase(project: any): Project {
   };
 }
 
-const USE_TEST_DATA = false; // switcher local=true/backend=false
+const USE_TEST_DATA = false;
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -29,7 +31,7 @@ export const Projects = () => {
       setProjects(testProjects);
       setLoading(false);
     } else {
-      fetch('http://localhost:8000/api/projects/')
+      fetch(`${API_URL}/api/projects/`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -38,13 +40,13 @@ export const Projects = () => {
         })
         .then((data: any) => {
           console.log('API response:', data);
-          const projectsArray = Array.isArray(data) ? data : data.projects || [];
+          const projectsArray = Array.isArray(data) ? data : data.results || data.projects || [];
           const projects = projectsArray.map(toCamelCase);
-          console.log('Mapped projects:', projects);
           setProjects(projects);
           setLoading(false);
         })
         .catch(err => {
+          console.error('Error loading projects:', err);
           setError(err.message);
           setLoading(false);
         });
@@ -55,26 +57,17 @@ export const Projects = () => {
   if (error) return <p>Error loading projects: {error}</p>;
 
   return (
-    <div
-      style={{
-        padding: 20,
-        maxWidth: 800,
-        margin: '0 auto',
-      }}
-    >
+    <div style={{ padding: 20, maxWidth: 800, margin: '0 auto' }}>
       <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Projects</h1>
       {projects.length === 0 ? (
         <p style={{ textAlign: 'center' }}>No projects found.</p>
       ) : (
         <div style={{ display: 'block' }}>
-          {projects.map(project => {
-            console.log('Rendering project:', project);
-            return (
-              <div key={project.id} style={{ marginBottom: 20 }}>
-                <ProjectCard project={project} />
-              </div>
-            );
-          })}
+          {projects.map(project => (
+            <div key={project.id} style={{ marginBottom: 20 }}>
+              <ProjectCard project={project} />
+            </div>
+          ))}
         </div>
       )}
     </div>

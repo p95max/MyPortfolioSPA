@@ -4,9 +4,9 @@ This project is a Single Page Application portfolio consisting of a React fronte
 
 ## Architecture
 
-- **Backend:** Django REST API with PostgreSQL database
-- **Frontend:** React SPA served by Nginx
-- **Database:** PostgreSQL
+- **Backend:** Django REST API
+- **Frontend:** React + VITE, served by Nginx
+- **Database:** PostgreSQL 17
 - **Containerization:** Docker Compose orchestrates all services
 
 
@@ -15,8 +15,8 @@ This project is a Single Page Application portfolio consisting of a React fronte
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/yourrepo.git
-cd yourrepo
+git clone https://github.com/p95max/MyPortfolioSPA.git
+cd MyPortfolioSPA
 ```
 
 2. Create `.env` file with database credentials.
@@ -40,7 +40,7 @@ For your models to appear in the Django Admin, you need to register them in the 
 
 **Example:**
 
-In `backend/your_app_name/admin.py`:
+In `backend/MyPortfolioSPA/admin.py`:
 
 ```python
 from django.contrib import admin
@@ -59,33 +59,11 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'subject')
 ```
 
-### 2. Create a Superuser
+### 3. Automated Superuser Creation
 
-You need a superuser account to log in to the Django Admin.
+A Django superuser account is essential for accessing the Admin interface. In this setup, the superuser is **automatically created by a script** (`backend/create_superuser.py`) during the `web` service startup, but only if it doesn't already exist.
+Superuser credentials are provided via your `.env` file (check **backend/env.example**) in backend:
 
-**Steps:**
-
-1. Ensure your Docker containers are running:
-
-```bash
-    docker-compose up -d
-```
-
-2. Execute the `createsuperuser` command inside your web container:
-
-```bash
-    docker-compose exec web poetry run python manage.py createsuperuser
-```
-
-3. Follow the prompts to create a username, email, and password.
-
-### 3. Access the Admin Interface
-
-Once your superuser is created and your web service is running, you can access the admin interface.
-
-1. Open your web browser.
-2. Navigate to: `http://localhost:8000/admin/`
-3. Log in using the superuser credentials you created.
 
 ### 4. Manage Your Data
 

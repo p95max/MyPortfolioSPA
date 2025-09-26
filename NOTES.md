@@ -1,5 +1,5 @@
 # db
-python manage.py dumpdata portfolio_backend > backup_db.json
+python manage.py loaddata api/fixtures/backup_db.json
 
 # docker
 docker compose up --build

@@ -33,5 +33,16 @@
       "github_url": "https://github.com/p95max/AutoService_Book",
       "demo_url": ""
     }
+  },
+      {
+    "model": "api.project",
+    "pk": 4,
+    "fields": {
+      "title": "Fun news",
+      "description": "Fun News is a multilingual Django-based news website with a responsive Bootstrap interface. It features article management, likes, favorites, comments, tag/category filtering, and search. Supports light/dark themes, AOS animations, Leaflet maps, and i18n for multiple languages. Ideal for showcasing Python backend skills.",
+      "tech_stack": "#Django #Python #News #Docker #nginx #PostgreSQL #i18n",
+      "github_url": "https://github.com/p95max/itg1",
+      "demo_url": ""
+    }
   }
 ]

@@ -54,6 +54,7 @@ export const Projects = () => {
     }
   }, []);
 
+
   if (loading) {
   return (
     <p style={{ textAlign: 'center', marginTop: '2rem', lineHeight: 1.6 }}>

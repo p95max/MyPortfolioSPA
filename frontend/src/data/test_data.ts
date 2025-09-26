@@ -4,7 +4,7 @@ export const testProjects: Project[] = [
   {
     id: '1',
     title: 'DemoWallet',
-    description: 'A modern MVP for a digital wallet and payment system...',
+    description: 'A modern MVP for a digital wallet and payment system... A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...',
     techStack: ['#React', '#Django', '#Docker', '#nginx', '#PostgreSQL'],
     githubUrl: 'https://github.com/yourusername/demowallet',
     demoUrl: 'https://demowallet.example.com',
@@ -12,9 +12,28 @@ export const testProjects: Project[] = [
   {
     id: '2',
     title: 'News Portal',
-    description: 'A news portal with user authentication and admin panel...',
+    description: 'A news portal with user authentication and admin panel...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...',
     techStack: ['#React', '#FastAPI', '#PostgreSQL'],
     githubUrl: 'https://github.com/yourusername/news-portal',
     demoUrl: '',
   },
+
+      {
+    id: '3',
+    title: 'DemoWallet',
+    description: 'A modern MVP for a digital wallet and payment system... A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...',
+    techStack: ['#React', '#Django', '#Docker', '#nginx', '#PostgreSQL'],
+    githubUrl: 'https://github.com/yourusername/demowallet',
+    demoUrl: 'https://demowallet.example.com',
+  },
+  {
+    id: '4',
+    title: 'News Portal',
+    description: 'A news portal with user authentication and admin panel...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...',
+    techStack: ['#React', '#FastAPI', '#PostgreSQL'],
+    githubUrl: 'https://github.com/yourusername/news-portal',
+    demoUrl: '',
+  },
+
+
 ];

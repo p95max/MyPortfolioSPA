@@ -12,14 +12,18 @@ export const App = () => {
   }, []);
 
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <div className="app-wrapper">
+      <Router>
+        <Navbar />
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </div>
+        <Footer />
+      </Router>
+    </div>
   );
 };

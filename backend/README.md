@@ -4,48 +4,66 @@ This is the backend service for the portfolio SPA project, built with Django and
 
 ## Features
 
-- REST API for portfolio data
+- REST API for portfolio data (Projects, Contact, etc.)
 - PostgreSQL database integration
 - Environment variables support via `.env`
 - Dependency management with Poetry
-
-## Setup
-
-1. Install dependencies:
-
-```bash
-  poetry install
-```
-
-2. Configure environment variables in `.env` file:
-
-```env
-POSTGRES_DB=your_db_name
-POSTGRES_USER=your_db_user
-POSTGRES_PASSWORD=your_db_password
-DATABASE_URL=postgres://user:password@db:5432/your_db_name
-```
-
-3. Run migrations:
-
-```bash
-  poetry run python manage.py migrate
-```
-
-4. Start the development server:
-
-```bash
-  poetry run python manage.py runserver 0.0.0.0:8000
-```
-
-## Docker
-
-Build and run with Docker Compose:
-
-```bash
-  docker-compose up --build
-```
+- Automatic migrations and superuser creation via Docker
+- Configurable Django Admin URL
+- Database backup/restore using Django fixtures
 
 ## API Documentation
 
-Swagger UI is available at `/swagger/` endpoint.
+Interactive API docs are available through **Swagger UI** at the `/swagger/` endpoint.
+
+## Database Backup & Restore
+
+This project includes a **fixtures backup** of the database that can be used to restore sample data.
+
+Fixture file path:
+
+```
+backend/api/fixtures/backup_db.json
+```
+
+### Load fixture data into the database:
+
+```bash
+docker-compose exec web poetry run python manage.py loaddata api/fixtures/backup_db.json
+```
+
+This will populate the PostgreSQL database with the default projects and related data.
+
+### Create a new backup:
+
+```bash
+docker-compose exec web poetry run python manage.py dumpdata api.Project --indent 2 > backend/api/fixtures/backup_db.json
+```
+
+This exports your current data back into the fixtures file (`backup_db.json`).
+
+## Environment Variables
+
+The backend uses environment variables defined in the `.env` file(check **backend/.env.example**)
+
+## Usage
+
+1. Build and start the services:
+
+```bash
+docker-compose up -d --build
+```
+
+2. Run migrations (handled automatically on startup):
+
+```bash
+docker-compose exec web poetry run python manage.py migrate
+```
+
+3. Access Django Admin:
+
+```
+http://localhost:8000/<your-admin-url>/
+```
+
+(Default: `http://localhost:8000/admin/`)

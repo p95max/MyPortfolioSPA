@@ -1,13 +1,19 @@
 # db
+```bash
 python manage.py loaddata api/fixtures/backup_db.json
+```
 
 # docker
-docker compose up --build
-docker compose down
+```bash
+docker compose up -d
+docker compose down -v
+```
 
 # front
+```bash
 npm run build
 npm run dev
+```
 
 # app schema for https://www.mermaidchart.com/
 ```mermaid
@@ -53,12 +59,10 @@ flowchart TB
     style DEPLOY fill:#FFF7E6,stroke:#FFB02E,stroke-width:2px
 ```
 
-## dev mergo in prod!
-
+# dev merge in prod!
+```bash
 git checkout prod  
-
 git pull origin dev  
-
 git merge dev  
-
 git push origin prod
+```

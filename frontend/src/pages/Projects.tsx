@@ -82,7 +82,30 @@ if (loading) {
   );
 }
 
-  if (error) return <p>Error loading projects: {error}</p>;
+  if (error) {
+  return (
+    <div
+      style={{
+        maxWidth: "600px",
+        margin: "3rem auto",
+        padding: "1.5rem",
+        borderRadius: "8px",
+        backgroundColor: "#ffe5e5",
+        border: "1px solid #ff4d4f",
+        color: "#a8071a",
+        fontFamily: "Arial, sans-serif",
+        textAlign: "center",
+      }}
+    >
+      <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>❌</div>
+      <h2 style={{ margin: "0 0 0.5rem 0" }}>Error loading projects</h2>
+      <p style={{ margin: 0 }}>{error}</p>
+      <p style={{ marginTop: "1rem", fontSize: "0.9rem", color: "#595959" }}>
+        Please try refreshing the page.
+      </p>
+    </div>
+  );
+}
 
   return (
     <div style={{ padding: 20, maxWidth: 800, margin: '0 auto' }}>

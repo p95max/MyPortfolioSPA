@@ -53,7 +53,7 @@ flowchart TB
     style DEPLOY fill:#FFF7E6,stroke:#FFB02E,stroke-width:2px
 ```
 
-dev mergo in prod!
+## dev mergo in prod!
 
 git checkout prod  
 

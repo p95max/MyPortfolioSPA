@@ -54,7 +54,15 @@ export const Projects = () => {
     }
   }, []);
 
-  if (loading) return <p>Loading projects...</p>;
+  if (loading) {
+  return (
+    <p style={{ textAlign: 'center', marginTop: '2rem', lineHeight: 1.6 }}>
+      ⚠️ This portfolio is hosted on <b>Render</b> using the <b>free tier</b>.<br />
+      The backend may take some time to "wake up" and might not show projects immediately.<br />
+      ⏳ Please wait 1–2 minutes and refresh the page.
+    </p>
+  );
+}
   if (error) return <p>Error loading projects: {error}</p>;
 
   return (

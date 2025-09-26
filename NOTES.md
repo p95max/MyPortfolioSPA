@@ -52,3 +52,13 @@ flowchart TB
     style DATABASE fill:#F4EEFF,stroke:#A78BFA,stroke-width:2px
     style DEPLOY fill:#FFF7E6,stroke:#FFB02E,stroke-width:2px
 ```
+
+dev mergo in prod!
+
+git checkout prod  
+
+git pull origin dev  
+
+git merge dev  
+
+git push origin prod

@@ -54,15 +54,34 @@ export const Projects = () => {
   }, []);
 
 
-  if (loading) {
+if (loading) {
   return (
-    <p style={{ textAlign: 'center', marginTop: '2rem', lineHeight: 1.6 }}>
-      ⚠️ This portfolio is hosted on <b>Render</b> using the <b>free tier</b>.<br />
-      The backend may take some time to "wake up" and might not show projects immediately.<br />
-      ⏳ Please wait 1–2 minutes and refresh the page.
-    </p>
+    <div style={{ textAlign: "center", marginTop: "3rem" }}>
+      <div
+        style={{
+          border: "4px solid #f3f3f3",
+          borderTop: "4px solid #3498db",
+          borderRadius: "50%",
+          width: "40px",
+          height: "40px",
+          animation: "spin 1s linear infinite",
+          margin: "0 auto",
+        }}
+      />
+      <p style={{ marginTop: "1rem", color: "#555" }}>Loading projects...</p>
+
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+    </div>
   );
 }
+
   if (error) return <p>Error loading projects: {error}</p>;
 
   return (

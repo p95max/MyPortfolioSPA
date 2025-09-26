@@ -53,11 +53,11 @@ export const ProjectCard = ({ project }: Props) => (
           GitHub
         </a>
       )}
-      {project.demoUrl && (
-        <a href={project.demoUrl} target="_blank" rel="noreferrer">
-          Demo
-        </a>
-      )}
+      {/*{project.demoUrl && (*/}
+      {/*  <a href={project.demoUrl} target="_blank" rel="noreferrer">*/}
+      {/*    Demo*/}
+      {/*  </a>*/}
+      {/*)}*/}
     </div>
   </div>
 );

@@ -59,13 +59,13 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'subject')
 ```
 
-### 3. Automated Superuser Creation
+### 2. Automated Superuser Creation
 
 A Django superuser account is essential for accessing the Admin interface. In this setup, the superuser is **automatically created by a script** (`backend/create_superuser.py`) during the `web` service startup, but only if it doesn't already exist.
 Superuser credentials are provided via your `.env` file (check **backend/env.example**) in backend:
 
 
-### 4. Manage Your Data
+### 3. Manage Your Data
 
 - On the admin dashboard, you will see your registered models listed under your application name.
 - Click on a model (e.g., "Projects") to view, add, edit, or delete records.

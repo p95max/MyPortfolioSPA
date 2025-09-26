@@ -21,6 +21,10 @@ const USE_TEST_DATA = true;
 - When `USE_TEST_DATA = true`  
   The app will load projects from a **local test data file** (`testProjects`) instead of the backend API.  
   👉 Useful for **local development** when the backend is not running.
+```
+Test data file location: `frontend/src/data/test_data.ts`
+Types (if any): `frontend/src/types/`
+```
 
 - When `USE_TEST_DATA = false`  
   The app will fetch project data from the **backend API**, configured via the environment variable:  

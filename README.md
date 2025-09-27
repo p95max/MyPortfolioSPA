@@ -62,7 +62,9 @@ class ContactAdmin(admin.ModelAdmin):
 ### 2. Automated Superuser Creation
 
 A Django superuser account is essential for accessing the Admin interface. In this setup, the superuser is **automatically created by a script** (`backend/create_superuser.py`) during the `web` service startup, but only if it doesn't already exist.
-Superuser credentials are provided via your `.env` file (check **backend/env.example**) in backend:
+Superuser credentials are provided via your `.env` file in backend
+For security reasons, the Django Admin URL is **not hardcoded** in the project.  
+Instead, it is stored in your `.env` file in variable **DJANGO_ADMIN_URL** (check **backend/.env.example**)
 
 
 ### 3. Manage Your Data

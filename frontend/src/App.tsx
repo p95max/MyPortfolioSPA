@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
 import { Contact } from './pages/Contact';
+import { Certificates} from "./pages/Certificates.tsx";
 
 export const App = () => {
   useEffect(() => {
@@ -20,6 +21,7 @@ export const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/certificates" element={<Certificates />} />
           </Routes>
         </div>
         <Footer />

@@ -21,14 +21,14 @@ const certificates: Certificate[] = [
     id: '2',
     title: 'Starta Certificate (DE)',
     issuer: 'Starta',
-    description: "English version of the backend development certificate. Topics include Python, Django, databases, microservices, API integration (OpenAI), team project and introduction to neural networks.",
+    description: "German version of the backend development certificate. Topics include Python, Django, databases, microservices, API integration (OpenAI), team project and introduction to neural networks.",
     fileName: 'Starta_DE.pdf',
   },
   {
     id: '3',
     title: 'Starta Certificate (EN)',
     issuer: 'Starta',
-    description: "German version of the backend development certificate. Topics include Python, Django, databases, microservices, API integration (OpenAI), team project and introduction to neural networks.",
+    description: "English version of the backend development certificate. Topics include Python, Django, databases, microservices, API integration (OpenAI), team project and introduction to neural networks.",
     fileName: 'Starta_EN.pdf',
   },
 ];

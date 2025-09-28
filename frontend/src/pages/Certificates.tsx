@@ -6,47 +6,63 @@ interface Certificate {
   issuer: string;
   description: string;
   fileName: string;
+  type: 'certificate' | 'recommendation';
   previewImage?: string;
 }
 
-const certificates: Certificate[] = [
+const documents: Certificate[] = [
   {
     id: '1',
-    title: 'Google Certificate',
-    issuer: 'Google',
-    description: 'Professional certification from Google demonstrating expertise in relevant technologies and best practices.',
+    title: 'Crash Course on Python',
+    issuer: 'Google / Coursera',
+    description: 'An online non-credit course authorized by Google and offered through Coursera.',
     fileName: 'Google_certificate.pdf',
+    type: 'certificate',
   },
   {
     id: '2',
     title: 'Starta Certificate (DE)',
     issuer: 'Starta',
-    description: "German version of the backend development certificate. Topics include Python, Django, databases, microservices, API integration (OpenAI), team project and introduction to neural networks.",
+    description: 'German version of the backend development certificate. Topics include Python, Django, databases, microservices, API integration (OpenAI), team project and introduction to neural networks.',
     fileName: 'Starta_DE.pdf',
+    type: 'certificate',
   },
   {
     id: '3',
     title: 'Starta Certificate (EN)',
     issuer: 'Starta',
-    description: "English version of the backend development certificate. Topics include Python, Django, databases, microservices, API integration (OpenAI), team project and introduction to neural networks.",
+    description: 'English version of the backend development certificate.',
     fileName: 'Starta_EN.pdf',
+    type: 'certificate',
+  },
+  {
+    id: '4',
+    title: 'Starta Recommendation',
+    issuer: 'Starta',
+    description: 'German version of the recommendation letter from Starta Institute',
+    fileName: 'ref_brief.pdf',
+    type: 'recommendation',
   },
 ];
 
-const CertificateCard = ({ certificate }: { certificate: Certificate }) => {
+const DocumentCard = ({ doc }: { doc: Certificate }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDownload = () => {
     setIsLoading(true);
-    const link = document.createElement('a');
-    link.href = `/${certificate.fileName}`;
-    link.download = certificate.fileName;
+    const link = window.document.createElement('a'); // теперь точно глобальный document
+    link.href = `/${doc.fileName}`;
+    link.download = doc.fileName;
     link.click();
     setTimeout(() => setIsLoading(false), 1000);
   };
 
   const handleView = () => {
-    window.open(`/${certificate.fileName}`, '_blank');
+    window.open(`/${doc.fileName}`, '_blank');
+  };
+
+  const getIcon = () => {
+    return doc.type === 'certificate' ? '📜' : '📋';
   };
 
   return (
@@ -83,18 +99,18 @@ const CertificateCard = ({ certificate }: { certificate: Certificate }) => {
             fontSize: '20px',
           }}
         >
-          📜
+          {getIcon()}
         </div>
         <div>
-          <h3 style={{ margin: '0 0 5px 0', color: '#333' }}>{certificate.title}</h3>
+          <h3 style={{ margin: '0 0 5px 0', color: '#333' }}>{doc.title}</h3>
           <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>
-            Issued by: <strong>{certificate.issuer}</strong>
+            {doc.type === 'certificate' ? 'Issued by:' : 'From:'} <strong>{doc.issuer}</strong>
           </p>
         </div>
       </div>
 
       <p style={{ color: '#555', lineHeight: '1.5', marginBottom: '15px' }}>
-        {certificate.description}
+        {doc.description}
       </p>
 
       <div style={{ display: 'flex', gap: '10px' }}>
@@ -103,18 +119,12 @@ const CertificateCard = ({ certificate }: { certificate: Certificate }) => {
           style={{
             padding: '8px 16px',
             backgroundColor: '#646cff',
-            color: '#503f3f',
+            color: '#fff',
             border: 'none',
             borderRadius: '6px',
             cursor: 'pointer',
             fontSize: '0.9rem',
             transition: 'background-color 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#535bf2';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#646cff';
           }}
         >
           👁️ View
@@ -131,17 +141,6 @@ const CertificateCard = ({ certificate }: { certificate: Certificate }) => {
             borderRadius: '6px',
             cursor: isLoading ? 'not-allowed' : 'pointer',
             fontSize: '0.9rem',
-            transition: 'background-color 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            if (!isLoading) {
-              e.currentTarget.style.backgroundColor = '#218838';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isLoading) {
-              e.currentTarget.style.backgroundColor = '#28a745';
-            }
           }}
         >
           {isLoading ? '⏳ Downloading...' : '📥 Download'}
@@ -152,35 +151,63 @@ const CertificateCard = ({ certificate }: { certificate: Certificate }) => {
 };
 
 export const Certificates = () => {
+  const [activeTab, setActiveTab] = useState<'certificates' | 'recommendations'>('certificates');
+
+  const certificates = documents.filter((d) => d.type === 'certificate');
+  const recommendations = documents.filter((d) => d.type === 'recommendation');
+
+  const currentDocs = activeTab === 'certificates' ? certificates : recommendations;
+
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <h1 style={{ color: '#f6f6f6', marginBottom: '10px' }}>Certificates</h1>
+        <h1 style={{ color: '#f6f6f6', marginBottom: '10px' }}>Credentials</h1>
         <p style={{ color: '#666', fontSize: '1.1rem' }}>
-          My professional certifications and achievements
+          My professional certifications and recommendations
         </p>
       </div>
 
+      {/* Tabs */}
+      <div style={{ display: 'flex', marginBottom: '30px', borderBottom: '2px solid #ddd' }}>
+        <button
+          onClick={() => setActiveTab('certificates')}
+          style={{
+            padding: '12px 24px',
+            border: 'none',
+            borderBottom: activeTab === 'certificates' ? '3px solid #646cff' : '3px solid transparent',
+            color: activeTab === 'certificates' ? '#646cff' : '#666',
+            fontWeight: activeTab === 'certificates' ? 'bold' : 'normal',
+            cursor: 'pointer',
+            background: 'transparent',
+          }}
+        >
+          📜 Certificates ({certificates.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('recommendations')}
+          style={{
+            padding: '12px 24px',
+            border: 'none',
+            borderBottom: activeTab === 'recommendations' ? '3px solid #646cff' : '3px solid transparent',
+            color: activeTab === 'recommendations' ? '#646cff' : '#666',
+            fontWeight: activeTab === 'recommendations' ? 'bold' : 'normal',
+            cursor: 'pointer',
+            background: 'transparent',
+          }}
+        >
+          📋 Recommendations ({recommendations.length})
+        </button>
+      </div>
+
+      {/* Content */}
       <div>
-        {certificates.map((certificate) => (
-          <CertificateCard key={certificate.id} certificate={certificate} />
-        ))}
-      </div>
-
-      <div
-        style={{
-          textAlign: 'center',
-          marginTop: '30px',
-          padding: '20px',
-          backgroundColor: '#f8f9fa',
-          borderRadius: '8px',
-          border: '1px solid #e9ecef',
-        }}
-      >
-        <p style={{ color: '#666', margin: 0 }}>
-          💡 <strong>Note:</strong> All certificates are available for download and viewing.
-          Click "View" to open in a new tab or "Download" to save locally.
-        </p>
+        {currentDocs.length > 0 ? (
+          currentDocs.map((doc) => <DocumentCard key={doc.id} doc={doc} />)
+        ) : (
+          <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+            <p>No {activeTab} available at the moment.</p>
+          </div>
+        )}
       </div>
     </div>
   );

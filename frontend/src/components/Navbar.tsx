@@ -20,9 +20,9 @@ export const Navbar = () => {
   const boxShadowColor = isDark ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)';
 
   const links = [
-    { to: '/', label: 'About me/CV' },
+    { to: '/', label: 'About me' },
     { to: '/projects', label: 'My Projects' },
-    { to: '/certificates', label: 'My Certificates' },
+    { to: '/certificates', label: 'Credentials' },
     { to: '/contact', label: 'Contact me' },
 
   ];

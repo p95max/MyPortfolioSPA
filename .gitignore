@@ -13,7 +13,8 @@ media/
 staticfiles/
 
 # Environment
-.env
+.env.dev
+.env.prod
 .env.*
 .venv/
 venv/

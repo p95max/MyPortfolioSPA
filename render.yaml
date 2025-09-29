@@ -9,7 +9,7 @@ services:
     rootDir: backend
     env: python
     buildCommand: "./build.sh"
-    startCommand: "poetry run gunicorn portfolio_backend.wsgi --bind 0.0.0.0:$PORT --log-file -"
+    startCommand: "poetry run gunicorn portfolio_backend.wsgi --workers 3 --threads 2 --bind 0.0.0.0:$PORT --log-file -"
     envVars:
       - key: DEBUG
         value: false

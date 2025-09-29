@@ -1,16 +1,17 @@
+#!/usr/bin/env bash
 set -o errexit
 
-if ! command -v poetry &> /dev/null
-then
-  echo "Poetry not found. Installing..."
-  python -m pip install --upgrade pip
-  python -m pip install "poetry==1.7.1"
-fi
+echo ">>> Installing/Updating Poetry..."
+pip install --upgrade pip
+pip install "poetry==1.7.1"
 
-echo "Installing dependencies with Poetry..."
+poetry config virtualenvs.create false
 poetry install --no-interaction --no-ansi
 
-echo "Collecting static files..."
+echo ">>> Running migrations..."
+poetry run python manage.py migrate --noinput
+
+echo ">>> Collecting static files..."
 poetry run python manage.py collectstatic --no-input
 
-echo "Build completed!"
+echo ">>> Build completed!"

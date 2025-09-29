@@ -20,6 +20,8 @@ RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 COPY . /app/
 
+RUN mkdir -p /app/logs
+
 RUN poetry run python manage.py collectstatic --no-input
 
 EXPOSE 8000

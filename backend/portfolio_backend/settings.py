@@ -5,8 +5,11 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
+try:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+except ImportError:
+    sentry_sdk = None
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -141,6 +144,8 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 LOGGING = {
     'version': 1,
@@ -164,7 +169,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG' if DEBUG else 'INFO',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/django.log',
+            'filename': BASE_DIR / 'django.log',
             'formatter': 'verbose',
         },
     },

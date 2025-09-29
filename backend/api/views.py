@@ -4,6 +4,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Project, ContactMessage
 from .serializers import ProjectSerializer, ContactMessageSerializer
+try:
+    import sentry_sdk
+except ImportError:
+    sentry_sdk = None
 
 logger = logging.getLogger(__name__)
 
@@ -48,3 +52,16 @@ def contact_message(request):
 
     logger.warning(f"Invalid contact message submission: {serializer.errors}")
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def track_visit(request):
+    ip = request.META.get('REMOTE_ADDR')
+    ua = request.META.get('HTTP_USER_AGENT')
+
+    if sentry_sdk:
+        sentry_sdk.capture_message(f"👤 New site visit from {ip}, UA={ua}")
+        logger.info(f"Visit tracked to Sentry from {ip}")
+    else:
+        logger.info(f"Visit from {ip} (Sentry not available)")
+
+    return Response({"status": "logged"})

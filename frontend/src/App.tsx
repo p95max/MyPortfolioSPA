@@ -5,11 +5,16 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
 import { Contact } from './pages/Contact';
-import { Certificates} from "./pages/Certificates.tsx";
+import { Certificates } from "./pages/Certificates.tsx";
 
 export const App = () => {
   useEffect(() => {
     document.title = 'My SPA Portfolio';
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/track-visit/", { method: "POST" })
+      .catch(err => console.error("Sentry visit tracking failed:", err));
   }, []);
 
   return (

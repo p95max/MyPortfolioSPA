@@ -29,7 +29,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://myportfoliospa.onrender.com',
 ]
 
-# Дальше идёт DATABASES = {...}
 
 if os.getenv('DATABASE_URL'):
     DATABASES = {

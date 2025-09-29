@@ -1,3 +1,4 @@
+from django.conf import settings
 try:
     import sentry_sdk
 except ImportError:
@@ -13,9 +14,12 @@ class LogVisitMiddleware:
         if response.status_code == 200:
             if request.path == "/":
                 sentry_sdk.capture_message(f"👤 User opened homepage from {request.META.get('REMOTE_ADDR')}")
-            elif request.path.startswith("/admin/"):
-                sentry_sdk.capture_message(f"🔐 Admin access from {request.META.get('REMOTE_ADDR')}")
+            elif request.path.startswith(settings.ADMIN_URL):
+                    sentry_sdk.capture_message(f"🔐 Admin access from {request.META.get('REMOTE_ADDR')}")
+            elif request.path == "/":
+                sentry_sdk.capture_message(f"👤 Site visit to homepage from {request.META.get('REMOTE_ADDR')}",
+                                           level="info")
             elif request.path == "/api/projects/":
-                sentry_sdk.capture_message(f"📊 API projects accessed from {request.META.get('REMOTE_ADDR')}")
+                sentry_sdk.capture_message(f"📊 API projects opened from {request.META.get('REMOTE_ADDR')}")
 
         return response

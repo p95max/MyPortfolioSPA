@@ -5,6 +5,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -159,32 +161,48 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose' if DEBUG else 'simple',
         },
+        'file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/django.log',
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
         },
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'WARNING',
             'propagate': False,
         },
         'api': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': False,
         },
         'portfolio_backend': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
         },
         '': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'WARNING',
             'propagate': False,
         },
     },
 }
+
+SENTRY_DSN = os.getenv("SENTRY_DSN", "")
+
+if SENTRY_DSN and not DEBUG:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=0.2,
+        send_default_pii=True,
+    )

@@ -20,7 +20,8 @@ ADMIN_URL = os.getenv('DJANGO_ADMIN_URL', 'admin/')
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '.onrender.com',
+    "https://myportfoliospa-1.onrender.com",
+    "https://myportfoliospa.onrender.com",
 ]
 
 if os.getenv('DATABASE_URL'):

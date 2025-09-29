@@ -1,7 +1,6 @@
 """
 Django settings for portfolio_backend project.
 """
-
 import os
 from pathlib import Path
 from dotenv import load_dotenv

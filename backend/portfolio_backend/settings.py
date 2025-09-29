@@ -20,9 +20,16 @@ ADMIN_URL = os.getenv('DJANGO_ADMIN_URL', 'admin/')
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    "https://myportfoliospa-1.onrender.com",
-    "https://myportfoliospa.onrender.com",
+    'myportfoliospa-1.onrender.com',
+    'myportfoliospa.onrender.com',
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://myportfoliospa-1.onrender.com',
+    'https://myportfoliospa.onrender.com',
+]
+
+# Дальше идёт DATABASES = {...}
 
 if os.getenv('DATABASE_URL'):
     DATABASES = {
@@ -121,7 +128,6 @@ else:
     CORS_ALLOWED_ORIGINS = [
         "https://myportfoliospa-1.onrender.com",
         "https://myportfoliospa.onrender.com",
-
     ]
 
 if not DEBUG:

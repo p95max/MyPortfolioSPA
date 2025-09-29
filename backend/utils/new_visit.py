@@ -1,4 +1,7 @@
-import sentry_sdk
+try:
+    import sentry_sdk
+except ImportError:
+    sentry_sdk = None
 
 class LogVisitMiddleware:
     def __init__(self, get_response):

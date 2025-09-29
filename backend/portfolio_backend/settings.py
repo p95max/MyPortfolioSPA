@@ -1,7 +1,6 @@
 """
 Django settings for portfolio_backend project.
 """
-
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -9,44 +8,47 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(BASE_DIR / '.env')
 
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+if os.path.exists(BASE_DIR / ".env.dev"):
+    load_dotenv(BASE_DIR / ".env.dev")
 
-DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "insecure-secret")
 
-ADMIN_URL = os.getenv('DJANGO_ADMIN_URL', 'admin/')
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
+
+ADMIN_URL = os.getenv("DJANGO_ADMIN_URL", "admin/")
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'myportfoliospa-1.onrender.com',
-    'myportfoliospa.onrender.com',
+    "localhost",
+    "127.0.0.1",
+    "myportfoliospa-1.onrender.com",
+    "myportfoliospa.onrender.com",
+    "0.0.0.0",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://myportfoliospa-1.onrender.com',
-    'https://myportfoliospa.onrender.com',
+    "https://myportfoliospa-1.onrender.com",
+    "https://myportfoliospa.onrender.com",
 ]
 
-
-if os.getenv('DATABASE_URL'):
+if os.getenv("DATABASE_URL"):
+ 
     DATABASES = {
-        'default': dj_database_url.config(
-            default=os.getenv('DATABASE_URL'),
+        "default": dj_database_url.config(
+            default=os.getenv("DATABASE_URL"),
             conn_max_age=600,
             conn_health_checks=True,
         )
     }
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT'),
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB", "port_db"),
+            "USER": os.getenv("POSTGRES_USER", "maxx"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "0451"),
+            "HOST": os.getenv("DB_HOST", "db"),
+            "PORT": os.getenv("DB_PORT", "5432"),
         }
     }
 
@@ -136,3 +138,53 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {asctime} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose' if DEBUG else 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'api': {
+            'handlers': ['console'],
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'propagate': False,
+        },
+        'portfolio_backend': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        '': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}

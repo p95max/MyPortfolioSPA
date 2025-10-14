@@ -44,5 +44,16 @@
       "github_url": "https://github.com/p95max/itg1",
       "demo_url": ""
     }
+  },
+  {
+    "model": "api.project",
+    "pk": 5,
+    "fields": {
+      "title": "ChattyM",
+      "description": "ChattyM is a minimal social network built with Django 5, PostgreSQL, and Bootstrap 5 that demonstrates core web development features. It offers email-based authentication via django-allauth, editable user profiles with avatars and birthdays, and full CRUD for posts, comments, and likes. Users can follow/unfollow others, view a personalized feed, send direct messages, and administrators can moderate content; fixtures are provided to populate test data. The project includes a DRF-based REST API with Swagger docs, token/session auth, and a Dockerized setup for easy local development and testing.",
+      "tech_stack": "#Django5 #Python3.11 #PostgreSQL #Bootstrap5 #Docker #DockerCompose #DjangoRESTFramework #django_allauth #Poetry #pytest",
+      "github_url": "https://github.com/p95max/ChattyM",
+      "demo_url": ""
+    }
   }
 ]

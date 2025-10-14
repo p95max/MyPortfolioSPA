@@ -12,7 +12,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Project.objects.all()
+    queryset = Project.objects.all().order_by('pk')   #  sort by pk
     serializer_class = ProjectSerializer
 
     def list(self, request, *args, **kwargs):

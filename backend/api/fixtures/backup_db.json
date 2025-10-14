@@ -1,7 +1,7 @@
 [
   {
     "model": "api.project",
-    "pk": 1,
+    "pk": 5,
     "fields": {
       "title": "Portfolio SPA Project",
       "description": "This project is a Single Page Application portfolio consisting of a React frontend and a Django backend, containerized with Docker.",
@@ -13,7 +13,7 @@
 
   {
     "model": "api.project",
-    "pk": 2,
+    "pk": 3,
     "fields": {
       "title": "DemoWallet",
       "description": "DemoWallet is a modern MVP for a digital wallet and payment system, built with Django 5, Django REST Framework, and PostgreSQL. It supports user registration, KYC, P2P transfers, merchant payments, transaction ledger, and dispute management.",
@@ -25,7 +25,7 @@
 
     {
     "model": "api.project",
-    "pk": 3,
+    "pk": 2,
     "fields": {
       "title": "AutoService_Book",
       "description": "AutoService Book is your reliable assistant for tracking and managing your car’s service history. This web application, built as a portfolio project, showcases skills in Django development, database management, and creating user-friendly interfaces.",
@@ -47,7 +47,7 @@
   },
   {
     "model": "api.project",
-    "pk": 5,
+    "pk": 1,
     "fields": {
       "title": "ChattyM",
       "description": "ChattyM is a minimal social network built with Django 5, PostgreSQL, and Bootstrap 5 that demonstrates core web development features. It offers email-based authentication via django-allauth, editable user profiles with avatars and birthdays, and full CRUD for posts, comments, and likes. Users can follow/unfollow others, view a personalized feed, send direct messages, and administrators can moderate content; fixtures are provided to populate test data. The project includes a DRF-based REST API with Swagger docs, token/session auth, and a Dockerized setup for easy local development and testing.",

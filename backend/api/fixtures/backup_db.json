@@ -1,51 +1,5 @@
 [
-  {
-    "model": "api.project",
-    "pk": 5,
-    "fields": {
-      "title": "Portfolio SPA Project",
-      "description": "This project is a Single Page Application portfolio consisting of a React frontend and a Django backend, containerized with Docker.",
-      "tech_stack": "#React #Django Rest #Docker #nginx #PostgreSQL",
-      "github_url": "https://github.com/p95max/MyPortfolioSPA",
-      "demo_url": ""
-    }
-  },
-
-  {
-    "model": "api.project",
-    "pk": 3,
-    "fields": {
-      "title": "DemoWallet",
-      "description": "DemoWallet is a modern MVP for a digital wallet and payment system, built with Django 5, Django REST Framework, and PostgreSQL. It supports user registration, KYC, P2P transfers, merchant payments, transaction ledger, and dispute management.",
-      "tech_stack": "#Django #Python #Monolith #Docker #nginx #PostgreSQL",
-      "github_url": "https://github.com/p95max/DemoWallet",
-      "demo_url": ""
-    }
-  },
-
     {
-    "model": "api.project",
-    "pk": 2,
-    "fields": {
-      "title": "AutoService_Book",
-      "description": "AutoService Book is your reliable assistant for tracking and managing your car’s service history. This web application, built as a portfolio project, showcases skills in Django development, database management, and creating user-friendly interfaces.",
-      "tech_stack": "#Django #Python #Finance #Docker #nginx #PostgreSQL",
-      "github_url": "https://github.com/p95max/AutoService_Book",
-      "demo_url": ""
-    }
-  },
-      {
-    "model": "api.project",
-    "pk": 4,
-    "fields": {
-      "title": "Fun news",
-      "description": "Fun News is a multilingual Django-based news website with a responsive Bootstrap interface. It features article management, likes, favorites, comments, tag/category filtering, and search. Supports light/dark themes, AOS animations, Leaflet maps, and i18n for multiple languages. Ideal for showcasing Python backend skills.",
-      "tech_stack": "#Django #Python #News #Docker #nginx #PostgreSQL #i18n",
-      "github_url": "https://github.com/p95max/itg1",
-      "demo_url": ""
-    }
-  },
-  {
     "model": "api.project",
     "pk": 1,
     "fields": {
@@ -55,5 +9,28 @@
       "github_url": "https://github.com/p95max/ChattyM",
       "demo_url": ""
     }
+  },
+  {
+    "model": "api.project",
+    "pk": 2,
+    "fields": {
+      "title": "What2Cook",
+      "description": "What2Cook — lightweight recipe finder: give it the ingredients you have and it will suggest recipes. Built with **FastAPI**, async SQLAlchemy, Postgres, Jinja2 templates and a small, responsive frontend..",
+      "tech_stack": "#FASTAPI #Python3.14 #PostgreSQL #Bootstrap5 #Docker #DockerCompose #jinja2 #SQLAlchemy #API",
+      "github_url": "https://github.com/p95max/What2Cook",
+      "demo_url": ""
+    }
+  },
+  {
+    "model": "api.project",
+    "pk": 3,
+    "fields": {
+      "title": "AutoService Book",
+      "description": "AutoService Book is your reliable assistant for tracking and managing your car’s service history. This web application, built as a portfolio project, showcases skills in Django development, database management, and creating user-friendly interfaces.",
+      "tech_stack": "#Django #Python3 #PostgreSQL #Bootstrap5 #Docker #DockerCompose #django_allauth #Poetry #pytest",
+      "github_url": "https://github.com/p95max/AutoService_Book",
+      "demo_url": ""
+    }
   }
+
 ]

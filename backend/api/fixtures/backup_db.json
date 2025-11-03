@@ -15,7 +15,7 @@
     "pk": 2,
     "fields": {
       "title": "What2Cook",
-      "description": "What2Cook — lightweight recipe finder: give it the ingredients you have and it will suggest recipes. Built with **FastAPI**, async SQLAlchemy, Postgres, Jinja2 templates and a small, responsive frontend..",
+      "description": "What2Cook — lightweight recipe finder: give it the ingredients you have and it will suggest recipes. Built with **FastAPI**, async SQLAlchemy, Postgres, Jinja2 templates and a small, responsive frontend.",
       "tech_stack": "#FASTAPI #Python3.14 #PostgreSQL #Bootstrap5 #Docker #DockerCompose #jinja2 #SQLAlchemy #API",
       "github_url": "https://github.com/p95max/What2Cook",
       "demo_url": ""
@@ -33,12 +33,16 @@
     }
   },
 
-  {
+
+
+
+
+    {
     "model": "api.projectscreenshot",
     "pk": 4,
     "fields": {
       "project": 1,
-      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1762207025/chattym2_bb0hbn.png",
+      "image_url": "img/screenshots/chattym2.png",
       "caption": "ChattyM — screenshot 1"
     }
   },
@@ -47,7 +51,7 @@
     "pk": 5,
     "fields": {
       "project": 1,
-      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1762207026/chattym1_oy6pxc.png",
+      "image_url": "img/screenshots/chattym1.png",
       "caption": "ChattyM — screenshot 2"
     }
   },
@@ -56,17 +60,16 @@
     "pk": 6,
     "fields": {
       "project": 1,
-      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1762207025/chattym3_m2hbyh.png",
+      "image_url": "img/screenshots/chattym3.png",
       "caption": "ChattyM — screenshot 3"
     }
   },
-
   {
     "model": "api.projectscreenshot",
     "pk": 7,
     "fields": {
       "project": 2,
-      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1762207027/what2cook1_fs2xvo.png",
+      "image_url": "img/screenshots/what2cook1.png",
       "caption": "What2Cook — screenshot 1"
     }
   },
@@ -75,7 +78,7 @@
     "pk": 8,
     "fields": {
       "project": 2,
-      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1762207028/what2cook2_mzustg.png",
+      "image_url": "img/screenshots/what2cook2.png",
       "caption": "What2Cook — screenshot 2"
     }
   },
@@ -84,36 +87,9 @@
     "pk": 9,
     "fields": {
       "project": 2,
-      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1762207026/what2cook3_a8xtiy.png",
+      "image_url": "img/screenshots/what2cook3.png",
       "caption": "What2Cook — screenshot 3"
     }
-  },
-
-  {
-    "model": "api.projectscreenshot",
-    "pk": 10,
-    "fields": {
-      "project": 3,
-      "image_url": "https://via.placeholder.com/1200x700?text=AutoService+-+Screenshot+1",
-      "caption": "AutoService Book — screenshot 1"
-    }
-  },
-  {
-    "model": "api.projectscreenshot",
-    "pk": 11,
-    "fields": {
-      "project": 3,
-      "image_url": "https://via.placeholder.com/1200x700?text=AutoService+-+Screenshot+2",
-      "caption": "AutoService Book — screenshot 2"
-    }
-  },
-  {
-    "model": "api.projectscreenshot",
-    "pk": 12,
-    "fields": {
-      "project": 3,
-      "image_url": "https://via.placeholder.com/1200x700?text=AutoService+-+Screenshot+3",
-      "caption": "AutoService Book — screenshot 3"
-    }
   }
+
 ]

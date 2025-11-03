@@ -3,7 +3,6 @@ import { ProjectCard } from '../components/ProjectCard';
 import type { Project } from '../types';
 import { testProjects } from '../data/test_data';
 
-
 function toCamelCase(project: any): Project {
   return {
     id: String(project.id),

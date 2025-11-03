@@ -8,6 +8,10 @@ export const testProjects: Project[] = [
     techStack: ['#React', '#Django', '#Docker', '#nginx', '#PostgreSQL'],
     githubUrl: 'https://github.com/yourusername/demowallet',
     demoUrl: 'https://demowallet.example.com',
+    screenshots: [
+      'https://via.placeholder.com/1200x700?text=DemoWallet+1',
+      'https://via.placeholder.com/1200x700?text=DemoWallet+2'
+    ]
   },
   {
     id: '2',
@@ -16,6 +20,10 @@ export const testProjects: Project[] = [
     techStack: ['#React', '#FastAPI', '#PostgreSQL'],
     githubUrl: 'https://github.com/yourusername/news-portal',
     demoUrl: '',
+    screenshots: [
+      'https://via.placeholder.com/1200x700?text=DemoWallet+1',
+      'https://via.placeholder.com/1200x700?text=DemoWallet+2'
+    ]
   },
 
       {
@@ -25,6 +33,10 @@ export const testProjects: Project[] = [
     techStack: ['#React', '#Django', '#Docker', '#nginx', '#PostgreSQL'],
     githubUrl: 'https://github.com/yourusername/demowallet',
     demoUrl: 'https://demowallet.example.com',
+    screenshots: [
+      'https://via.placeholder.com/1200x700?text=DemoWallet+1',
+      'https://via.placeholder.com/1200x700?text=DemoWallet+2'
+    ]
   },
   {
     id: '4',
@@ -33,6 +45,10 @@ export const testProjects: Project[] = [
     techStack: ['#React', '#FastAPI', '#PostgreSQL'],
     githubUrl: 'https://github.com/yourusername/news-portal',
     demoUrl: '',
+    screenshots: [
+      'https://via.placeholder.com/1200x700?text=DemoWallet+1',
+      'https://via.placeholder.com/1200x700?text=DemoWallet+2'
+    ]
   },
 
 

@@ -13,6 +13,12 @@ function toCamelCase(project: any): Project {
       : project.tech_stack || [],
     githubUrl: project.github_url,
     demoUrl: project.demo_url,
+    screenshots: Array.isArray(project.screenshots)
+      ? project.screenshots.map((s: any) => {
+          if (typeof s === 'string') return s;
+          return s.image_url || '';
+        }).filter((u: string) => !!u)
+      : [],
   };
 }
 

@@ -5,4 +5,5 @@ export interface Project {
   techStack: string[];
   githubUrl?: string;
   demoUrl?: string;
+  screenshots?: string[];
 }

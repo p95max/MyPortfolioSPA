@@ -55,6 +55,7 @@ export const Projects = () => {
     }
   }, []);
 
+
   if (loading) return <p style={{ textAlign: "center" }}>Loading projects...</p>;
   if (error) return <p style={{ textAlign: "center", color: "red" }}>Error: {error}</p>;
 

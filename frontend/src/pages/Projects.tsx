@@ -1,4 +1,3 @@
-// Projects.tsx
 import React, { useEffect, useState } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import type { Project } from '../types';
@@ -16,25 +15,29 @@ function normalizeImageUrl(u?: string | null): string {
 
   if (/^https?:\/\//i.test(s) || /^\/\//.test(s)) return s;
 
+  if (s.startsWith('/')) return s;
+
+  if (/screenshots\//i.test(s)) {
+    return s.startsWith('/') ? s : `/${s}`;
+  }
+
+  if (/\.(png|jpe?g|gif|webp|svg)$/i.test(s)) {
+    return s.startsWith('/') ? s : `/${s}`;
+  }
+
+  if (/^[\w\-. ]+$/.test(s)) {
+    const safeName = s.replace(/\s+/g, '_');
+    const hasExt = /\.[a-z0-9]{2,4}$/i.test(s);
+    return `/screenshots/${hasExt ? safeName : `${safeName}.png`}`;
+  }
+
   if (/^\d+x\d+(\?.*)?$/.test(s)) {
     return `https://via.placeholder.com/${s}`;
-  }
-
-  if (s.startsWith('/')) {
-    if (typeof window !== 'undefined' && window.location?.origin) {
-      return window.location.origin + s;
-    }
-    return PLACEHOLDER_SVG;
-  }
-
-  if (/^[\w.-]+\.[a-z]{2,}($|[:/])/.test(s)) {
-    return 'https://' + s;
   }
 
   console.warn('IMG-NORMALIZE: unknown image string, using placeholder ->', u);
   return PLACEHOLDER_SVG;
 }
-
 
 function normalizeProjects(raw: any[]): Project[] {
   return raw.map((p: any) => {

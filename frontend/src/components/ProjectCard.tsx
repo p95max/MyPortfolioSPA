@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import type { Project } from '../types';
 
@@ -13,10 +12,6 @@ interface Props {
   project: Project;
 }
 
-/**
- * Пробует загрузить изображение через fetch (credentials: include) и вернуть blob-url.
- * Если fetch не прошёл — бросает.
- */
 async function tryFetchAsBlobUrl(url: string): Promise<string> {
   const res = await fetch(url, { credentials: 'include', mode: 'cors' });
   if (!res.ok) throw new Error('status ' + res.status);

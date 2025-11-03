@@ -39,8 +39,37 @@ interface Props {
 
 const PLACEHOLDER = 'https://via.placeholder.com/800x450?text=No+Screenshot';
 
+function normalizeImageUrl(u: string | undefined | null): string {
+  if (!u) return PLACEHOLDER;
+
+  const trimmed = u.trim();
+
+  if (/^https?:\/\//i.test(trimmed) || /^\/\//.test(trimmed)) {
+    return trimmed;
+  }
+
+  if (/^\d+x\d+(\?.*)?$/.test(trimmed)) {
+    return `https://via.placeholder.com/${trimmed}`;
+  }
+
+  if (trimmed.startsWith('/')) {
+    if (typeof window !== 'undefined' && window.location && window.location.origin) {
+      return window.location.origin + trimmed;
+    }
+    return PLACEHOLDER;
+  }
+
+  if (/^[\w.-]+\.[a-z]{2,}[:/]/i.test(trimmed) || /^[\w.-]+\.[a-z]{2,}$/i.test(trimmed)) {
+    return 'https://' + trimmed;
+  }
+
+  return PLACEHOLDER;
+}
+
 export const ProjectCard = ({ project }: Props) => {
-  const images = (project.screenshots && project.screenshots.length > 0) ? project.screenshots : [PLACEHOLDER];
+  const rawImages = (project.screenshots && project.screenshots.length > 0) ? project.screenshots : [PLACEHOLDER];
+  const images = rawImages.map((s) => normalizeImageUrl(s));
+
   const [index, setIndex] = useState(0);
 
   const prev = (e: React.MouseEvent) => {

@@ -3,53 +3,41 @@ import type { Project } from '../types';
 export const testProjects: Project[] = [
   {
     id: '1',
-    title: 'DemoWallet',
-    description: 'A modern MVP for a digital wallet and payment system... A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...',
-    techStack: ['#React', '#Django', '#Docker', '#nginx', '#PostgreSQL'],
-    githubUrl: 'https://github.com/yourusername/demowallet',
-    demoUrl: 'https://demowallet.example.com',
+    title: 'ChattyM',
+    description: 'Minimal social network demo (Django + DRF). Posts, comments, likes, profiles and a small admin interface — used as a portfolio showcase.',
+    techStack: ['#Django', '#DRF', '#Bootstrap5', '#PostgreSQL'],
+    githubUrl: 'https://github.com/p95max/ChattyM',
+    demoUrl: '',
     screenshots: [
-      'https://via.placeholder.com/1200x700?text=DemoWallet+1',
-      'https://via.placeholder.com/1200x700?text=DemoWallet+2'
+      '/screenshots/chattym1.png',
+      '/screenshots/chattym2.png',
+      '/screenshots/chattym3.png'
     ]
   },
   {
     id: '2',
-    title: 'News Portal',
-    description: 'A news portal with user authentication and admin panel...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...',
-    techStack: ['#React', '#FastAPI', '#PostgreSQL'],
-    githubUrl: 'https://github.com/yourusername/news-portal',
+    title: 'What2Cook',
+    description: 'Lightweight recipe finder built with FastAPI and async SQLAlchemy — enter ingredients and get matching recipes.',
+    techStack: ['#FastAPI', '#SQLAlchemy', '#PostgreSQL', '#Jinja2'],
+    githubUrl: 'https://github.com/p95max/What2Cook',
     demoUrl: '',
     screenshots: [
-      'https://via.placeholder.com/1200x700?text=DemoWallet+1',
-      'https://via.placeholder.com/1200x700?text=DemoWallet+2'
-    ]
-  },
-
-      {
-    id: '3',
-    title: 'DemoWallet',
-    description: 'A modern MVP for a digital wallet and payment system... A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...',
-    techStack: ['#React', '#Django', '#Docker', '#nginx', '#PostgreSQL'],
-    githubUrl: 'https://github.com/yourusername/demowallet',
-    demoUrl: 'https://demowallet.example.com',
-    screenshots: [
-      'https://via.placeholder.com/1200x700?text=DemoWallet+1',
-      'https://via.placeholder.com/1200x700?text=DemoWallet+2'
+      '/screenshots/what2cook1.png',
+      '/screenshots/what2cook2.png',
+      '/screenshots/what2cook3.png'
     ]
   },
   {
-    id: '4',
-    title: 'News Portal',
-    description: 'A news portal with user authentication and admin panel...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...A modern MVP for a digital wallet and payment system...',
-    techStack: ['#React', '#FastAPI', '#PostgreSQL'],
-    githubUrl: 'https://github.com/yourusername/news-portal',
+    id: '3',
+    title: 'AutoService Book',
+    description: 'Car service tracker — record services, fuel, parts and expenses. Demonstrates Django forms, auth, and export utilities.',
+    techStack: ['#Django', '#Docker', '#PostgreSQL', '#Bootstrap5'],
+    githubUrl: 'https://github.com/p95max/AutoService_Book',
     demoUrl: '',
     screenshots: [
-      'https://via.placeholder.com/1200x700?text=DemoWallet+1',
-      'https://via.placeholder.com/1200x700?text=DemoWallet+2'
+      '/screenshots/as_book1.png',
+      '/screenshots/as_book2.png',
+      '/screenshots/as_book3.png'
     ]
-  },
-
-
+  }
 ];

@@ -23,6 +23,8 @@ docker compose down -v
 docker compose exec web poetry run python manage.py makemigrations api
 docker compose exec web poetry run python manage.py migrate
 
+docker compose exec web poetry run python manage.py loaddata api/fixtures/backup_db.json
+
 ```
 
 # front

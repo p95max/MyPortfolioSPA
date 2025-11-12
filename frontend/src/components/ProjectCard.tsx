@@ -56,7 +56,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
         <img
           src={images[index]}
           alt={`${project.title} screenshot ${index + 1}`}
-          style={{ width: '100%', height: '320px', objectFit: 'cover', display: 'block' }}
+          style={{ width: '100%', height: '420px', objectFit: 'cover', display: 'block' }}
           onError={onImgError}
         />
 

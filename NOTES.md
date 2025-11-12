@@ -1,6 +1,18 @@
 # db
 ```bash
 python manage.py loaddata api/fixtures/backup_db.json
+
+poetry run python manage.py makemigrations api
+poetry run python manage.py migrate
+```
+
+# frontend
+## build
+```
+cd frontend
+npm ci
+npm run build
+ls -la dist/screenshots
 ```
 
 # docker

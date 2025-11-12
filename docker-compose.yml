@@ -6,7 +6,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5440:5440"
     networks:
       - mynetwork
 

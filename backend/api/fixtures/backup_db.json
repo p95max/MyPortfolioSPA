@@ -42,7 +42,7 @@
     "pk": 4,
     "fields": {
       "project": 1,
-      "image_url": "img/screenshots/chattym2.png",
+      "image_url": "/screenshots/chattym2.png",
       "caption": "ChattyM — screenshot 1"
     }
   },
@@ -51,7 +51,7 @@
     "pk": 5,
     "fields": {
       "project": 1,
-      "image_url": "img/screenshots/chattym1.png",
+      "image_url": "/screenshots/chattym1.png",
       "caption": "ChattyM — screenshot 2"
     }
   },
@@ -60,7 +60,7 @@
     "pk": 6,
     "fields": {
       "project": 1,
-      "image_url": "img/screenshots/chattym3.png",
+      "image_url": "/screenshots/chattym3.png",
       "caption": "ChattyM — screenshot 3"
     }
   },
@@ -69,7 +69,7 @@
     "pk": 7,
     "fields": {
       "project": 2,
-      "image_url": "img/screenshots/what2cook1.png",
+      "image_url": "/screenshots/what2cook1.png",
       "caption": "What2Cook — screenshot 1"
     }
   },
@@ -78,7 +78,7 @@
     "pk": 8,
     "fields": {
       "project": 2,
-      "image_url": "img/screenshots/what2cook2.png",
+      "image_url": "/screenshots/what2cook2.png",
       "caption": "What2Cook — screenshot 2"
     }
   },
@@ -87,7 +87,7 @@
     "pk": 9,
     "fields": {
       "project": 2,
-      "image_url": "img/screenshots/what2cook3.png",
+      "image_url": "/screenshots/what2cook3.png",
       "caption": "What2Cook — screenshot 3"
     }
   }

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import type { Project } from '../types';
 
 const PLACEHOLDER_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450">
-     <rect width="100%" height="100%" fill="#efefef"/>
-     <text x="50%" y="50%" font-size="20" fill="#666" text-anchor="middle" dominant-baseline="middle">No screenshot</text>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675">
+     <rect width="100%" height="100%" fill="#111"/>
+     <text x="50%" y="50%" font-size="24" fill="#888" text-anchor="middle" dominant-baseline="middle">No screenshot</text>
    </svg>`
 );
 
@@ -22,6 +22,7 @@ async function tryFetchAsBlobUrl(url: string): Promise<string> {
 export const ProjectCard: React.FC<Props> = ({ project }) => {
   const images = Array.isArray(project.screenshots) && project.screenshots.length ? project.screenshots : [PLACEHOLDER_SVG];
   const [index, setIndex] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   const prev = (e: React.MouseEvent) => { e.stopPropagation(); setIndex(i => (i === 0 ? images.length - 1 : i - 1)); };
   const next = (e: React.MouseEvent) => { e.stopPropagation(); setIndex(i => (i === images.length - 1 ? 0 : i + 1)); };
@@ -49,35 +50,119 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
   };
 
   return (
-    <div className="project-card" style={{ border: '1px solid #ddd', padding: 12, borderRadius: 8, marginBottom: 12 }}>
-      <h3>{project.title}</h3>
+    <div
+      className="project-card"
+      style={{
+        width: '100%',
+        maxWidth: 1100,
+        margin: '0 auto',
+        border: '1px solid rgba(255,255,255,0.06)',
+        padding: 14,
+        borderRadius: 10,
+        marginBottom: 18,
+        background: 'linear-gradient(180deg, rgba(20,20,20,0.6), rgba(12,12,12,0.6))',
+        color: '#eee',
+        boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
+      }}
+    >
+      <h3 style={{ margin: '0 0 12px 0' }}>{project.title}</h3>
 
-      <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8, background: '#111' }}>
+      <div
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: 8,
+          background: '#0b0b0b',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          aspectRatio: '16 / 9',
+          minHeight: 360,
+        }}
+      >
         <img
           src={images[index]}
           alt={`${project.title} screenshot ${index + 1}`}
-          // img size
-          style={{ width: '100%', height: '720px', objectFit: 'cover', display: 'block' }}
+          loading="lazy"
+          decoding="async"
           onError={onImgError}
+          onLoad={() => setLoaded(true)}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            display: loaded ? 'block' : 'none',
+            background: '#0b0b0b',
+          }}
         />
+
+        {!loaded && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#666'
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ width: 48, height: 4, background: '#222', margin: '0 auto 8px', borderRadius: 2 }} />
+              <div>Loading image…</div>
+            </div>
+          </div>
+        )}
 
         {images.length > 1 && (
           <>
-            <button onClick={prev} aria-label="Previous" style={navBtnStyleLeft}>‹</button>
-            <button onClick={next} aria-label="Next" style={navBtnStyleRight}>›</button>
+            <button onClick={prev} aria-label="Previous" style={{
+              position: 'absolute',
+              left: 10,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(0,0,0,0.45)',
+              border: 'none',
+              color: '#fff',
+              padding: '8px 12px',
+              borderRadius: 8,
+              cursor: 'pointer',
+              backdropFilter: 'blur(4px)',
+            }}>‹</button>
 
-            <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', bottom: 8, display: 'flex', gap: 6 }}>
+            <button onClick={next} aria-label="Next" style={{
+              position: 'absolute',
+              right: 10,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'rgba(0,0,0,0.45)',
+              border: 'none',
+              color: '#fff',
+              padding: '8px 12px',
+              borderRadius: 8,
+              cursor: 'pointer',
+              backdropFilter: 'blur(4px)',
+            }}>›</button>
+
+            <div style={{
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              bottom: 10,
+              display: 'flex',
+              gap: 8,
+            }}>
               {images.map((_, i) => (
                 <button
                   key={i}
-                  onClick={(ev) => { ev.stopPropagation(); setIndex(i); }}
+                  onClick={(ev) => { ev.stopPropagation(); setIndex(i); setLoaded(false); }}
                   aria-label={`Go to screenshot ${i + 1}`}
                   style={{
-                    width: 10,
-                    height: 10,
+                    width: 12,
+                    height: 12,
                     borderRadius: '50%',
-                    border: 'none',
-                    background: i === index ? '#fff' : 'rgba(255,255,255,0.4)',
+                    border: '2px solid rgba(255,255,255,0.12)',
+                    background: i === index ? '#fff' : 'transparent',
                     cursor: 'pointer'
                   }}
                 />
@@ -87,38 +172,14 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
         )}
       </div>
 
-      <p>{project.description}</p>
-      <div style={{ marginTop: 8 }}>
-        {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noreferrer">GitHub</a>}
+      <p style={{ marginTop: 12, color: '#d9d9d9' }}>{project.description}</p>
+
+      <div style={{ marginTop: 8, display: 'flex', gap: 12, alignItems: 'center' }}>
+        {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noreferrer" style={{ color: '#9fbcff' }}>GitHub</a>}
+        {project.demoUrl && <a href={project.demoUrl} target="_blank" rel="noreferrer" style={{ color: '#9fbcff' }}>Demo</a>}
       </div>
     </div>
   );
-};
-
-const navBtnStyleLeft: React.CSSProperties = {
-  position: 'absolute',
-  left: 8,
-  top: '50%',
-  transform: 'translateY(-50%)',
-  background: 'rgba(0,0,0,0.5)',
-  border: 'none',
-  color: '#fff',
-  padding: '6px 8px',
-  borderRadius: 6,
-  cursor: 'pointer',
-};
-
-const navBtnStyleRight: React.CSSProperties = {
-  position: 'absolute',
-  right: 8,
-  top: '50%',
-  transform: 'translateY(-50%)',
-  background: 'rgba(0,0,0,0.5)',
-  border: 'none',
-  color: '#fff',
-  padding: '6px 8px',
-  borderRadius: 6,
-  cursor: 'pointer',
 };
 
 export default ProjectCard;

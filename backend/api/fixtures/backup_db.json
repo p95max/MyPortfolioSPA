@@ -96,8 +96,8 @@
     "pk": 10,
     "fields": {
       "project": 3,
-      "image_url": "/screenshots/as_book3.png",
-      "caption": "AS Book — screenshot 3"
+      "image_url": "/screenshots/as_book1.png",
+      "caption": "AS Book — screenshot 1"
     }
   },
       {
@@ -114,8 +114,8 @@
     "pk": 12,
     "fields": {
       "project": 3,
-      "image_url": "/screenshots/as_book1.png",
-      "caption": "AS Book — screenshot 1"
+      "image_url": "/screenshots/as_book3.png",
+      "caption": "AS Book — screenshot 3"
     }
   }
 ]

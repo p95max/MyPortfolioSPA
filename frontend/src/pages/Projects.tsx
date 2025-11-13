@@ -24,7 +24,11 @@ function toCamelCase(project: any): Project {
 }
 
 const USE_TEST_DATA = false;
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+const API_URL = import.meta.env.VITE_API_URL === undefined
+  ? 'http://localhost:8000'
+  : import.meta.env.VITE_API_URL;
+
 const ITEMS_PER_PAGE = 5;
 
 export const Projects = () => {

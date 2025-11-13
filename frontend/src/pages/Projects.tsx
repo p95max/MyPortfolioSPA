@@ -37,6 +37,7 @@ export const Projects = () => {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(0);
 
+
   useEffect(() => {
     if (USE_TEST_DATA) {
       setProjects(testProjects);

@@ -37,6 +37,7 @@ export const Projects = () => {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(0);
 
+
   useEffect(() => {
     if (USE_TEST_DATA) {
       setProjects(testProjects);
@@ -70,7 +71,7 @@ export const Projects = () => {
   const currentProjects = projects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
-    <div style={{ padding: 20, maxWidth: 800, margin: "0 auto" }}>
+    <div style={{ padding: 20, maxWidth: 1100, margin: "0 auto" }}>
       <h1 style={{ textAlign: "center", marginBottom: 20 }}>My Projects</h1>
 
       {projects.length === 0 ? (
@@ -79,7 +80,7 @@ export const Projects = () => {
         <>
           <div>
             {currentProjects.map(project => (
-              <div key={project.id} style={{ marginBottom: 20 }}>
+              <div key={project.id} style={{ marginBottom: 28 }}>
                 <ProjectCard project={project} />
               </div>
             ))}

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import type { Project } from '../types';
 
 const PLACEHOLDER_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450">
+  `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900">
      <rect width="100%" height="100%" fill="#efefef"/>
-     <text x="50%" y="50%" font-size="20" fill="#666" text-anchor="middle" dominant-baseline="middle">No screenshot</text>
+     <text x="50%" y="50%" font-size="28" fill="#666" text-anchor="middle" dominant-baseline="middle">No screenshot</text>
    </svg>`
 );
 
@@ -49,15 +49,14 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
   };
 
   return (
-    <div className="project-card" style={{ border: '1px solid #ddd', padding: 12, borderRadius: 8, marginBottom: 12 }}>
-      <h3>{project.title}</h3>
+    <div className="project-card" style={{ padding: 18, borderRadius: 10, marginBottom: 12, border: '1px solid rgba(255,255,255,0.04)', background: 'var(--card-bg, #0f1720)'}}>
+      <h3 style={{ margin: '0 0 12px 0' }}>{project.title}</h3>
 
       <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8, background: '#111' }}>
         <img
+          className="project-card-img"
           src={images[index]}
           alt={`${project.title} screenshot ${index + 1}`}
-          // img size
-          style={{ width: '100%', height: '520px', objectFit: 'cover', display: 'block' }}
           onError={onImgError}
         />
 
@@ -87,7 +86,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
         )}
       </div>
 
-      <p>{project.description}</p>
+      <p style={{ marginTop: 12 }}>{project.description}</p>
       <div style={{ marginTop: 8 }}>
         {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noreferrer">GitHub</a>}
       </div>
@@ -106,6 +105,7 @@ const navBtnStyleLeft: React.CSSProperties = {
   padding: '6px 8px',
   borderRadius: 6,
   cursor: 'pointer',
+  zIndex: 10,
 };
 
 const navBtnStyleRight: React.CSSProperties = {
@@ -119,6 +119,7 @@ const navBtnStyleRight: React.CSSProperties = {
   padding: '6px 8px',
   borderRadius: 6,
   cursor: 'pointer',
+  zIndex: 10,
 };
 
 export default ProjectCard;

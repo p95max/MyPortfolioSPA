@@ -107,7 +107,6 @@ export const TinyAssistant: React.FC = () => {
 
   useEffect(() => {
     return () => {
-
       if (typingIntervalRef.current) {
         window.clearInterval(typingIntervalRef.current);
         typingIntervalRef.current = null;
@@ -139,7 +138,6 @@ export const TinyAssistant: React.FC = () => {
   };
 
   const simulateTypingReply = (fullText: string) => {
-
     setTyping(true);
     const id = uid("a_");
     pushMessage({ id, role: "assistant", text: "", ts: Date.now() });
@@ -192,7 +190,6 @@ export const TinyAssistant: React.FC = () => {
       if (!best || score > best.score) best = { t, score };
     }
     if (best && best.score >= 0.45) {
-
       simulateTypingReply(best.t.a);
       return;
     }
@@ -245,14 +242,14 @@ export const TinyAssistant: React.FC = () => {
         onClick={() => setOpen((v) => !v)}
         title="Tiny — quick answers"
       >
-        <span className="tiny-logo">Helper</span>
+        <span className="tiny-logo">Help</span>
       </button>
 
       <div className="tiny-panel" role="dialog" aria-hidden={!open}>
         <div className="tiny-header">
           <div>
             <strong>Helper</strong>
-            <div className="tiny-sub">DEMO AI Assistant</div>
+            <div className="tiny-sub">DEMO AI Assistant (can be replaced on any AI LLM)</div>
           </div>
 
           <div className="tiny-controls">

@@ -7,6 +7,7 @@ import { Projects } from './pages/Projects';
 import { Contact } from './pages/Contact';
 import { Certificates } from './pages/Certificates';
 import TinyAssistant from './components/TinyAssistant';
+
 export const App = () => {
   useEffect(() => {
     document.title = 'My SPA Portfolio';
@@ -36,3 +37,5 @@ export const App = () => {
     </div>
   );
 };
+
+export default App;

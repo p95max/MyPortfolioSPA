@@ -5,8 +5,8 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
 import { Contact } from './pages/Contact';
-import { Certificates } from "./pages/Certificates.tsx";
-
+import { Certificates } from './pages/Certificates';
+import TinyAssistant from './components/TinyAssistant';
 export const App = () => {
   useEffect(() => {
     document.title = 'My SPA Portfolio';
@@ -31,6 +31,8 @@ export const App = () => {
         </div>
         <Footer />
       </Router>
+
+      <TinyAssistant />
     </div>
   );
 };

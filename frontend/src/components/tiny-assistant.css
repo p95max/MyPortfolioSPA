@@ -1,0 +1,228 @@
+/* tiny-assistant.css — larger UI for TinyAssistant */
+
+/* easy tuning */
+:root {
+  --ta-toggle-size: 56px;
+  --ta-panel-width-desktop: 520px;
+  --ta-panel-height-desktop: 620px;
+  --ta-font-base: 15px;
+  --ta-accent: #646cff;
+  --ta-bg: rgba(20,20,22,0.95);
+  --ta-surface: rgba(255,255,255,0.03);
+  --ta-border: rgba(255,255,255,0.04);
+  --ta-shadow: 0 20px 60px rgba(2,6,23,0.6);
+}
+
+/* container */
+.tiny-widget {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 99999;
+  font-family: Inter, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #eaeef8;
+}
+
+/* toggle button */
+.tiny-toggle {
+  width: var(--ta-toggle-size);
+  height: var(--ta-toggle-size);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid var(--ta-border);
+  box-shadow: 0 8px 30px rgba(2,6,23,0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+  padding: 8px;
+  backdrop-filter: blur(6px) saturate(120%);
+}
+.tiny-toggle:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 18px 46px rgba(2,6,23,0.7); }
+.tiny-logo { font-weight: 700; font-size: 14px; color: var(--ta-accent); }
+
+/* panel */
+.tiny-panel {
+  width: calc(var(--ta-panel-width-desktop));
+  height: calc(var(--ta-panel-height-desktop));
+  max-width: calc(var(--ta-panel-width-desktop));
+  max-height: calc(var(--ta-panel-height-desktop));
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), var(--ta-bg));
+  border-radius: 14px;
+  margin-top: 12px;
+  overflow: hidden;
+  display: none; /* shown when .open is set on root */
+  box-shadow: var(--ta-shadow);
+  border: 1px solid var(--ta-border);
+  transform-origin: bottom right;
+  transition: transform .16s ease, opacity .12s ease;
+  color: var(--ta-font-color, #eaeef8);
+  font-size: var(--ta-font-base);
+}
+
+/* show panel when widget has .open */
+.tiny-widget.open .tiny-panel {
+  display: block;
+  transform: translateY(-6px) scale(1);
+  opacity: 1;
+}
+
+/* header */
+.tiny-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+.tiny-header strong { display:block; font-size: 1rem; color: #fff; }
+.tiny-sub { font-size: 0.85rem; color: rgba(255,255,255,0.66); margin-top:2px; }
+
+/* controls */
+.tiny-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.tiny-limit {
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.85);
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255,255,255,0.02);
+}
+.tiny-reset, .tiny-close {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.tiny-close { padding: 6px 10px; }
+
+/* body - messages area */
+.tiny-body {
+  padding: 14px;
+  height: calc(var(--ta-panel-height-desktop) - 200px); /* leave space for header + templates + form */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+}
+
+/* message bubbles */
+.tiny-msg { display: flex; }
+.tiny-msg.system { justify-content: center; }
+.tiny-msg.user { justify-content: flex-end; }
+.tiny-msg.assistant { justify-content: flex-start; }
+
+.tiny-bubble {
+  max-width: 78%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  position: relative;
+  line-height: 1.35;
+  word-break: break-word;
+  box-shadow: 0 6px 20px rgba(2,6,23,0.35);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.02);
+}
+.tiny-msg.user .tiny-bubble {
+  background: linear-gradient(180deg, rgba(100,108,255,0.14), rgba(77,84,214,0.06));
+  color: #fff;
+  align-self: flex-end;
+}
+
+/* timestamp */
+.tiny-ts {
+  font-size: 11px;
+  color: rgba(255,255,255,0.52);
+  margin-top: 6px;
+  text-align: right;
+}
+
+/* typing indicator */
+.dot-typing { display:flex; gap:6px; align-items:center; padding:6px 0; }
+.dot-typing span { width:7px; height:7px; border-radius:50%; background: rgba(255,255,255,0.6); display:inline-block; opacity:0.6; animation: ta-bounce 1s infinite; }
+.dot-typing span:nth-child(2) { animation-delay: 0.12s; }
+.dot-typing span:nth-child(3) { animation-delay: 0.28s; }
+@keyframes ta-bounce { 0% { transform: translateY(0); opacity: .6 } 50% { transform: translateY(-6px); opacity: 1 } 100% { transform: translateY(0); opacity: .6 } }
+
+/* quick templates */
+.tiny-quick-templates {
+  padding: 10px 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255,255,255,0.02);
+  background: rgba(0,0,0,0.02);
+}
+.tpl-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.tpl-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(2,6,23,0.25); }
+
+/* form */
+.tiny-form {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid rgba(255,255,255,0.02);
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+}
+.tiny-form input[type="text"], .tiny-form input[type="search"], .tiny-form textarea {
+  flex: 1 1 auto;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(0,0,0,0.02);
+  color: #fff;
+  font-size: 0.98rem;
+  outline: none;
+}
+.tiny-form input::placeholder { color: rgba(255,255,255,0.45); }
+.tiny-form button {
+  background: var(--ta-accent);
+  border: none;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.tiny-form button:active { transform: translateY(-1px); }
+
+/* responsive adjustments */
+@media (max-width: 900px) {
+  :root {
+    --ta-panel-width-desktop: 92vw;
+    --ta-panel-height-desktop: 86vh;
+    --ta-toggle-size: 52px;
+  }
+  .tiny-widget { right: 6px; left: 6px; bottom: 8px; display: flex; justify-content: center; }
+  .tiny-panel { width: var(--ta-panel-width-desktop); height: var(--ta-panel-height-desktop); max-width: none; max-height: none; border-radius: 12px; }
+  .tiny-body { height: calc(var(--ta-panel-height-desktop) - 220px); }
+  .tiny-toggle { position: absolute; right: 18px; bottom: calc(var(--ta-panel-height-desktop) + 18px); }
+}
+
+/* small UX polish for focus */
+.tiny-toggle:focus, .tpl-btn:focus, .tiny-reset:focus, .tiny-close:focus, .tiny-form button:focus, .tiny-form input:focus {
+  outline: 3px solid rgba(100,108,255,0.14);
+  outline-offset: 2px;
+  border-radius: 10px;
+}

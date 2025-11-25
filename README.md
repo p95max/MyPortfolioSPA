@@ -1,6 +1,6 @@
 # Portfolio SPA Project
 
-Single Page Application portfolio with **React (Vite)** frontend and **Django REST** backend, containerized via **Docker Compose**.
+Single Page Application portfolio with **React (Vite)** frontend and **Django REST** backend, containerized via **Docker Compose** and deployed by **render.com**.
 
 ---
 
@@ -93,6 +93,7 @@ VITE_CAPTCHA_SITE_KEY=your-site-key
 - Superuser auto-created if missing.
 - Custom admin URL via `DJANGO_ADMIN_URL`.
 - URL address is protected by .env
+- Jazzmin Admin Theme: The project uses the Jazzmin plugin to modernize the Django Admin interface, providing an improved UI, better navigation, and a more polished management experience.
 
 ---
 

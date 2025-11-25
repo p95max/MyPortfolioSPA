@@ -54,8 +54,8 @@
 
 .input {
   width: 100%;
-  padding: 11px 12px;
-  border-radius: 10px;
+  padding: 15px 5px;
+  border-radius: 5px;
   border: 1px solid rgba(148,163,184,0.25);
   background: rgba(2,6,23,0.35);
   color: #e5e7eb;

@@ -247,8 +247,8 @@
   .field { margin-top: 12px; }
 
   .input {
-    padding: 11px 12px;
-    border-radius: 10px;
+    padding: 15px 5px;
+    border-radius: 5px;
   }
 
   .textarea { min-height: 120px; }

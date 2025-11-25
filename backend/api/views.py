@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 
 from .models import Project
 from .serializers import ProjectSerializer, ContactMessageSerializer
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 from django.utils.html import escape
 
 
@@ -66,25 +66,26 @@ def contact_message(request):
                 f"<pre style='white-space:pre-wrap'>{msg}</pre>"
             )
 
-            email_msg = EmailMessage(
+            email_msg = EmailMultiAlternatives(
                 subject=subject,
-                body=text_body,
+                body=text_body,  # plain text
                 from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
                 to=recipients,
                 reply_to=[message_obj.email] if message_obj.email else None,
             )
-            email_msg.content_subtype = "plain"
             email_msg.attach_alternative(html_body, "text/html")
             email_msg.send(fail_silently=False)
         else:
-            logger.warning("No recipients configured for contact notifications; email skipped")
+            logger.warning(
+                "No recipients configured. NOTIFY_EMAILS=%s, NOTIFY_EMAIL=%s, EMAIL_HOST_USER=%s",
+                getattr(settings, "NOTIFY_EMAILS", None),
+                getattr(settings, "NOTIFY_EMAIL", None),
+                getattr(settings, "EMAIL_HOST_USER", None),
+            )
 
         logger.info(f"Contact message saved and notification processed. ID={message_obj.id}")
         return Response({'message': 'Thank you for your message!'}, status=status.HTTP_201_CREATED)
 
     except Exception as e:
         logger.error(f"Failed to save/send contact message: {e}", exc_info=True)
-        return Response(
-            {"error": "Could not process your message."},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
+        return Response({"error": "Could not process your message."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

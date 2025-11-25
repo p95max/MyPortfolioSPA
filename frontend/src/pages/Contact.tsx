@@ -18,6 +18,8 @@ declare global {
           callback?: (token: string) => void;
           "refresh-expired"?: "auto" | "manual";
           theme?: "auto" | "light" | "dark";
+          "expired-callback"?: () => void;
+          "error-callback"?: () => void;
         }
       ) => void;
       reset?: (el?: HTMLElement) => void;
@@ -53,7 +55,6 @@ export default function Contact() {
 
   useEffect(() => {
     if (scriptLoadedRef.current) return;
-
     const s = document.createElement("script");
     s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
     s.async = true;
@@ -65,6 +66,8 @@ export default function Contact() {
           sitekey: siteKey,
           "refresh-expired": "auto",
           callback: (token: string) => setCaptchaToken(token),
+          "expired-callback": () => setCaptchaToken(null),
+          "error-callback": () => setCaptchaToken(null),
           theme: "auto",
         });
       }
@@ -82,7 +85,6 @@ export default function Contact() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr(null);
-
     if (form.hp) {
       setOk(true);
       return;
@@ -103,7 +105,6 @@ export default function Contact() {
       setErr("Please complete the captcha.");
       return;
     }
-
     setLoading(true);
     try {
       const resp = await fetch(apiUrl, {
@@ -117,7 +118,6 @@ export default function Contact() {
           cf_turnstile_token: captchaToken,
         }),
       });
-
       if (!resp.ok) {
         let detail = `Failed to send message (HTTP ${resp.status})`;
         try {
@@ -127,9 +127,7 @@ export default function Contact() {
           } else if (typeof data === "object" && data && "message" in data && typeof (data as any).message === "string") {
             detail = (data as { message: string }).message;
           }
-        } catch {
-
-        }
+        } catch {}
         if (resp.status === 400 && /captcha/i.test(detail)) {
           detail = "Captcha verification failed. Please try again.";
           if (window.turnstile && widgetRef.current) {
@@ -142,7 +140,6 @@ export default function Contact() {
         }
         throw new Error(detail);
       }
-
       setOk(true);
     } catch (err: unknown) {
       setErr(isErrorLike(err) && typeof err.message === "string" ? err.message : "Something went wrong");
@@ -150,6 +147,11 @@ export default function Contact() {
       setLoading(false);
     }
   };
+
+  const canSubmit = useMemo(() => {
+    const hasAllFields = !!form.name && !!form.message && /\S+@\S+\.\S+/.test(form.email);
+    return hasAllFields && !!siteKey && !!captchaToken && !loading;
+  }, [form.name, form.email, form.message, siteKey, captchaToken, loading]);
 
   if (ok) {
     return (
@@ -180,7 +182,6 @@ export default function Contact() {
 
           {err && <div className="alert">{err}</div>}
 
-          {/* honeypot */}
           <input
             className="hp"
             type="text"
@@ -237,7 +238,14 @@ export default function Contact() {
             <div ref={widgetRef} className="cf-turnstile" />
           </div>
 
-          <button className="btn btn-primary" type="submit" disabled={loading} aria-busy={loading}>
+          <button
+            className="btn btn-primary"
+            type="submit"
+            disabled={!canSubmit}
+            aria-busy={loading}
+            aria-disabled={!canSubmit}
+            title={!captchaToken ? "Complete captcha to enable" : undefined}
+          >
             {loading ? <span className="spinner" aria-hidden /> : <span className="send-ico" aria-hidden>✉️</span>}
             <span>{loading ? "Sending…" : "Send message"}</span>
           </button>

@@ -215,6 +215,12 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", EMAIL_HOST_USER)
+NOTIFY_EMAILS = [e.strip() for e in os.getenv("NOTIFY_EMAILS", NOTIFY_EMAIL).split(",") if e.strip()]
+
+EMAIL_SUBJECT_PREFIX = "[Portfolio] "
+
+
 JAZZMIN_SETTINGS = {
     "site_title": "Portfolio Admin",
     "site_header": "My Portfolio",

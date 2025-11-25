@@ -53,22 +53,26 @@ def contact_message(request):
             name = escape(message_obj.name or "")
             email = escape(message_obj.email or "")
             msg = escape(message_obj.message or "")
+            created_at = escape(message_obj.created_at or "")
 
             text_body = (
+                f"Date: {created_at}\n"
                 f"Name: {name}\n"
                 f"Email: {email}\n\n"
                 f"Message:\n{msg}"
             )
             html_body = (
-                f"<h3>New Contact Message</h3>"
+                f"<h3>You received a New Contact Message</h3>"
+                f"<p><strong>Date:</strong> {created_at}<br>"
                 f"<p><strong>Name:</strong> {name}<br>"
-                f"<strong>Email:</strong> {email}</p>"
+                f"<strong>Email:</strong> {email}</p><br>"
+                f"<p>Check it on your admin panel</p>"
                 f"<pre style='white-space:pre-wrap'>{msg}</pre>"
             )
 
             email_msg = EmailMultiAlternatives(
                 subject=subject,
-                body=text_body,  # plain text
+                body=text_body,
                 from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
                 to=recipients,
                 reply_to=[message_obj.email] if message_obj.email else None,

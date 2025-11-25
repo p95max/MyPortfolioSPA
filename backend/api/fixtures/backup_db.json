@@ -15,7 +15,7 @@
     "pk": 2,
     "fields": {
       "title": "What2Cook",
-      "description": "What2Cook — lightweight recipe finder: give it the ingredients you have and it will suggest recipes. Built with **FastAPI**, async SQLAlchemy, Postgres, Jinja2 templates and a small, responsive frontend.",
+      "description": "What2Cook — lightweight recipe finder: give it the ingredients you have and it will suggest recipes. Built with FastAPI, async SQLAlchemy, Postgres, Jinja2 templates and a small, responsive frontend.",
       "tech_stack": "#FASTAPI #Python3.14 #PostgreSQL #Bootstrap5 #Docker #DockerCompose #jinja2 #SQLAlchemy #API",
       "github_url": "https://github.com/p95max/What2Cook",
       "demo_url": ""
@@ -32,6 +32,17 @@
       "demo_url": ""
     }
   },
+    {
+    "model": "api.project",
+    "pk": 4,
+    "fields": {
+      "title": "Mini-Fleet Monitor",
+      "description": "This application is a lightweight fleet-management dashboard for simulated robots. It provides real-time robot status, coordinates, movement controls, and safe deletion with a hard limit of 10 units. The stack is minimal and production-oriented: Node.js API, PostgreSQL, Redis, and a React frontend with a clean, utility-driven UI. The project demonstrates handling live state, event-driven updates, and building a focused operational interface with modern full-stack practices.",
+      "tech_stack": "#Full-stack development #Node.js + Express #PostgreSQL #React #Docker #Redis #JWT_Auth #REST + WebSocket #OpenLayers-Map",
+      "github_url": "",
+      "demo_url": ""
+    }
+  },
 
 
 
@@ -39,7 +50,7 @@
 
     {
     "model": "api.projectscreenshot",
-    "pk": 4,
+    "pk": 1,
     "fields": {
       "project": 1,
       "image_url": "/screenshots/chattym2.png",
@@ -48,7 +59,7 @@
   },
   {
     "model": "api.projectscreenshot",
-    "pk": 5,
+    "pk": 2,
     "fields": {
       "project": 1,
       "image_url": "/screenshots/chattym1.png",
@@ -57,16 +68,18 @@
   },
   {
     "model": "api.projectscreenshot",
-    "pk": 6,
+    "pk": 3,
     "fields": {
       "project": 1,
       "image_url": "/screenshots/chattym3.png",
       "caption": "ChattyM — screenshot 3"
     }
   },
+
+
   {
     "model": "api.projectscreenshot",
-    "pk": 7,
+    "pk": 4,
     "fields": {
       "project": 2,
       "image_url": "/screenshots/what2cook1.png",
@@ -75,7 +88,7 @@
   },
   {
     "model": "api.projectscreenshot",
-    "pk": 8,
+    "pk": 5,
     "fields": {
       "project": 2,
       "image_url": "/screenshots/what2cook2.png",
@@ -84,16 +97,18 @@
   },
   {
     "model": "api.projectscreenshot",
-    "pk": 9,
+    "pk": 6,
     "fields": {
       "project": 2,
       "image_url": "/screenshots/what2cook3.png",
       "caption": "What2Cook — screenshot 3"
     }
   },
+
+
     {
     "model": "api.projectscreenshot",
-    "pk": 10,
+    "pk": 7,
     "fields": {
       "project": 3,
       "image_url": "/screenshots/as_book1.png",
@@ -102,7 +117,7 @@
   },
       {
     "model": "api.projectscreenshot",
-    "pk": 11,
+    "pk": 8,
     "fields": {
       "project": 3,
       "image_url": "/screenshots/as_book2.png",
@@ -111,11 +126,40 @@
   },
       {
     "model": "api.projectscreenshot",
-    "pk": 12,
+    "pk": 9,
     "fields": {
       "project": 3,
       "image_url": "/screenshots/as_book3.png",
       "caption": "AS Book — screenshot 3"
+    }
+  },
+
+
+   {
+    "model": "api.projectscreenshot",
+    "pk": 10,
+    "fields": {
+      "project": 4,
+      "image_url": "/screenshots/fleet1.png",
+      "caption": "Mini-Fleet Monitor — screenshot 1"
+    }
+  },
+      {
+    "model": "api.projectscreenshot",
+    "pk": 11,
+    "fields": {
+      "project": 4,
+      "image_url": "/screenshots/fleet2.png",
+      "caption": "Mini-Fleet Monitor — screenshot 2"
+    }
+  },
+      {
+    "model": "api.projectscreenshot",
+    "pk": 12,
+    "fields": {
+      "project": 4,
+      "image_url": "/screenshots/fleet3.png",
+      "caption": "Mini-Fleet Monitor — screenshot 3"
     }
   }
 ]

@@ -1,0 +1,31 @@
+.page-home {
+  padding: 16px;
+  --accent-color: #0070f3;
+  --text-color: #f6f6f6;
+  --muted-color: #c6d4e6;
+  --card-bg: rgba(20,20,20,0.65);
+}
+.page-home .container {
+  max-width: 980px; margin: 48px auto; padding: 28px;
+  border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(10,10,10,0.65), rgba(10,10,10,0.5));
+}
+.page-home .card { padding: 22px; border-radius: 10px; background: var(--card-bg); color: var(--text-color); }
+.page-home .header { margin: 0 0 12px 0; font-size: 2.2rem; line-height: 1.05; color: var(--accent-color); }
+.page-home .subheader { margin: 0 0 20px 0; color: var(--muted-color); font-size: 1rem; }
+.page-home .markdown { color: var(--muted-color); line-height: 1.6; }
+.page-home .controls { display: flex; gap: 12px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+.page-home .btn { padding: 10px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; }
+.page-home .btn-toggle { background: transparent; color: var(--muted-color); border: 1px solid rgba(255,255,255,0.06); }
+.page-home .btn-toggle[aria-pressed="true"] { background: var(--accent-color); color: #fff; }
+.page-home .btn-download { background: #22c55e; color: #fff; }
+.page-home .btn-outline { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--muted-color); border: 1px solid rgba(255,255,255,0.06); text-decoration: none; }
+.page-home .iframe-wrap { border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); }
+.page-home .links { margin-top: 18px; display: flex; gap: 12px; align-items: center; }
+.page-home .link-accent { color: var(--accent-color); font-weight: 700; }
+.page-home .link-muted { color: var(--muted-color); }
+.page-home .ml-auto { margin-left: auto; }
+@media (prefers-color-scheme: light){ body { background-color: #f6f8fb; } }
+@media (prefers-color-scheme: dark){ body { background-color: #0f1720; } }
+@media (max-width: 720px){ .home-iframe { height: 420px !important; } }

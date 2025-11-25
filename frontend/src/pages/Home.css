@@ -29,3 +29,64 @@
 @media (prefers-color-scheme: light){ body { background-color: #f6f8fb; } }
 @media (prefers-color-scheme: dark){ body { background-color: #0f1720; } }
 @media (max-width: 720px){ .home-iframe { height: 420px !important; } }
+
+
+/* ============================
+   MOBILE FIXES — Home page
+   ============================ */
+@media (max-width: 600px) {
+
+  .page-home .container {
+    margin: 20px auto;
+    padding: 16px;
+  }
+
+  .page-home .card {
+    padding: 16px;
+  }
+
+  .page-home .header {
+    font-size: 1.9rem;
+    line-height: 1.15;
+  }
+
+  .page-home .subheader {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .page-home .markdown {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .page-home .controls {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .page-home .ml-auto {
+    margin-left: 0;
+  }
+
+  .home-iframe {
+    height: 420px !important;
+  }
+
+  .iframe-wrap {
+    border-radius: 10px;
+  }
+
+  .links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 20px;
+  }
+
+  .tech-stack-row {
+    flex-wrap: wrap;
+    gap: 6px !important;
+  }
+}

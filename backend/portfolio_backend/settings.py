@@ -60,6 +60,7 @@ else:
     }
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -213,3 +214,25 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Portfolio Admin",
+    "site_header": "My Portfolio",
+    "site_brand": "My Portfolio",
+    "welcome_sign": "Welcome to My Portfolio Admin",
+    "show_ui_builder": False,
+    "topmenu_links": [
+        {"name": "Docs", "url": "https://www.django-rest-framework.org/"},
+        {"app": "api"},
+    ],
+    "icons": {
+        "api.contactmessage": "fas fa-envelope",
+        "api.project": "fas fa-diagram-project",
+    },
+}
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "navbar_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+}

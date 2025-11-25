@@ -5,8 +5,8 @@ const PLACEHOLDER_SVG =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450">
-       <rect width="100%" height="100%" fill="#efefef"/>
-       <text x="50%" y="50%" font-size="20" fill="#666" text-anchor="middle" dominant-baseline="middle">No screenshot</text>
+       <rect width="100%" height="100%" fill="#111"/>
+       <text x="50%" y="50%" font-size="20" fill="#aaa" text-anchor="middle" dominant-baseline="middle">No screenshot</text>
      </svg>`
   );
 
@@ -57,11 +57,29 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
     <div className="project-card" style={{ border: '1px solid #ddd', padding: 12, borderRadius: 8, marginBottom: 12 }}>
       <h3>{project.title}</h3>
 
-      <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8, background: '#111' }}>
+      {/* Вьюпорт фиксированной высоты, центрируем изображение, вписываем без обрезания */}
+      <div
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: 8,
+          background: '#111',
+          height: 520,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
         <img
           src={current}
           alt={`${project.title} screenshot ${index + 1}`}
-          style={{ width: '100%', height: '520px', objectFit: 'cover', display: 'block' }}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            width: 'auto',
+            height: 'auto',
+            display: 'block'
+          }}
           loading="lazy"
           crossOrigin="anonymous"
           onError={onImgError}
@@ -76,7 +94,16 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
               ›
             </button>
 
-            <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', bottom: 8, display: 'flex', gap: 6 }}>
+            <div
+              style={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                bottom: 8,
+                display: 'flex',
+                gap: 6
+              }}
+            >
               {imgs.map((_, i) => (
                 <button
                   key={i}

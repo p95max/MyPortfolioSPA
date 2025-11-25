@@ -51,17 +51,19 @@ def contact_message(request):
             f"Message:\n{message_obj.message}"
         )
 
-        send_mail(
-            subject=f"{getattr(settings, 'EMAIL_SUBJECT_PREFIX', '')}📩 New Contact Message",
-            message=(
-                f"Name: {message_obj.name}\n"
-                f"Email: {message_obj.email}\n\n"
-                f"Message:\n{message_obj.message}"
-            ),
-            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
-            recipient_list=getattr(settings, "NOTIFY_EMAILS", [getattr(settings, "EMAIL_HOST_USER", "")]),
-            fail_silently=False,
-        )
+        recipients = getattr(settings, "NOTIFY_EMAILS", [])
+        if recipients:
+            send_mail(
+                subject=f"{getattr(settings, 'EMAIL_SUBJECT_PREFIX', '')}📩 New Contact Message",
+                message=(
+                    f"Name: {message_obj.name}\n"
+                    f"Email: {message_obj.email}\n\n"
+                    f"Message:\n{message_obj.message}"
+                ),
+                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+                recipient_list=getattr(settings, "NOTIFY_EMAILS", [getattr(settings, "EMAIL_HOST_USER", "")]),
+                fail_silently=False,
+            )
 
         logger.info(f"Contact message saved and email sent. ID={message_obj.id}")
         return Response({'message': 'Thank you for your message!'}, status=status.HTTP_201_CREATED)

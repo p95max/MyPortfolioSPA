@@ -215,10 +215,18 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", EMAIL_HOST_USER)
-NOTIFY_EMAILS = [e.strip() for e in os.getenv("NOTIFY_EMAILS", NOTIFY_EMAIL).split(",") if e.strip()]
-
 EMAIL_SUBJECT_PREFIX = "[Portfolio] "
+
+NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", os.getenv("EMAIL_HOST_USER", ""))
+
+_notify_source = os.getenv(
+    "NOTIFY_EMAILS",
+    NOTIFY_EMAIL if NOTIFY_EMAIL is not None else ""
+)
+NOTIFY_EMAILS = [e.strip() for e in _notify_source.split(",") if e and e.strip()]
+
+if not NOTIFY_EMAILS and EMAIL_HOST_USER:
+    NOTIFY_EMAILS = [EMAIL_HOST_USER]
 
 
 JAZZMIN_SETTINGS = {

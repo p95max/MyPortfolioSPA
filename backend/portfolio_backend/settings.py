@@ -228,6 +228,9 @@ NOTIFY_EMAILS = [e.strip() for e in _notify_source.split(",") if e and e.strip()
 if not NOTIFY_EMAILS and EMAIL_HOST_USER:
     NOTIFY_EMAILS = [EMAIL_HOST_USER]
 
+DISPLAY_TZ = os.getenv("DISPLAY_TZ", "Europe/Berlin")
+
+
 
 JAZZMIN_SETTINGS = {
     "site_title": "Portfolio Admin",
@@ -262,3 +265,4 @@ REST_FRAMEWORK = {
 }
 
 TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET", "")
+

@@ -2,8 +2,9 @@ import logging
 from django.conf import settings
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from django.utils import timezone
 import requests
+from django.utils import timezone
+from zoneinfo import ZoneInfo
 
 from .models import Project
 from .serializers import ProjectSerializer, ContactMessageSerializer
@@ -78,12 +79,20 @@ def contact_message(request):
             name = escape(message_obj.name or "")
             email = escape(message_obj.email or "")
             msg = escape(message_obj.message or "")
-            created_at = message_obj.created_at.isoformat() if getattr(message_obj, "created_at", None) else timezone.now().isoformat()
-            created_at = escape(created_at)
+
+            tzname = getattr(settings, "DISPLAY_TZ", "Europe/Berlin")
+            try:
+                tz = ZoneInfo(tzname)
+            except Exception:
+                tz = timezone.get_default_timezone()
+
+            created_dt = getattr(message_obj, "created_at", None) or timezone.now()
+            created_local = timezone.localtime(created_dt, tz)
+            created_human = created_local.strftime("%d %b %Y, %H:%M %Z")
 
             text_body = (
                 f"ID: {message_obj.id}\n"
-                f"Date: {created_at}\n"
+                f"Date: {created_human}\n"
                 f"Name: {name}\n"
                 f"Email: {email}\n\n"
                 f"Message:\n{msg}"
@@ -91,11 +100,11 @@ def contact_message(request):
             html_body = (
                 f"<h3>New Contact Message</h3>"
                 f"<p><strong>ID:</strong> {message_obj.id}<br>"
-                f"<strong>Date:</strong> {created_at}<br>"
+                f"<strong>Date:</strong> {escape(created_human)}<br>"
                 f"<strong>Name:</strong> {name}<br>"
                 f"<strong>Email:</strong> {email}</p>"
-                f"<pre style='white-space:pre-wrap'>{msg}</pre>"
                 f"<p><em>See details in Admin.</em></p>"
+                f"<pre style='white-space:pre-wrap'>{msg}</pre>"
             )
 
             email_msg = EmailMultiAlternatives(

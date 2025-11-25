@@ -1,12 +1,13 @@
 import logging
 from django.conf import settings
-from django.core.mail import send_mail
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .models import Project, ContactMessage
+from .models import Project
 from .serializers import ProjectSerializer, ContactMessageSerializer
+from django.core.mail import EmailMessage
+from django.utils.html import escape
 
 
 
@@ -44,28 +45,41 @@ def contact_message(request):
     try:
         message_obj = serializer.save()
 
-        subject = "📩 New Contact Message on Portfolio"
-        body = (
-            f"Name: {message_obj.name}\n"
-            f"Email: {message_obj.email}\n\n"
-            f"Message:\n{message_obj.message}"
-        )
-
         recipients = getattr(settings, "NOTIFY_EMAILS", [])
         if recipients:
-            send_mail(
-                subject=f"{getattr(settings, 'EMAIL_SUBJECT_PREFIX', '')}📩 New Contact Message",
-                message=(
-                    f"Name: {message_obj.name}\n"
-                    f"Email: {message_obj.email}\n\n"
-                    f"Message:\n{message_obj.message}"
-                ),
-                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
-                recipient_list=getattr(settings, "NOTIFY_EMAILS", [getattr(settings, "EMAIL_HOST_USER", "")]),
-                fail_silently=False,
+            subj_prefix = getattr(settings, "EMAIL_SUBJECT_PREFIX", "")
+            subject = f"{subj_prefix}📩 New Contact Message".strip()
+
+            name = escape(message_obj.name or "")
+            email = escape(message_obj.email or "")
+            msg = escape(message_obj.message or "")
+
+            text_body = (
+                f"Name: {name}\n"
+                f"Email: {email}\n\n"
+                f"Message:\n{msg}"
+            )
+            html_body = (
+                f"<h3>New Contact Message</h3>"
+                f"<p><strong>Name:</strong> {name}<br>"
+                f"<strong>Email:</strong> {email}</p>"
+                f"<pre style='white-space:pre-wrap'>{msg}</pre>"
             )
 
-        logger.info(f"Contact message saved and email sent. ID={message_obj.id}")
+            email_msg = EmailMessage(
+                subject=subject,
+                body=text_body,
+                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+                to=recipients,
+                reply_to=[message_obj.email] if message_obj.email else None,
+            )
+            email_msg.content_subtype = "plain"
+            email_msg.attach_alternative(html_body, "text/html")
+            email_msg.send(fail_silently=False)
+        else:
+            logger.warning("No recipients configured for contact notifications; email skipped")
+
+        logger.info(f"Contact message saved and notification processed. ID={message_obj.id}")
         return Response({'message': 'Thank you for your message!'}, status=status.HTTP_201_CREATED)
 
     except Exception as e:

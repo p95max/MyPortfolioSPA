@@ -4,12 +4,13 @@ import "./navbar.css";
 
 export const Navbar = () => {
   const location = useLocation();
+  const [open, setOpen] = useState(false);
+
   const [isDark, setIsDark] = useState<boolean>(() =>
     typeof window !== "undefined" && window.matchMedia
       ? window.matchMedia("(prefers-color-scheme: dark)").matches
       : true
   );
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
@@ -18,14 +19,9 @@ export const Navbar = () => {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
+  useEffect(() => setOpen(false), [location.pathname]);
 
-  const rootClass = useMemo(
-    () => `nav-root ${isDark ? "dark" : ""}`,
-    [isDark]
-  );
+  const rootClass = useMemo(() => `nav-root ${isDark ? "dark" : ""}`, [isDark]);
 
   const links = [
     { to: "/", label: "About" },
@@ -43,23 +39,17 @@ export const Navbar = () => {
           <span>My Single Page Portfolio</span>
         </Link>
 
-        {/* center links (collapse on mobile) */}
         <div className={`nav-center ${open ? "open" : ""}`} id="primary-menu">
           {links.map(({ to, label }) => {
             const active = location.pathname === to;
             return (
-              <Link
-                key={to}
-                to={to}
-                className={`nav-link ${active ? "active" : ""}`}
-              >
+              <Link key={to} to={to} className={`nav-link ${active ? "active" : ""}`}>
                 {label}
               </Link>
             );
           })}
         </div>
 
-        {/* right side */}
         <div className="nav-right">
           <button
             className={`hamburger ${open ? "is-open" : ""}`}
@@ -79,3 +69,5 @@ export const Navbar = () => {
     </div>
   );
 };
+
+export default Navbar;

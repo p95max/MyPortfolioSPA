@@ -39,5 +39,18 @@ export const testProjects: Project[] = [
       '/screenshots/as_book2.png',
       '/screenshots/as_book3.png'
     ]
+  },
+    {
+    id: '4',
+    title: 'Mini-Fleet Monitor',
+    description: 'This application is a lightweight fleet-management dashboard for simulated robots. It provides real-time robot status, coordinates, movement controls, and safe deletion with a hard limit of 10 units. The stack is minimal and production-oriented: Node.js API, PostgreSQL, Redis, and a React frontend with a clean, utility-driven UI. The project demonstrates handling live state, event-driven updates, and building a focused operational interface with modern full-stack practices.',
+    techStack: ['#Full-stack development #Node.js + Express #PostgreSQL #React #Docker #Redis #JWT_Auth #REST + WebSocket #OpenLayers-Map'],
+    githubUrl: 'https://github.com/p95max',
+    demoUrl: '',
+    screenshots: [
+      '/screenshots/fleet1.png',
+      '/screenshots/fleet2.png',
+      '/screenshots/fleet3.png'
+    ]
   }
 ];

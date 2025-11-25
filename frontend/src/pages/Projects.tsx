@@ -15,19 +15,21 @@ function toCamelCase(project: any): Project {
         : project.tech_stack || [],
     githubUrl: project.github_url,
     demoUrl: project.demo_url,
-    screenshots: Array.isArray(project.screenshots)
-      ? project.screenshots
-          .map((s: any) => (typeof s === "string" ? s : s.image_url || ""))
-          .filter((u: string) => !!u)
-      : [],
+     screenshots: Array.isArray(project.screenshots)
+       ? project.screenshots
+           .map((s: any) => (typeof s === 'string' ? s : (s.image_url || '')))
+           .filter((u: string) => !!u)
+           .map((u: string) => u)
+       : [],
   };
 }
 
-const USE_TEST_DATA = true;
-const API_URL =
-  import.meta.env.VITE_API_URL === undefined
-    ? "http://localhost:8000"
-    : import.meta.env.VITE_API_URL;
+
+const USE_TEST_DATA = false;
+
+const API_URL = import.meta.env.VITE_API_URL === undefined
+  ? 'http://localhost:8000'
+  : import.meta.env.VITE_API_URL;
 
 const ITEMS_PER_PAGE = 5;
 

@@ -2,12 +2,21 @@ import logging
 from django.conf import settings
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from django.utils import timezone
 
 from .models import Project
 from .serializers import ProjectSerializer, ContactMessageSerializer
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import escape
+
+from rest_framework.decorators import api_view, throttle_classes
+from .throttles import (
+    ContactEmailThrottle,
+    ContactIPThrottle,
+    ContactSubnetThrottle,
+    ContactGlobalThrottle,
+    ContactMessageFingerprintThrottle,
+)
 
 
 
@@ -33,9 +42,20 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @api_view(['POST'])
+@throttle_classes([
+    ContactEmailThrottle,
+    ContactIPThrottle,
+    ContactSubnetThrottle,
+    ContactGlobalThrottle,
+    ContactMessageFingerprintThrottle,
+])
 def contact_message(request):
     logger.info("POST /contact-message/ requested")
     logger.debug(f"Request data: {request.data}")
+
+    if (request.data.get("website") or request.data.get("hp")):
+        logger.warning("Honeypot triggered; dropping submission")
+        return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)
 
     serializer = ContactMessageSerializer(data=request.data)
     if not serializer.is_valid():
@@ -53,21 +73,24 @@ def contact_message(request):
             name = escape(message_obj.name or "")
             email = escape(message_obj.email or "")
             msg = escape(message_obj.message or "")
-            created_at = escape(message_obj.created_at or "")
+            created_at = message_obj.created_at.isoformat() if getattr(message_obj, "created_at", None) else timezone.now().isoformat()
+            created_at = escape(created_at)
 
             text_body = (
+                f"ID: {message_obj.id}\n"
                 f"Date: {created_at}\n"
                 f"Name: {name}\n"
                 f"Email: {email}\n\n"
                 f"Message:\n{msg}"
             )
             html_body = (
-                f"<h3>You received a New Contact Message</h3>"
-                f"<p><strong>Date:</strong> {created_at}<br>"
-                f"<p><strong>Name:</strong> {name}<br>"
-                f"<strong>Email:</strong> {email}</p><br>"
-                f"<p>Check it on your admin panel</p>"
+                f"<h3>New Contact Message</h3>"
+                f"<p><strong>ID:</strong> {message_obj.id}<br>"
+                f"<strong>Date:</strong> {created_at}<br>"
+                f"<strong>Name:</strong> {name}<br>"
+                f"<strong>Email:</strong> {email}</p>"
                 f"<pre style='white-space:pre-wrap'>{msg}</pre>"
+                f"<p><em>See details in Admin.</em></p>"
             )
 
             email_msg = EmailMultiAlternatives(

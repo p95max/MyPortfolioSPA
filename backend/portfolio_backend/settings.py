@@ -250,3 +250,13 @@ JAZZMIN_UI_TWEAKS = {
     "body_small_text": False,
     "brand_small_text": False,
 }
+
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_RATES": {
+        "contact_email": "5/hour",
+        "contact_ip": "60/hour",
+        "contact_subnet": "200/hour",
+        "contact_global": "500/hour",
+        "contact_fingerprint": "3/hour",
+    }
+}

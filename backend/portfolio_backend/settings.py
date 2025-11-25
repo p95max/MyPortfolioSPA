@@ -260,3 +260,5 @@ REST_FRAMEWORK = {
         "contact_fingerprint": "3/hour",
     }
 }
+
+TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET", "")

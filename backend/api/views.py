@@ -3,6 +3,7 @@ from django.conf import settings
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from django.utils import timezone
+import requests
 
 from .models import Project
 from .serializers import ProjectSerializer, ContactMessageSerializer
@@ -56,6 +57,10 @@ def contact_message(request):
     if (request.data.get("website") or request.data.get("hp")):
         logger.warning("Honeypot triggered; dropping submission")
         return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)
+
+    token = request.data.get("cf_turnstile_token")
+    if not _check_turnstile(token, request.META.get("REMOTE_ADDR")):
+        return Response({"detail": "captcha_failed"}, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = ContactMessageSerializer(data=request.data)
     if not serializer.is_valid():
@@ -116,3 +121,18 @@ def contact_message(request):
     except Exception as e:
         logger.error(f"Failed to save/send contact message: {e}", exc_info=True)
         return Response({"error": "Could not process your message."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def _check_turnstile(token: str, ip: str) -> bool:
+    secret = getattr(settings, "TURNSTILE_SECRET", "")
+    if not secret:
+        return True
+    try:
+        r = requests.post(
+            "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+            data={"secret": secret, "response": token, "remoteip": ip},
+            timeout=3,
+        )
+        return bool(r.json().get("success"))
+    except Exception:
+        return False

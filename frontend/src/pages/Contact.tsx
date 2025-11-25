@@ -1,30 +1,76 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./Contact.css";
 
 type Form = {
   name: string;
   email: string;
   message: string;
-  company?: string;
+  hp?: string;
 };
 
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        el: HTMLElement,
+        opts: {
+          sitekey: string;
+          callback?: (token: string) => void;
+          "refresh-expired"?: "auto" | "manual";
+          theme?: "auto" | "light" | "dark";
+        }
+      ) => void;
+      reset?: (el?: HTMLElement) => void;
+    };
+  }
+}
+
+function isErrorLike(x: unknown): x is { message?: string } {
+  return typeof x === "object" && x !== null && "message" in x;
+}
+
 export default function Contact() {
-  const [form, setForm] = useState<Form>({ name: "", email: "", message: "", company: "" });
+  const [form, setForm] = useState<Form>({ name: "", email: "", message: "", hp: "" });
   const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+  const widgetRef = useRef<HTMLDivElement | null>(null);
+  const scriptLoadedRef = useRef(false);
 
   useEffect(() => {
     document.title = "My SPA Portfolio — Contact";
   }, []);
 
-  const apiUrl = useMemo(
-    () =>
-      (import.meta as any).env?.VITE_API_URL
-        ? `${(import.meta as any).env.VITE_API_URL}/api/contact/`
-        : "http://localhost:8000/api/contact/",
-    []
-  );
+  const apiUrl = useMemo(() => {
+    return import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}/api/contact/`
+      : "http://localhost:8000/api/contact/";
+  }, []);
+
+  const siteKey = useMemo(() => import.meta.env.VITE_TURNSTILE_SITEKEY ?? "", []);
+
+  useEffect(() => {
+    if (scriptLoadedRef.current) return;
+
+    const s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    s.async = true;
+    s.defer = true;
+    s.onload = () => {
+      scriptLoadedRef.current = true;
+      if (widgetRef.current && window.turnstile && siteKey) {
+        window.turnstile.render(widgetRef.current, {
+          sitekey: siteKey,
+          "refresh-expired": "auto",
+          callback: (token: string) => setCaptchaToken(token),
+          theme: "auto",
+        });
+      }
+    };
+    document.head.appendChild(s);
+  }, [siteKey]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -37,7 +83,10 @@ export default function Contact() {
     e.preventDefault();
     setErr(null);
 
-    if (form.company) return;
+    if (form.hp) {
+      setOk(true);
+      return;
+    }
     if (!form.name || !form.email || !form.message) {
       setErr("Please fill out all fields.");
       return;
@@ -46,27 +95,57 @@ export default function Contact() {
       setErr("Please provide a valid email.");
       return;
     }
+    if (!siteKey) {
+      setErr("Captcha is not configured.");
+      return;
+    }
+    if (!captchaToken) {
+      setErr("Please complete the captcha.");
+      return;
+    }
 
     setLoading(true);
     try {
       const resp = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          hp: form.hp,
+          cf_turnstile_token: captchaToken,
+        }),
       });
+
       if (!resp.ok) {
-        let detail = "Failed to send message";
+        let detail = `Failed to send message (HTTP ${resp.status})`;
         try {
-          const data = await resp.json();
-          detail = data?.message || detail;
+          const data: unknown = await resp.json();
+          if (typeof data === "object" && data && "detail" in data && typeof (data as any).detail === "string") {
+            detail = (data as { detail: string }).detail;
+          } else if (typeof data === "object" && data && "message" in data && typeof (data as any).message === "string") {
+            detail = (data as { message: string }).message;
+          }
         } catch {
-          /* ignore */
+
+        }
+        if (resp.status === 400 && /captcha/i.test(detail)) {
+          detail = "Captcha verification failed. Please try again.";
+          if (window.turnstile && widgetRef.current) {
+            setCaptchaToken(null);
+            window.turnstile.reset?.(widgetRef.current);
+          }
+        }
+        if (resp.status === 429) {
+          detail = "Too many attempts. Please try again later.";
         }
         throw new Error(detail);
       }
+
       setOk(true);
-    } catch (e: any) {
-      setErr(e?.message || "Something went wrong");
+    } catch (err: unknown) {
+      setErr(isErrorLike(err) && typeof err.message === "string" ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -101,13 +180,14 @@ export default function Contact() {
 
           {err && <div className="alert">{err}</div>}
 
+          {/* honeypot */}
           <input
             className="hp"
             type="text"
-            name="company"
+            name="hp"
             autoComplete="off"
             tabIndex={-1}
-            value={form.company}
+            value={form.hp}
             onChange={onChange}
             aria-hidden="true"
           />
@@ -153,12 +233,12 @@ export default function Contact() {
             <label className="label">Message</label>
           </div>
 
+          <div className="captcha-wrap">
+            <div ref={widgetRef} className="cf-turnstile" />
+          </div>
+
           <button className="btn btn-primary" type="submit" disabled={loading} aria-busy={loading}>
-            {loading ? (
-              <span className="spinner" aria-hidden />
-            ) : (
-              <span className="send-ico" aria-hidden>✉️</span>
-            )}
+            {loading ? <span className="spinner" aria-hidden /> : <span className="send-ico" aria-hidden>✉️</span>}
             <span>{loading ? "Sending…" : "Send message"}</span>
           </button>
 
@@ -195,7 +275,6 @@ export default function Contact() {
               </a>
             </li>
           </ul>
-
         </aside>
       </div>
     </div>

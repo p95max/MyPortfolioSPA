@@ -1,87 +1,147 @@
 # Portfolio SPA Project
 
-This project is a Single Page Application portfolio consisting of a React frontend and a Django backend, containerized with Docker.
+Single Page Application portfolio with **React (Vite)** frontend and **Django REST** backend, containerized via **Docker Compose**.
+
+## Features
+
+- Project/skills content managed via Django Admin
+- Admin panel URL address is protected by .env
+- Contact form with:
+  - **CAPTCHA** validation (server-side token verify)
+  - **Anti-spam safeguards** (rate limits per IP/email, minimal payload checks, optional honeypot)
+  - **Email notifications** to a configurable list
+  - Optional deep-link to the admin detail page of the created message
 
 ## Architecture
 
 - **Backend:** Django REST API
-- **Frontend:** React + VITE, served by Nginx
+- **Frontend:** React + Vite, served by Nginx
 - **Database:** PostgreSQL 17
-- **Containerization:** Docker Compose orchestrates all services
-
+- **Orchestration:** Docker Compose
 
 ## Getting Started
-
-1. Clone the repository:
 
 ```bash
 git clone https://github.com/p95max/MyPortfolioSPA.git
 cd MyPortfolioSPA
+docker compose up --build
 ```
 
-2. Create `.env` file with database credentials.
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8000`
 
-3. Build and start all services:
+## Environment Variables
+
+### Backend (`backend/.env`)
+
+```
+#Django
+DEBUG=True
+SECRET_KEY=django-
+
+#DB
+DB_NAME=dbname
+DB_USER=user
+DB_PASSWORD=pass
+DB_HOST=localhost
+DB_PORT=5432
+
+# superuser
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@admin.com
+DJANGO_SUPERUSER_PASSWORD=adminpass
+
+# django admin
+DJANGO_ADMIN_URL=admin
+
+# local dev db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=S3cur3P@ss
+POSTGRES_DB=mydb
+
+# email
+EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST_USER=your_email@gmail.com
+EMAIL_HOST_PASSWORD=your_app_password
+
+NOTIFY_EMAIL=your_email@gmail.com
+
+TURNSTILE_SECRET=your-capcha-secret-key
+```
+
+### Frontend (`frontend/.env`)
+
+```
+VITE_API_BASE=http://localhost:8000
+VITE_CAPTCHA_SITE_KEY=your-site-key
+```
+
+## Django Admin
+
+- Superuser auto-created if missing.
+- Custom admin URL via `DJANGO_ADMIN_URL`.
+- URL address is protected by .env
+
+## Contact Form — End-to-End Flow
+
+### 1) Frontend
+
+Disables submit until CAPTCHA verification. Sends:
+
+```
+POST /contact-message/
+{
+  "name": "John",
+  "email": "john@example.com",
+  "message": "Hello",
+  "captcha_token": "<token>",
+  "company": "Acme"
+}
+```
+
+### 2) Backend validation
+
+- CAPTCHA verify using `CAPTCHA_SECRET`
+- Throttles
+- Honeypot check
+- Persists ContactMessage
+- Sends notification email
+
+### 3) Responses
+
+- 201 Created
+- 400 Invalid
+- 429 Throttled
+
+## Testing
 
 ```bash
-docker-compose up --build
+curl -X POST http://localhost:8000/contact-message/   -H 'Content-Type: application/json'   -d '{"name":"Test","email":"a@a.com","message":"hi","captcha_token":"x"}'
 ```
 
-4. Access frontend at `http://localhost:3000` and backend API at `http://localhost:8000`.
+## Security Notes
 
-
-## Django Admin Guide
-
-The Django Admin interface provides a powerful and easy-to-use way to manage your application's data. You can create, read, update, and delete (CRUD) records for your models without writing any additional frontend code.
-
-### 1. Register Your Models
-
-For your models to appear in the Django Admin, you need to register them in the `admin.py` file of your Django application.
-
-**Example:**
-
-In `backend/MyPortfolioSPA/admin.py`:
-
-```python
-from django.contrib import admin
-from .models import Project, Skill, Contact  # Replace with your actual models
-
-@admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'status', 'created_at')  # Customize displayed fields
-
-@admin.register(Skill)
-class SkillAdmin(admin.ModelAdmin):
-    list_display = ('name', 'level')
-
-@admin.register(Contact)
-class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'subject')
-```
-
-### 2. Automated Superuser Creation
-
-A Django superuser account is essential for accessing the Admin interface. In this setup, the superuser is **automatically created by a script** (`backend/create_superuser.py`) during the `web` service startup, but only if it doesn't already exist.
-Superuser credentials are provided via your `.env` file in backend
-For security reasons, the Django Admin URL is **not hardcoded** in the project.  
-Instead, it is stored in your `.env` file in variable **DJANGO_ADMIN_URL** (check **backend/.env.example**)
-
-
-### 3. Manage Your Data
-
-- On the admin dashboard, you will see your registered models listed under your application name.
-- Click on a model (e.g., "Projects") to view, add, edit, or delete records.
-- Use the "Add [Model Name]" button to create new entries.
-- Click on existing entries to edit them.
-
-This guide should help you get started with managing your portfolio data through the Django Admin.
+- Server-side CAPTCHA validation
+- Throttling
+- Escape user input
 
 ## Development
 
-- Backend code is in `/backend`
-- Frontend code is in `/frontend`
-- 
+- Backend: `/backend`
+- Frontend: `/frontend`
+
+## Troubleshooting
+
+- CAPTCHA fails → check domain + keys
+- 429 → throttling
+- Emails → SMTP creds
 
 ## License
 
-MIT License
+MIT
+
+## Contacts
+
+Author: Maksym Petrykin  
+Email: [m.petrykin@gmx.de](mailto:m.petrykin@gmx.de)  
+Telegram: [@max_p95](https://t.me/max_p95)

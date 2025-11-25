@@ -18,7 +18,7 @@ function toCamelCase(project: any): Project {
        ? project.screenshots
            .map((s: any) => (typeof s === 'string' ? s : (s.image_url || '')))
            .filter((u: string) => !!u)
-           .map((u: string) => u.startsWith('http') ? u : `${API_URL}${u}`)
+           .map((u: string) => u)
        : [],
   };
 }

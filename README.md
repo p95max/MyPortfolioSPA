@@ -13,6 +13,7 @@ Single Page Application portfolio with **React (Vite)** frontend and **Django RE
   - **CAPTCHA** validation (server-side token verify)
   - **Anti-spam safeguards** (rate limits per IP/email, minimal payload checks, optional honeypot)
   - **Email notifications** to a configurable list
+- The mobile version of the website has also been optimized.
 
 ## Architecture
 

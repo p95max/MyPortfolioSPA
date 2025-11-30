@@ -60,6 +60,7 @@ else:
     }
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -205,12 +206,63 @@ LOGGING = {
     },
 }
 
-SENTRY_DSN = os.getenv("SENTRY_DSN", "")
 
-if SENTRY_DSN and not DEBUG:
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[DjangoIntegration()],
-        traces_sample_rate=0.2,
-        send_default_pii=True,
-    )
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_SUBJECT_PREFIX = "[Portfolio] "
+
+NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", os.getenv("EMAIL_HOST_USER", ""))
+
+_notify_source = os.getenv(
+    "NOTIFY_EMAILS",
+    NOTIFY_EMAIL if NOTIFY_EMAIL is not None else ""
+)
+NOTIFY_EMAILS = [e.strip() for e in _notify_source.split(",") if e and e.strip()]
+
+if not NOTIFY_EMAILS and EMAIL_HOST_USER:
+    NOTIFY_EMAILS = [EMAIL_HOST_USER]
+
+DISPLAY_TZ = os.getenv("DISPLAY_TZ", "Europe/Berlin")
+
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Portfolio Admin",
+    "site_header": "My Portfolio",
+    "site_brand": "My Portfolio",
+    "welcome_sign": "Welcome to My Portfolio Admin",
+    "show_ui_builder": False,
+    "topmenu_links": [
+        {"name": "Docs", "url": "https://www.django-rest-framework.org/"},
+        {"app": "api"},
+    ],
+    "icons": {
+        "api.contactmessage": "fas fa-envelope",
+        "api.project": "fas fa-diagram-project",
+    },
+}
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "navbar_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_RATES": {
+        "contact_email": "5/hour",
+        "contact_ip": "60/hour",
+        "contact_subnet": "200/hour",
+        "contact_global": "500/hour",
+        "contact_fingerprint": "3/hour",
+    }
+}
+
+TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET", "")
+

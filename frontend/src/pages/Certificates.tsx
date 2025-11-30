@@ -55,7 +55,7 @@ function Certificates() {
     <div className="page-cert">
       <div className="container">
         <div className="card">
-          <h1 className="header">Credentials</h1>
+          <h1 className="header">Certificates</h1>
           <p className="subheader">Professional certifications and recommendation letters.</p>
 
           <div className="tabs">

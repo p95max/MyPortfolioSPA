@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import "./Home.css";
+import aboutText from "../components/aboutText";
 
 type Lang = "DE" | "EN";
 
@@ -9,33 +10,8 @@ export const Home = () => {
   const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
-    document.title = "My SPA Portfolio — Home";
+    document.title = "My SPA Portfolio - Home";
   }, []);
-
-  const aboutText = useMemo(() => {
-    if (lang === "DE") {
-      return [
-        "### Über mich",
-        "- Python/Django Backend, REST, Docker, Postgres",
-        "- Praxisorientiert, liefere MVPs und продакшен-код",
-        "- Fokus: надёжность, наблюдаемость, тесты",
-        "",
-        "### Aktuell",
-        "- Baue Portfolio-SPA + AI-Assistant",
-        "- Pflege mehrere Django/FastAPI-Projekte",
-      ].join("\n");
-    }
-    return [
-      "### About",
-      "- Python/Django backend, REST, Docker, Postgres",
-      "- Pragmatic engineering: MVPs → production",
-      "- Focus: reliability, observability, tests",
-      "",
-      "### Now",
-      "- Building a portfolio SPA with an AI assistant",
-      "- Maintaining multiple Django/FastAPI projects",
-    ].join("\n");
-  }, [lang]);
 
   const resumeHref = lang === "DE" ? "/resumeDE.pdf" : "/resumeENG.pdf";
   const resumeDL = lang === "DE" ? "Resume_DE.pdf" : "Resume_EN.pdf";
@@ -67,6 +43,7 @@ export const Home = () => {
             </div>
 
             <div className="controls">
+              {/* Кнопки меняют ТОЛЬКО PDF резюме */}
               <div style={{ display: "flex", gap: 8 }}>
                 <button
                   className="btn btn-toggle"

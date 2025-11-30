@@ -3,3 +3,7 @@ interface ImportMetaEnv {
   readonly VITE_TURNSTILE_SITEKEY?: string;
   readonly VITE_SNOW?: "on" | "off" | "auto";
 }
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

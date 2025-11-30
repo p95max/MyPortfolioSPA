@@ -25,7 +25,7 @@ function toCamelCase(project: any): Project {
 }
 
 
-const USE_TEST_DATA = true;
+const USE_TEST_DATA = false;
 
 const API_URL = import.meta.env.VITE_API_URL === undefined
   ? 'http://localhost:8000'

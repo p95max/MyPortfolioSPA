@@ -1,87 +1,195 @@
 # Portfolio SPA Project
 
-This project is a Single Page Application portfolio consisting of a React frontend and a Django backend, containerized with Docker.
+Single Page Application portfolio with **React (Vite)** frontend and **Django REST** backend, containerized via **Docker Compose** and deployed by **render.com**.
+
+---
+
+## Features
+
+- Projects/skills **content management** via Django Admin Panel;
+- **Fast PDF Preview:** The application provides instant in-browser PDF previews using PDF.js. The first page is rendered directly on the frontend without opening external tabs, ensuring quick loading and a smooth user experience for CVs, documents, or reports.
+- **Interactive Helper Widget:** The portfolio includes a lightweight, browser-only helper widget that provides quick guidance, preconfigured answers, and basic navigation support. It works without any backend or external APIs, but can be extended with AI capabilities if needed.
+- **Contact form with:**
+  - **CAPTCHA** validation (server-side token verify)
+  - **Anti-spam safeguards** (rate limits per IP/email, minimal payload checks, optional honeypot)
+  - **Email notifications** to a configurable list
+- The mobile version of the website has also been optimized.
 
 ## Architecture
 
 - **Backend:** Django REST API
-- **Frontend:** React + VITE, served by Nginx
+- **Frontend:** React + Vite, served by Nginx
 - **Database:** PostgreSQL 17
-- **Containerization:** Docker Compose orchestrates all services
+- **Orchestration:** Docker Compose
 
+---
+
+## Live Demo
+
+You can test the full workflow — frontend UI, API, contact form with CAPTCHA and email notifications - on the production instance:
+
+🔗 https://myportfoliospa-1.onrender.com/
+
+---
 
 ## Getting Started
-
-1. Clone the repository:
 
 ```bash
 git clone https://github.com/p95max/MyPortfolioSPA.git
 cd MyPortfolioSPA
+docker compose up --build
 ```
 
-2. Create `.env` file with database credentials.
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8000`
 
-3. Build and start all services:
+## Environment Variables
+
+### Backend (`backend/.env`)
+
+```
+#Django
+DEBUG=True
+SECRET_KEY=django-
+
+#DB
+DB_NAME=dbname
+DB_USER=user
+DB_PASSWORD=pass
+DB_HOST=localhost
+DB_PORT=5432
+
+# superuser
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@admin.com
+DJANGO_SUPERUSER_PASSWORD=adminpass
+
+# django admin
+DJANGO_ADMIN_URL=admin
+
+# local dev db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=S3cur3P@ss
+POSTGRES_DB=mydb
+
+# email
+EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST_USER=your_email@gmail.com
+EMAIL_HOST_PASSWORD=your_app_password
+
+NOTIFY_EMAIL=your_email@gmail.com
+
+TURNSTILE_SECRET=your-capcha-secret-key
+```
+
+### Frontend (`frontend/.env`)
+
+```
+VITE_API_BASE=http://localhost:8000
+VITE_CAPTCHA_SITE_KEY=your-site-key
+```
+
+## Django Admin
+
+- Superuser auto-created if missing.
+- Custom admin URL via `DJANGO_ADMIN_URL`.
+- URL address is protected by .env
+- Jazzmin Admin Theme: The project uses the Jazzmin plugin to modernize the Django Admin interface, providing an improved UI, better navigation, and a more polished management experience.
+
+---
+
+## Email Notifications for New Contact Messages
+
+The backend automatically sends an email notification whenever a new contact message is submitted successfully.
+
+### How It Works
+
+- After CAPTCHA validation and anti-spam checks, the backend saves the contact message to the database.
+- The system then sends an email to all recipients listed in the `NOTIFY_EMAILS` environment variable.
+- The email contains:
+  - Sender name
+  - Sender email
+  - Message text
+  - Optional company name
+  - Timestamp
+
+### Configuration
+
+Add these variables to `backend/.env`:
+
+```
+NOTIFY_EMAILS=owner@example.com,backup@example.com
+EMAIL_SUBJECT_PREFIX=[Portfolio]
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=bot@example.com
+EMAIL_HOST_PASSWORD=app-password
+EMAIL_USE_TLS=1
+ADMIN_PANEL=https://myportfoliospa.onrender.com/deus_ex_adm/api/contactmessage/
+```
+
+### Email Example
+
+```
+📩 New Contact Message
+
+Name: John Doe
+Email: john@example.com
+
+Message:
+Hello, I would like to get in touch...
+
+See details in Admin:
+https://myportfoliospa.onrender.com/deus_ex_adm/api/contactmessage/123/
+```
+
+This ensures you never miss incoming messages from your portfolio website.
+
+---
+
+###  Backend validation
+
+- CAPTCHA verify using `CAPTCHA_SECRET`
+- Throttles
+- Honeypot check
+- Persists ContactMessage
+- Sends notification email
+
+---
+
+## Testing
 
 ```bash
-docker-compose up --build
+curl -X POST http://localhost:8000/contact-message/   -H 'Content-Type: application/json'   -d '{"name":"Test","email":"a@a.com","message":"hi","captcha_token":"x"}'
 ```
 
-4. Access frontend at `http://localhost:3000` and backend API at `http://localhost:8000`.
+---
 
+## Security Notes
 
-## Django Admin Guide
+- Server-side CAPTCHA validation
+- Throttling
+- Escape user input
 
-The Django Admin interface provides a powerful and easy-to-use way to manage your application's data. You can create, read, update, and delete (CRUD) records for your models without writing any additional frontend code.
-
-### 1. Register Your Models
-
-For your models to appear in the Django Admin, you need to register them in the `admin.py` file of your Django application.
-
-**Example:**
-
-In `backend/MyPortfolioSPA/admin.py`:
-
-```python
-from django.contrib import admin
-from .models import Project, Skill, Contact  # Replace with your actual models
-
-@admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'status', 'created_at')  # Customize displayed fields
-
-@admin.register(Skill)
-class SkillAdmin(admin.ModelAdmin):
-    list_display = ('name', 'level')
-
-@admin.register(Contact)
-class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'subject')
-```
-
-### 2. Automated Superuser Creation
-
-A Django superuser account is essential for accessing the Admin interface. In this setup, the superuser is **automatically created by a script** (`backend/create_superuser.py`) during the `web` service startup, but only if it doesn't already exist.
-Superuser credentials are provided via your `.env` file in backend
-For security reasons, the Django Admin URL is **not hardcoded** in the project.  
-Instead, it is stored in your `.env` file in variable **DJANGO_ADMIN_URL** (check **backend/.env.example**)
-
-
-### 3. Manage Your Data
-
-- On the admin dashboard, you will see your registered models listed under your application name.
-- Click on a model (e.g., "Projects") to view, add, edit, or delete records.
-- Use the "Add [Model Name]" button to create new entries.
-- Click on existing entries to edit them.
-
-This guide should help you get started with managing your portfolio data through the Django Admin.
+---
 
 ## Development
 
-- Backend code is in `/backend`
-- Frontend code is in `/frontend`
-- 
+- Backend: `/backend`
+- Frontend: `/frontend`
+
+---
 
 ## License
 
-MIT License
+MIT
+
+---
+
+## Contacts
+
+Author: Maksym Petrykin  
+Email: [m.petrykin@gmx.de](mailto:m.petrykin@gmx.de)  
+Telegram: [@max_p95](https://t.me/max_p95)
+
+---

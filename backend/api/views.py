@@ -1,18 +1,32 @@
 import logging
+from django.conf import settings
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .models import Project, ContactMessage
+import requests
+from django.utils import timezone
+from zoneinfo import ZoneInfo
+
+from .models import Project
 from .serializers import ProjectSerializer, ContactMessageSerializer
-try:
-    import sentry_sdk
-except ImportError:
-    sentry_sdk = None
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import escape
+
+from rest_framework.decorators import api_view, throttle_classes
+from .throttles import (
+    ContactEmailThrottle,
+    ContactIPThrottle,
+    ContactSubnetThrottle,
+    ContactGlobalThrottle,
+    ContactMessageFingerprintThrottle,
+)
+
+
 
 logger = logging.getLogger(__name__)
 
+
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Project.objects.all().order_by('pk')   #  sort by pk
+    queryset = Project.objects.all().order_by('pk')
     serializer_class = ProjectSerializer
 
     def list(self, request, *args, **kwargs):
@@ -30,38 +44,104 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @api_view(['POST'])
+@throttle_classes([
+    ContactEmailThrottle,
+    ContactIPThrottle,
+    ContactSubnetThrottle,
+    ContactGlobalThrottle,
+    ContactMessageFingerprintThrottle,
+])
 def contact_message(request):
     logger.info("POST /contact-message/ requested")
     logger.debug(f"Request data: {request.data}")
 
+    if (request.data.get("website") or request.data.get("hp")):
+        logger.warning("Honeypot triggered; dropping submission")
+        return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)
+
+    token = request.data.get("cf_turnstile_token")
+    if not _check_turnstile(token, request.META.get("REMOTE_ADDR")):
+        return Response({"detail": "captcha_failed"}, status=status.HTTP_400_BAD_REQUEST)
+
     serializer = ContactMessageSerializer(data=request.data)
-    if serializer.is_valid():
-        try:
-            message = serializer.save()
-            logger.info(f"New contact message saved with ID {message.id}")
-            return Response(
-                {'message': 'Thank you for your message!'},
-                status=status.HTTP_201_CREATED
+    if not serializer.is_valid():
+        logger.warning(f"Invalid contact message submission: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        message_obj = serializer.save()
+
+        recipients = getattr(settings, "NOTIFY_EMAILS", [])
+        if recipients:
+            subj_prefix = getattr(settings, "EMAIL_SUBJECT_PREFIX", "")
+            subject = f"{subj_prefix}📩 New Contact Message".strip()
+
+            name = escape(message_obj.name or "")
+            email = escape(message_obj.email or "")
+            msg = escape(message_obj.message or "")
+
+            tzname = getattr(settings, "DISPLAY_TZ", "Europe/Berlin")
+            try:
+                tz = ZoneInfo(tzname)
+            except Exception:
+                tz = timezone.get_default_timezone()
+
+            created_dt = getattr(message_obj, "created_at", None) or timezone.now()
+            created_local = timezone.localtime(created_dt, tz)
+            created_human = created_local.strftime("%d %b %Y, %H:%M %Z")
+
+            text_body = (
+                f"ID: {message_obj.id}\n"
+                f"Date: {created_human}\n"
+                f"Name: {name}\n"
+                f"Email: {email}\n\n"
+                f"Message:\n{msg}"
             )
-        except Exception as e:
-            logger.error(f"Failed to save contact message: {e}", exc_info=True)
-            return Response(
-                {"error": "Could not save your message."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            html_body = (
+                f"<h3>New Contact Message</h3>"
+                f"<p><strong>ID:</strong> {message_obj.id}<br>"
+                f"<strong>Date:</strong> {escape(created_human)}<br>"
+                f"<strong>Name:</strong> {name}<br>"
+                f"<strong>Email:</strong> {email}</p>"
+                f"<p><em>See details in Admin.</em></p>"
+                f"<pre style='white-space:pre-wrap'>{msg}</pre>"
             )
 
-    logger.warning(f"Invalid contact message submission: {serializer.errors}")
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            email_msg = EmailMultiAlternatives(
+                subject=subject,
+                body=text_body,
+                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+                to=recipients,
+                reply_to=[message_obj.email] if message_obj.email else None,
+            )
+            email_msg.attach_alternative(html_body, "text/html")
+            email_msg.send(fail_silently=False)
+        else:
+            logger.warning(
+                "No recipients configured. NOTIFY_EMAILS=%s, NOTIFY_EMAIL=%s, EMAIL_HOST_USER=%s",
+                getattr(settings, "NOTIFY_EMAILS", None),
+                getattr(settings, "NOTIFY_EMAIL", None),
+                getattr(settings, "EMAIL_HOST_USER", None),
+            )
 
-@api_view(['POST'])
-def track_visit(request):
-    ip = request.META.get('REMOTE_ADDR')
-    ua = request.META.get('HTTP_USER_AGENT')
+        logger.info(f"Contact message saved and notification processed. ID={message_obj.id}")
+        return Response({'message': 'Thank you for your message!'}, status=status.HTTP_201_CREATED)
 
-    if sentry_sdk:
-        sentry_sdk.capture_message(f"👤 New site visit from {ip}, UA={ua}")
-        logger.info(f"Visit tracked to Sentry from {ip}")
-    else:
-        logger.info(f"Visit from {ip} (Sentry not available)")
+    except Exception as e:
+        logger.error(f"Failed to save/send contact message: {e}", exc_info=True)
+        return Response({"error": "Could not process your message."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    return Response({"status": "logged"})
+
+def _check_turnstile(token: str, ip: str) -> bool:
+    secret = getattr(settings, "TURNSTILE_SECRET", "")
+    if not secret:
+        return True
+    try:
+        r = requests.post(
+            "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+            data={"secret": secret, "response": token, "remoteip": ip},
+            timeout=3,
+        )
+        return bool(r.json().get("success"))
+    except Exception:
+        return False

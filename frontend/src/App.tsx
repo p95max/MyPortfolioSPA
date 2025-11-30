@@ -7,7 +7,6 @@ import { Projects } from './pages/Projects';
 import Contact from './pages/Contact';
 import Certificates from './pages/Certificates';
 import TinyAssistant from './components/TinyAssistant';
-import Snowfall from './components/Snowfall';
 
 export const App = () => {
   useEffect(() => {
@@ -23,7 +22,6 @@ export const App = () => {
     <div className="app-wrapper">
       <Router>
         <Navbar />
-         <Snowfall />
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />

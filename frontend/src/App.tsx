@@ -9,6 +9,7 @@ import Certificates from './pages/Certificates';
 import TinyAssistant from './components/TinyAssistant';
 import Snowfall from './components/Snowfall';
 
+
 export const App = () => {
   useEffect(() => {
     document.title = 'My SPA Portfolio';

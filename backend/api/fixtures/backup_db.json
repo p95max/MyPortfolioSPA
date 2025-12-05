@@ -43,6 +43,29 @@
       "demo_url": ""
     }
   },
+  {
+  "model": "api.project",
+  "pk": 5,
+  "fields": {
+    "title": "Amazon Publisher",
+    "description": "Amazon Publisher — a compact FastAPI demo that reads product rows from Google Sheets, builds Amazon Listings-style JSON payloads (using local Product-Type schemas), validates them, and exposes preview + feeds endpoints. The service is designed as a reproducible, extendable demo for validating and preparing Listings payloads without touching the real SP-API.",
+    "tech_stack": "#FastAPI #Python3 #Pydantic #GoogleSheetsAPI #JSONSchemas #Docker #DataPipelines",
+    "github_url": "https://github.com/p95max/amazon_publisher",
+    "demo_url": ""
+  }
+},
+{
+  "model": "api.project",
+  "pk": 6,
+  "fields": {
+    "title": "Table Transformer",
+    "description": "Table Transformer — a data-processing service that reads tabular data (local CSV or Google Sheets), normalizes fields (coordinates, dates, values), and converts each row into one or more spatial point features with attributes and geometry. Outputs include JSON files, preview CSV, PostGIS inserts, and (optionally) batch submissions to ArcGIS Hosted Feature Layers via REST. A FastAPI layer can expose processed data as GeoJSON for map visualization.",
+    "tech_stack": "#FastAPI #Python #GeoJSON #PostGIS #GoogleSheetsAPI #ETL #Docker #ArcGISREST",
+    "github_url": "https://github.com/p95max/table_transformer",
+    "demo_url": ""
+  }
+},
+
 
 
 
@@ -161,5 +184,24 @@
       "image_url": "/screenshots/fleet3.png",
       "caption": "Mini-Fleet Monitor — screenshot 3"
     }
+  },
+  {
+  "model": "api.projectscreenshot",
+  "pk": 13,
+  "fields": {
+    "project": 5,
+    "image_url": "/screenshots/amazon_publisher_api.svg",
+    "caption": "Amazon Publisher — API placeholder"
   }
+},
+{
+  "model": "api.projectscreenshot",
+  "pk": 14,
+  "fields": {
+    "project": 6,
+    "image_url": "/screenshots/table_transformer_api.svg",
+    "caption": "Table Transformer — API placeholder"
+  }
+}
+
 ]

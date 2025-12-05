@@ -17,7 +17,7 @@ const aboutText = `
 Remote — Backend Contractor (revenue-share)
 
 **Key Responsibilities:**
-- 🧱 Development of AI tools for business automation(HR tools) 
+- 🧱 Development of AI tools for business automation(e.g.HR tools) 
 - 🧩 n8n development  
 - 🔍 REST API and TTS service implementation + testing
 

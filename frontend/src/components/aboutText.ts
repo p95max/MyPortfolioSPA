@@ -17,10 +17,9 @@ const aboutText = `
 Remote — Backend Contractor (revenue-share)
 
 **Key Responsibilities:**
-- 🧱 Development of microservices (gRPC, Docker Compose)  
-- 🤖 Telegram Bot development  
-- 🔍 REST API and TTS service implementation + testing  
-- 📝 Writing and maintaining project documentation  
+- 🧱 Development of AI tools for business automation(HR tools) 
+- 🧩 n8n development  
+- 🔍 REST API and TTS service implementation + testing
 
 ---
 ### 🙋‍♂️ About me:

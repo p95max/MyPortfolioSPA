@@ -18,8 +18,8 @@ Remote — Backend Contractor (revenue-share)
 
 **Key Responsibilities:**
 - 🧱 Development of AI tools for business automation(e.g.HR tools) 
-- 🧩 n8n development  
-- 🔍 REST API and TTS service implementation + testing
+- 🧩 n8n integration and PoC development with Python scripts 
+- 🔍 REST API implementation + testing
 
 ---
 ### 🙋‍♂️ About me:

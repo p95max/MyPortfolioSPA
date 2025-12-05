@@ -1,0 +1,52 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <style>
+      .t{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";fill:#d1d5db}
+      .m{fill:#1f2937;stroke:#374151;stroke-width:2;rx:10}
+      .a{stroke:#94a3b8;stroke-width:2;stroke-dasharray:6,6;fill:none;marker-end:url(#arrow)}
+      .b{fill:#10b981}
+      .y{fill:#f59e0b}
+      .k{fill:#0ea5e9}
+      .s{fill:#d1d5db}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <text class="t" x="60" y="90" font-size="34">Table Transformer · API</text>
+  <text class="t" x="60" y="130" font-size="18" opacity=".85">CSV/Sheets → normalize → point features → JSON/GeoJSON/PostGIS</text>
+
+  <rect class="m" x="60" y="220" width="240" height="140"/>
+  <text class="t" x="80" y="260" font-size="18">Sources</text>
+  <rect x="80" y="274" width="200" height="30" class="k" rx="6"/>
+  <text class="t" x="100" y="295" font-size="14">CSV · Google Sheets</text>
+
+  <path class="a" d="M300 290 C360 290 420 290 480 290"/>
+  <rect class="m" x="480" y="220" width="300" height="140"/>
+  <text class="t" x="500" y="255" font-size="18">Normalize &amp; Transform</text>
+  <rect x="500" y="270" width="260" height="26" class="y" rx="6"/>
+  <text class="t" x="510" y="288" font-size="13">coords · dates · values → Point features</text>
+
+  <path class="a" d="M780 290 C860 290 920 290 1040 290"/>
+  <rect class="m" x="1040" y="220" width="100" height="140"/>
+  <text class="t" x="1055" y="260" font-size="16">API</text>
+  <rect x="1050" y="274" width="80" height="30" class="b" rx="6"/>
+  <text class="t" x="1060" y="295" font-size="12">GeoJSON</text>
+
+  <g opacity=".9">
+    <rect class="m" x="60" y="420" width="520" height="170"/>
+    <text class="t" x="80" y="460" font-size="18">Outputs</text>
+    <text class="s" x="80" y="490" font-size="14">• files: .json, preview.csv</text>
+    <text class="s" x="80" y="515" font-size="14">• DB: PostGIS inserts</text>
+    <text class="s" x="80" y="540" font-size="14">• ArcGIS addFeatures (optional)</text>
+
+    <rect class="m" x="620" y="420" width="520" height="170"/>
+    <text class="t" x="640" y="460" font-size="18">Example feature</text>
+    <text class="s" x="640" y="490" font-size="14">{ "type":"Feature","geometry":{"type":"Point","coordinates":[12.92,50.83]}, "properties":{"id":1,"name":"A"}} </text>
+  </g>
+</svg>

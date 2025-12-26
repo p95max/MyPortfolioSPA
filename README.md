@@ -91,10 +91,12 @@ VITE_CAPTCHA_SITE_KEY=your-site-key
 
 ## Django Admin
 
-- Superuser auto-created if missing.
-- Custom admin URL via `DJANGO_ADMIN_URL`.
-- URL address is protected by .env
-- Jazzmin Admin Theme: The project uses the Jazzmin plugin to modernize the Django Admin interface, providing an improved UI, better navigation, and a more polished management experience.
+- Superuser is **auto-created on startup** if it does not exist (via environment variables).
+- Custom admin URL is supported via `DJANGO_ADMIN_URL`.
+- Admin URL is **not hardcoded** and can be changed safely through `.env`.
+- **Jazzmin Admin Theme** is enabled to provide a modernized Django Admin UI with improved navigation and usability.
+- Projects support **manual ordering** via the `sort_order` field (editable directly in the admin list view).
+- Project screenshots can be managed inline with **live preview support**.
 
 ---
 
@@ -104,18 +106,19 @@ The backend automatically sends an email notification whenever a new contact mes
 
 ### How It Works
 
-- After CAPTCHA validation and anti-spam checks, the backend saves the contact message to the database.
-- The system then sends an email to all recipients listed in the `NOTIFY_EMAILS` environment variable.
-- The email contains:
+- Incoming messages pass CAPTCHA verification and multiple anti-spam throttles.
+- The contact message is saved to the database.
+- An email notification is sent to all recipients defined in `NOTIFY_EMAILS`.
+- The email includes:
   - Sender name
   - Sender email
   - Message text
-  - Optional company name
-  - Timestamp
+  - Human-readable timestamp (configurable timezone)
+- The email contains a **direct reference to the Django Admin**, where the message can be reviewed.
 
 ### Configuration
 
-Add these variables to `backend/.env`:
+Add the following variables to `backend/.env`:
 
 ```
 NOTIFY_EMAILS=owner@example.com,backup@example.com

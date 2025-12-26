@@ -1,10 +1,27 @@
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.core.validators import URLValidator
 from django.utils.html import format_html
-from django.core.exceptions import ValidationError
 
 from .models import Project, ProjectScreenshot, ContactMessage
+
+
+def _public_image_url(value: str) -> str:
+    """
+    Converts stored image_url to a URL that is accessible from the browser.
+    - absolute http(s) URLs stay as-is
+    - relative paths like /screenshots/x.png are prefixed with FRONTEND_BASE_URL
+    """
+    url = (value or "").strip()
+    if not url:
+        return ""
+    if url.startswith("http://") or url.startswith("https://"):
+        return url
+    if url.startswith("/"):
+        base = (getattr(settings, "FRONTEND_BASE_URL", "") or "").rstrip("/")
+        return f"{base}{url}"
+    return url
 
 
 class ProjectScreenshotAdminForm(forms.ModelForm):
@@ -17,11 +34,9 @@ class ProjectScreenshotAdminForm(forms.ModelForm):
         if not url:
             return url
 
-        # allow relative paths like /screenshots/x.png
         if url.startswith("/"):
             return url
 
-        # otherwise validate as absolute URL
         URLValidator(schemes=("http", "https"))(url)
         return url
 
@@ -35,14 +50,14 @@ class ProjectScreenshotInline(admin.TabularInline):
 
     @admin.display(description="Preview")
     def preview(self, obj: ProjectScreenshot):
-        url = (obj.image_url or "").strip()
-        if not url:
+        public = _public_image_url(obj.image_url)
+        if not public:
             return "—"
         return format_html(
             '<a href="{0}" target="_blank" rel="noopener">'
             '<img src="{0}" style="height:80px; width:auto; border-radius:6px; border:1px solid #ddd;" />'
             "</a>",
-            url,
+            public,
         )
 
 
@@ -68,21 +83,21 @@ class ProjectScreenshotAdmin(admin.ModelAdmin):
 
     @admin.display(description="Image")
     def image_link(self, obj: ProjectScreenshot):
-        url = (obj.image_url or "").strip()
-        if not url:
+        public = _public_image_url(obj.image_url)
+        if not public:
             return "—"
-        return format_html('<a href="{0}" target="_blank" rel="noopener">{0}</a>', url)
+        return format_html('<a href="{0}" target="_blank" rel="noopener">{0}</a>', public)
 
     @admin.display(description="Preview")
     def preview(self, obj: ProjectScreenshot):
-        url = (obj.image_url or "").strip()
-        if not url:
+        public = _public_image_url(obj.image_url)
+        if not public:
             return "—"
         return format_html(
             '<a href="{0}" target="_blank" rel="noopener">'
             '<img src="{0}" style="height:80px; width:auto; border-radius:6px; border:1px solid #ddd;" />'
             "</a>",
-            url,
+            public,
         )
 
 

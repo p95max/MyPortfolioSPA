@@ -266,3 +266,6 @@ REST_FRAMEWORK = {
 
 TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET", "")
 
+FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
+
+

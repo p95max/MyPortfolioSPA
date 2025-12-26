@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Project.objects.all().order_by('pk')
+    queryset = Project.objects.all().order_by("sort_order", "pk")
     serializer_class = ProjectSerializer
 
     def list(self, request, *args, **kwargs):

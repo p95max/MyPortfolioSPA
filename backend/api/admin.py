@@ -66,8 +66,9 @@ class ProjectScreenshotInline(admin.TabularInline):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ("title", "tech_stack", "github_url", "demo_url", "screenshots_count")
-    search_fields = ("title", "description", "tech_stack")
+    list_display = ("sort_order", "title", "tech_stack", "github_url", "demo_url", "screenshots_count")
+    list_editable = ("sort_order",)
+    ordering = ("sort_order", "pk")
     inlines = (ProjectScreenshotInline,)
 
     @admin.display(description="Screenshots")

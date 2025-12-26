@@ -6,14 +6,17 @@ Single Page Application portfolio with **React (Vite)** frontend and **Django RE
 
 ## Features
 
-- Projects/skills **content management** via Django Admin Panel;
-- **Fast PDF Preview:** The application provides instant in-browser PDF previews using PDF.js. The first page is rendered directly on the frontend without opening external tabs, ensuring quick loading and a smooth user experience for CVs, documents, or reports.
-- **Interactive Helper Widget:** The portfolio includes a lightweight, browser-only helper widget that provides quick guidance, preconfigured answers, and basic navigation support. It works without any backend or external APIs, but can be extended with AI capabilities if needed.
-- **Contact form with:**
-  - **CAPTCHA** validation (server-side token verify)
+- Projects and skills **content management** via the Django Admin Panel.
+- Full CRUD support for portfolio projects, including **inline screenshot management**.
+- **Fast PDF Preview:** instant in-browser PDF previews powered by PDF.js.  
+  The first page is rendered directly on the frontend without opening external tabs, ensuring fast load times and a smooth user experience for CVs, documents, and reports.
+- **Interactive Helper Widget:** a lightweight, browser-only helper widget that provides quick guidance, preconfigured answers, and basic navigation support.  
+  It works without any backend or external APIs, but can be extended with AI capabilities if required.
+- **Contact form** with:
+  - **CAPTCHA** validation (server-side token verification)
   - **Anti-spam safeguards** (rate limits per IP/email, minimal payload checks, optional honeypot)
-  - **Email notifications** to a configurable list
-- The mobile version of the website has also been optimized.
+  - **Email notifications** sent to a configurable list of recipients
+- The **mobile version** of the website is fully optimized for smaller screens and touch interaction.
 
 ## Architecture
 
@@ -95,8 +98,22 @@ VITE_CAPTCHA_SITE_KEY=your-site-key
 - Custom admin URL is supported via `DJANGO_ADMIN_URL`.
 - Admin URL is **not hardcoded** and can be changed safely through `.env`.
 - **Jazzmin Admin Theme** is enabled to provide a modernized Django Admin UI with improved navigation and usability.
+- The admin panel provides **full CRUD management** for portfolio projects.
+- Projects can be **created, edited, reordered, and removed** directly from the admin interface.
+- Each project supports **inline management of screenshots**, including:
+  - Adding new screenshots
+  - Editing captions and image paths
+  - Removing screenshots
+  - Live preview of images
 - Projects support **manual ordering** via the `sort_order` field (editable directly in the admin list view).
-- Project screenshots can be managed inline with **live preview support**.
+
+### Screenshots Storage Note
+
+- Project screenshots are currently stored in the **frontend public directory**:
+`frontend/public/screenshots`
+- The backend stores **relative paths** (e.g. `/screenshots/project1.png`) and uses the frontend domain to display previews in the admin panel.
+- This approach is intentional for simplicity in a portfolio setup.
+- **Planned improvement**: move screenshots to a dedicated media storage solution (e.g. S3 / Cloudinary / MinIO) to decouple backend administration from frontend static assets and improve scalability.
 
 ---
 

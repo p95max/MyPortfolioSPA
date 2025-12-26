@@ -84,3 +84,15 @@ git pull origin dev
 git merge dev  
 git push origin prod
 ```
+
+Jobapply — screenshot 1
+/screenshots/job1.png
+
+Jobapply — screenshot 2
+/screenshots/job2.png
+
+Jobapply — screenshot 3
+/screenshots/job3.png
+
+Jobapply — screenshot 4
+/screenshots/job4.png

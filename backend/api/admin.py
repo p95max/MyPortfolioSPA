@@ -1,11 +1,34 @@
+from django import forms
 from django.contrib import admin
+from django.core.validators import URLValidator
 from django.utils.html import format_html
+from django.core.exceptions import ValidationError
 
 from .models import Project, ProjectScreenshot, ContactMessage
 
 
+class ProjectScreenshotAdminForm(forms.ModelForm):
+    class Meta:
+        model = ProjectScreenshot
+        fields = "__all__"
+
+    def clean_image_url(self):
+        url = (self.cleaned_data.get("image_url") or "").strip()
+        if not url:
+            return url
+
+        # allow relative paths like /screenshots/x.png
+        if url.startswith("/"):
+            return url
+
+        # otherwise validate as absolute URL
+        URLValidator(schemes=("http", "https"))(url)
+        return url
+
+
 class ProjectScreenshotInline(admin.TabularInline):
     model = ProjectScreenshot
+    form = ProjectScreenshotAdminForm
     extra = 0
     fields = ("caption", "image_url", "preview")
     readonly_fields = ("preview",)
@@ -29,13 +52,14 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ("title", "description", "tech_stack")
     inlines = (ProjectScreenshotInline,)
 
-    @admin.display(description="Screenshots", ordering=None)
+    @admin.display(description="Screenshots")
     def screenshots_count(self, obj: Project):
         return obj.screenshots.count()
 
 
 @admin.register(ProjectScreenshot)
 class ProjectScreenshotAdmin(admin.ModelAdmin):
+    form = ProjectScreenshotAdminForm
     list_display = ("project", "caption", "image_link", "preview")
     search_fields = ("project__title", "caption", "image_url")
     list_filter = ("project",)

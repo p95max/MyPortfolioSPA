@@ -67,13 +67,17 @@ class ProjectScreenshotInline(admin.TabularInline):
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ("sort_order", "title", "tech_stack", "github_url", "demo_url", "screenshots_count")
+    list_display_links = ("title",)
     list_editable = ("sort_order",)
     ordering = ("sort_order", "pk")
+
+    search_fields = ("title", "description", "tech_stack")
     inlines = (ProjectScreenshotInline,)
 
     @admin.display(description="Screenshots")
     def screenshots_count(self, obj: Project):
         return obj.screenshots.count()
+
 
 
 @admin.register(ProjectScreenshot)

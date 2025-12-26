@@ -25,6 +25,8 @@ def _public_image_url(value: str) -> str:
 
 
 class ProjectScreenshotAdminForm(forms.ModelForm):
+    image_url = forms.CharField(required=False)
+
     class Meta:
         model = ProjectScreenshot
         fields = "__all__"
@@ -39,6 +41,7 @@ class ProjectScreenshotAdminForm(forms.ModelForm):
 
         URLValidator(schemes=("http", "https"))(url)
         return url
+
 
 
 class ProjectScreenshotInline(admin.TabularInline):

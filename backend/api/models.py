@@ -12,7 +12,7 @@ class Project(models.Model):
 
 class ProjectScreenshot(models.Model):
     project = models.ForeignKey(Project, related_name='screenshots', on_delete=models.CASCADE)
-    image_url = models.URLField(blank=True)
+    image_url = models.CharField(max_length=500, blank=True)
     caption = models.CharField(max_length=200, blank=True)
 
     def __str__(self):

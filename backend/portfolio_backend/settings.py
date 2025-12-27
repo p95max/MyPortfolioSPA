@@ -60,6 +60,7 @@ else:
     }
 
 INSTALLED_APPS = [
+    "adminsortable2",
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',

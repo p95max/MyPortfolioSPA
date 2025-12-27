@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.core.validators import URLValidator
 from django.utils.html import format_html
+from adminsortable2.admin import SortableAdminMixin
 
 from .models import Project, ProjectScreenshot, ContactMessage
 
@@ -65,18 +66,16 @@ class ProjectScreenshotInline(admin.TabularInline):
 
 
 @admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
-    list_display = ("sort_order", "title", "tech_stack", "github_url", "demo_url", "screenshots_count")
-    list_display_links = ("title",)
-    list_editable = ("sort_order",)
-    ordering = ("sort_order", "pk")
-
+class ProjectAdmin(SortableAdminMixin, admin.ModelAdmin):
+    list_display = ("title", "tech_stack", "github_url", "demo_url", "screenshots_count")
     search_fields = ("title", "description", "tech_stack")
+    ordering = ("sort_order", "pk")
     inlines = (ProjectScreenshotInline,)
 
     @admin.display(description="Screenshots")
     def screenshots_count(self, obj: Project):
         return obj.screenshots.count()
+
 
 
 

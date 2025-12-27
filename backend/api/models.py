@@ -6,7 +6,7 @@ class Project(models.Model):
     tech_stack = models.CharField(max_length=200)
     github_url = models.URLField(blank=True)
     demo_url = models.URLField(blank=True)
-    ssort_order = models.PositiveIntegerField(
+    sort_order = models.PositiveIntegerField(
     default=0,
     db_index=True,
     verbose_name="Order",

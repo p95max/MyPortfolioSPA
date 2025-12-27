@@ -104,8 +104,7 @@ VITE_CAPTCHA_SITE_KEY=your-site-key
   - Adding new screenshots
   - Editing captions and image paths
   - Removing screenshots
-  - Live preview of images
-- Projects support **manual ordering** via the `sort_order` field (editable directly in the admin list view).
+- Projects support **manual ordering** via the `sort_order`(by Drag&drop) field (editable directly in the admin list view).
 
 ### Screenshots Storage Note
 

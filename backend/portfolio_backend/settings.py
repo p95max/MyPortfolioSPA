@@ -238,7 +238,7 @@ JAZZMIN_SETTINGS = {
     "site_header": "My Portfolio",
     "site_brand": "My Portfolio",
     "welcome_sign": "Welcome to My Portfolio Admin",
-    "show_ui_builder": False,
+    "show_ui_builder": True,
     "topmenu_links": [
         {"name": "Docs", "url": "https://www.django-rest-framework.org/"},
         {"app": "api"},
@@ -254,6 +254,8 @@ JAZZMIN_UI_TWEAKS = {
     "body_small_text": False,
     "brand_small_text": False,
 }
+
+
 
 REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {

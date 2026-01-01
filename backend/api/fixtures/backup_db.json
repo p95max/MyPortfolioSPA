@@ -65,6 +65,17 @@
     "demo_url": ""
   }
 },
+{
+  "model": "api.project",
+  "pk": 7,
+  "fields": {
+    "title": "JobApply",
+    "description": "JobApply - a Django-based job application tracker with a Google-first workflow. Google OAuth-only authentication (no passwords) Full CRUD for job applications with statuses, filters, notes, and search Interview scheduler (linked to applications) CSV/XLSX export/import Automatic Google Drive backups.",
+    "tech_stack": "#Django #Python #GoogleAPI #Docker #Cloudflare Turnstile",
+    "github_url": "https://github.com/p95max/JobApply",
+    "demo_url": ""
+  }
+},
 
 
 
@@ -185,6 +196,7 @@
       "caption": "Mini-Fleet Monitor — screenshot 3"
     }
   },
+
   {
   "model": "api.projectscreenshot",
   "pk": 13,
@@ -202,6 +214,43 @@
     "image_url": "/screenshots/table_transformer_api.svg",
     "caption": "Table Transformer — API placeholder"
   }
-}
+},
+
+     {
+    "model": "api.projectscreenshot",
+    "pk": 15,
+    "fields": {
+      "project": 7,
+      "image_url": "/screenshots/job1.png",
+      "caption": "JobApply — screenshot 1"
+    }
+  },
+     {
+    "model": "api.projectscreenshot",
+    "pk": 16,
+    "fields": {
+      "project": 7,
+      "image_url": "/screenshots/job2.png",
+      "caption": "JobApply — screenshot 2"
+    }
+  },
+     {
+    "model": "api.projectscreenshot",
+    "pk": 17,
+    "fields": {
+      "project": 7,
+      "image_url": "/screenshots/job3.png",
+      "caption": "JobApply — screenshot 3"
+    }
+  },
+  {
+    "model": "api.projectscreenshot",
+    "pk": 17,
+    "fields": {
+      "project": 7,
+      "image_url": "/screenshots/job4.png",
+      "caption": "JobApply — screenshot 4"
+    }
+  }
 
 ]

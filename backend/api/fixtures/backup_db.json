@@ -39,7 +39,7 @@
       "title": "Mini-Fleet Monitor",
       "description": "This application is a lightweight fleet-management dashboard for simulated robots. It provides real-time robot status, coordinates, movement controls, and safe deletion with a hard limit of 10 units. The stack is minimal and production-oriented: Node.js API, PostgreSQL, Redis, and a React frontend with a clean, utility-driven UI. The project demonstrates handling live state, event-driven updates, and building a focused operational interface with modern full-stack practices.",
       "tech_stack": "#Full-stack development #Node.js + Express #PostgreSQL #React #Docker #Redis #JWT_Auth #REST + WebSocket #OpenLayers-Map",
-      "github_url": "",
+      "github_url": "https://github.com/p95max/robot-fleet-monitor",
       "demo_url": ""
     }
   },

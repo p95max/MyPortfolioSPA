@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Max
 
 class Project(models.Model):
     title = models.CharField(max_length=200)
@@ -10,9 +11,14 @@ class Project(models.Model):
         default=0,
         db_index=True,
         verbose_name="Order",
-        help_text="Drag & drop rows in the admin list to reorder projects." # for admin panel
-)
+        help_text="Drag & drop rows in the admin list to reorder projects.",
+    )
 
+    def save(self, *args, **kwargs):
+        if not self.pk and (self.sort_order is None or self.sort_order == 0):
+            max_order = Project.objects.aggregate(m=Max("sort_order"))["m"] or 0
+            self.sort_order = max_order + 1
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

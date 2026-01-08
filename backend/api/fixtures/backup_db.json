@@ -190,7 +190,7 @@
 
   {
   "model": "api.projectscreenshot",
-  "pk": 13,
+  "pk": 12,
   "fields": {
     "project": 5,
     "image_url": "/screenshots/amazon_publisher_api.svg",
@@ -199,7 +199,7 @@
 },
 {
   "model": "api.projectscreenshot",
-  "pk": 14,
+  "pk": 13,
   "fields": {
     "project": 6,
     "image_url": "/screenshots/table_transformer_api.svg",
@@ -209,7 +209,7 @@
 
      {
     "model": "api.projectscreenshot",
-    "pk": 15,
+    "pk": 14,
     "fields": {
       "project": 7,
       "image_url": "/screenshots/job1.png",
@@ -218,7 +218,7 @@
   },
      {
     "model": "api.projectscreenshot",
-    "pk": 16,
+    "pk": 15,
     "fields": {
       "project": 7,
       "image_url": "/screenshots/job2.png",
@@ -227,7 +227,7 @@
   },
      {
     "model": "api.projectscreenshot",
-    "pk": 17,
+    "pk": 16,
     "fields": {
       "project": 7,
       "image_url": "/screenshots/job3.png",

@@ -7,10 +7,10 @@ class Project(models.Model):
     github_url = models.URLField(blank=True)
     demo_url = models.URLField(blank=True)
     sort_order = models.PositiveIntegerField(
-    default=0,
-    db_index=True,
-    verbose_name="Order",
-    help_text="Drag & drop rows in the admin list to reorder projects." # for admin panel
+        default=0,
+        db_index=True,
+        verbose_name="Order",
+        help_text="Drag & drop rows in the admin list to reorder projects." # for admin panel
 )
 
 

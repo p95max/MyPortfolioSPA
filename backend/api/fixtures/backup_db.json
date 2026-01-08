@@ -187,15 +187,6 @@
       "caption": "Mini-Fleet Monitor — screenshot 2"
     }
   },
-      {
-    "model": "api.projectscreenshot",
-    "pk": 12,
-    "fields": {
-      "project": 4,
-      "image_url": "/screenshots/fleet3.png",
-      "caption": "Mini-Fleet Monitor — screenshot 3"
-    }
-  },
 
   {
   "model": "api.projectscreenshot",

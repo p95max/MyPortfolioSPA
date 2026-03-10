@@ -91,7 +91,7 @@ I enjoy working on practical systems: APIs, integrations, data pipelines and aut
 
 Languages:  
 English — B1+  
-German — currently improving (B1–B2)
+German — currently improving (B2)
 
 Based in Germany and open to remote or hybrid opportunities.
 

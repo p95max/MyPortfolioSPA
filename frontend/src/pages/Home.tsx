@@ -44,7 +44,6 @@ export const Home = () => {
             </div>
 
             <div className="controls">
-              {/* Кнопки меняют ТОЛЬКО PDF резюме */}
               <div style={{ display: "flex", gap: 8 }}>
                 <button
                   className="btn btn-toggle"

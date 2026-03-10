@@ -31,11 +31,12 @@ export const Home = () => {
     <div className="page-home">
       <div className="container">
         <div className="card">
-          <h1 className="header">Hi — I’m Maksym. I build dependable backend systems.</h1>
-          <p className="subheader">
-            Pragmatic engineering: Python/Django, REST APIs, Docker, PostgreSQL. I value clean
-            contracts, tests, and shipping on time.
-          </p>
+              <h1 className="header">Hi — I’m Maksym. I build backend systems that automate real work.</h1>
+              <p className="subheader">
+                Python backend developer specializing in APIs, integrations and data workflows.
+                Stack: Python, Django, FastAPI, PostgreSQL, Docker.
+                I focus on clean architecture, reliable APIs and pragmatic engineering.
+              </p>
 
           <div>
             <div className="markdown">
@@ -99,9 +100,6 @@ export const Home = () => {
             <a className="link-muted" href="/contact">
               Contact me
             </a>
-            <div className="ml-auto" style={{ color: "var(--muted-color)", fontSize: 13 }}>
-              Location: Germany — open to remote
-            </div>
           </div>
         </div>
       </div>

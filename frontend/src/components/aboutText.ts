@@ -90,10 +90,14 @@ My main stack includes Python, Django, FastAPI, PostgreSQL and Docker.
 I enjoy working on practical systems: APIs, integrations, data pipelines and automation workflows.
 
 Languages: 
-Ukrainian — Native
-Russian — Fluent
-English — B1+
-German — B2 (learning)
+
+- Ukrainian — Native
+
+- Russian — Fluent
+
+- English — B1+
+
+- German — B2 (learning)
 
 Based in Germany and open to remote or hybrid opportunities.
 

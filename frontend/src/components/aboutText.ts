@@ -95,7 +95,7 @@ Languages:
 
 - Russian — Fluent
 
-- English — B1+
+- English — B2
 
 - German — B2 (learning)
 

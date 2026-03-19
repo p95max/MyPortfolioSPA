@@ -8,6 +8,8 @@ import Contact from './pages/Contact';
 import Certificates from './pages/Certificates';
 import TinyAssistant from './components/TinyAssistant';
 import Snowfall from './components/Snowfall';
+import Impressum from './pages/Impressum';
+import Datenschutz from './pages/Datenschutz';
 
 
 export const App = () => {
@@ -26,6 +28,8 @@ export const App = () => {
             <Route path="/projects" element={<Projects />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/certificates" element={<Certificates />} />
+            <Route path="/impressum" element={<Impressum />} />
+            <Route path="/datenschutz" element={<Datenschutz />} />
           </Routes>
         </div>
         <Footer />

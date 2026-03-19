@@ -76,9 +76,17 @@
     "demo_url": ""
   }
 },
-
-
-
+{
+  "model": "api.project",
+  "pk": 8,
+  "fields": {
+    "title": "Azure IaC Project (Terraform + Ansible)",
+    "description": "Built an automated infrastructure and deployment pipeline on Azure: - Provisioned VM and networking via Terraform - Configured system using Ansible roles - Deployed OIDC-protected web app (Keycloak + oauth2-proxy + Nginx) - Implemented CI/CD with GitHub Actions Focus: IaC best practices, automation, reproducibility",
+    "tech_stack": "#Terraform #Ansible #Docker #Nginx #Keycloak (OIDC) #PostgreSQL #GitHub Actions #Azure",
+    "github_url": "https://github.com/p95max/JobApply",
+    "demo_url": ""
+  }
+},
 
 
 
@@ -241,6 +249,15 @@
       "project": 7,
       "image_url": "/screenshots/job4.png",
       "caption": "JobApply — screenshot 4"
+    }
+  },
+    {
+    "model": "api.projectscreenshot",
+    "pk": 18,
+    "fields": {
+      "project": 8,
+      "image_url": "/screenshots/iac-demo-vm.png",
+      "caption": "IaC DEMO - screenshot 1"
     }
   }
 

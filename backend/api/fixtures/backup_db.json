@@ -5,7 +5,7 @@
     "fields": {
       "title": "ChattyM",
       "description": "ChattyM is a minimal social network built with Django 5, PostgreSQL, and Bootstrap 5 that demonstrates core web development features. It offers email-based authentication via django-allauth, editable user profiles with avatars and birthdays, and full CRUD for posts, comments, and likes. Users can follow/unfollow others, view a personalized feed, send direct messages, and administrators can moderate content; fixtures are provided to populate test data. The project includes a DRF-based REST API with Swagger docs, token/session auth, and a Dockerized setup for easy local development and testing.",
-      "tech_stack": "#Django5 #Python3.11 #PostgreSQL #Bootstrap5 #Docker #DockerCompose #DjangoRESTFramework #django_allauth #Poetry #pytest",
+      "tech_stack": "#Django5 #Python3.11 #PostgreSQL #Bootstrap5 #Docker #Docker-Compose #DjangoRESTFramework #django_allauth #Poetry #pytest",
       "github_url": "https://github.com/p95max/ChattyM",
       "demo_url": ""
     }
@@ -16,7 +16,7 @@
     "fields": {
       "title": "What2Cook",
       "description": "What2Cook — lightweight recipe finder: give it the ingredients you have and it will suggest recipes. Built with FastAPI, async SQLAlchemy, Postgres, Jinja2 templates and a small, responsive frontend.",
-      "tech_stack": "#FASTAPI #Python3.14 #PostgreSQL #Bootstrap5 #Docker #DockerCompose #jinja2 #SQLAlchemy #API",
+      "tech_stack": "#FASTAPI #Python3.14 #PostgreSQL #Bootstrap5 #DockerCompose #jinja2 #SQLAlchemy #API",
       "github_url": "https://github.com/p95max/What2Cook",
       "demo_url": ""
     }
@@ -27,7 +27,7 @@
     "fields": {
       "title": "AutoService Book",
       "description": "AutoService Book is your reliable assistant for tracking and managing your car’s service history. This web application, built as a portfolio project, showcases skills in Django development, database management, and creating user-friendly interfaces.",
-      "tech_stack": "#Django #Python3 #PostgreSQL #Bootstrap5 #Docker #DockerCompose #django_allauth #Poetry #pytest",
+      "tech_stack": "#Django #Python3 #PostgreSQL #Bootstrap5 #Docker #Docker-Compose #django_allauth #Poetry #pytest",
       "github_url": "https://github.com/p95max/AutoService_Book",
       "demo_url": ""
     }
@@ -38,7 +38,7 @@
     "fields": {
       "title": "Mini-Fleet Monitor",
       "description": "This application is a lightweight fleet-management dashboard for simulated robots. It provides real-time robot status, coordinates, movement controls, and safe deletion with a hard limit of 10 units. The stack is minimal and production-oriented: Node.js API, PostgreSQL, Redis, and a React frontend with a clean, utility-driven UI. The project demonstrates handling live state, event-driven updates, and building a focused operational interface with modern full-stack practices.",
-      "tech_stack": "#Full-stack development #Node.js + Express #PostgreSQL #React #Docker #Redis #JWT_Auth #REST + WebSocket #OpenLayers-Map",
+      "tech_stack": "#Full-stack development #Node.js+Express #PostgreSQL #React #Docker #Redis #JWT_Auth #REST+WebSocket #OpenLayers-Map",
       "github_url": "https://github.com/p95max/robot-fleet-monitor",
       "demo_url": ""
     }
@@ -71,7 +71,7 @@
   "fields": {
     "title": "JobApply",
     "description": "JobApply - a Django-based job application tracker with a Google-first workflow. Google OAuth-only authentication (no passwords) Full CRUD for job applications with statuses, filters, notes, and search Interview scheduler (linked to applications) CSV/XLSX export/import Automatic Google Drive backups.",
-    "tech_stack": "#Django #Python #GoogleAPI #Docker #Cloudflare Turnstile",
+    "tech_stack": "#Django #Python #GoogleAPI #Docker #Cloudflare-Turnstile",
     "github_url": "https://github.com/p95max/JobApply",
     "demo_url": ""
   }
@@ -82,7 +82,7 @@
   "fields": {
     "title": "Azure IaC Project (Terraform + Ansible)",
     "description": "Built an automated infrastructure and deployment pipeline on Azure: - Provisioned VM and networking via Terraform - Configured system using Ansible roles - Deployed OIDC-protected web app (Keycloak + oauth2-proxy + Nginx) - Implemented CI/CD with GitHub Actions Focus: IaC best practices, automation, reproducibility",
-    "tech_stack": "#Terraform #Ansible #Docker #Nginx #Keycloak (OIDC) #PostgreSQL #GitHub Actions #Azure",
+    "tech_stack": "#Terraform #Ansible #Docker #Nginx #Keycloak(OIDC) #PostgreSQL #GitHub-Actions #Azure",
     "github_url": "https://github.com/p95max/JobApply",
     "demo_url": ""
   }

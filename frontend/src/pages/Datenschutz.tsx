@@ -75,6 +75,11 @@ export default function Datenschutz() {
         IP-Adresse, Browser-Informationen, Geräte- und Nutzungsdaten sowie
         sicherheitsrelevanter Signale.
       </p>
+       <p>
+          Cloudflare Inc. ist ein US-amerikanisches Unternehmen.
+          Die Datenübertragung in die USA erfolgt auf Grundlage
+          von Art. 46 DSGVO (Standardvertragsklauseln).
+       </p>
       <p>
         Diese Verarbeitung dient dem Schutz dieser Website und erfolgt auf
         Grundlage von Art. 6 Abs. 1 lit. f DSGVO.

@@ -253,19 +253,19 @@
   },
     {
     "model": "api.projectscreenshot",
-    "pk": 19,
+    "pk": 18,
     "fields": {
       "project": 8,
-      "image_url": "/screenshots/iac-demo-vm1.png",
+      "image_url": "/screenshots/iac-demo-vm2.png",
       "caption": "IaC DEMO - screenshot 1"
     }
   },
       {
     "model": "api.projectscreenshot",
-    "pk": 18,
+    "pk": 19,
     "fields": {
       "project": 8,
-      "image_url": "/screenshots/iac-demo-vm2.png",
+      "image_url": "/screenshots/iac-demo-vm1.png",
       "caption": "IaC DEMO - screenshot 2"
     }
   }

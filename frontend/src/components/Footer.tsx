@@ -23,7 +23,7 @@ export default function Footer() {
         </span>
 
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          {/* Legal links */}
+          {/* Legal links (for Germany) */}
           <a
             href="/impressum"
             style={{ color: '#6b7280', textDecoration: 'none' }}

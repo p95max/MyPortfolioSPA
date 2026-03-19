@@ -159,7 +159,7 @@ export default function Contact() {
         <div className="contact-success">
           <div className="success-icon" aria-hidden>✅</div>
           <h2>Thanks! Your message has been sent.</h2>
-          <p>I’ll get back to you soon.</p>
+          <p>I'll get back to you soon.</p>
           <a className="btn btn-primary" href="/">Back to Home</a>
         </div>
       </div>
@@ -169,7 +169,7 @@ export default function Contact() {
   return (
     <div className="contact-page">
       <section className="contact-hero">
-        <h1>Let’s talk</h1>
+        <h1>Let's talk</h1>
         <p>Have a project, role, or question? Drop me a message.</p>
       </section>
 
@@ -238,7 +238,6 @@ export default function Contact() {
             <div ref={widgetRef} className="cf-turnstile" />
           </div>
 
-
           <button
             className="btn btn-primary"
             type="submit"
@@ -251,16 +250,10 @@ export default function Contact() {
             <span>{loading ? "Sending…" : "Send message"}</span>
           </button>
 
-          <div className="fine-print">
-            This site is protected by Cloudflare Turnstile.
-          </div>
-
-          <div className="fine-print">
-            By sending this form, you agree that I may process your name, email address, and message
-            for the purpose of replying to your request. For more details, see the{" "}
-            <a href="/datenschutz">Privacy Policy</a>.
-          </div>
-
+          <p className="fine-print">
+            By submitting, you agree to the processing of your data to handle your request.
+            Protected by Cloudflare Turnstile · <a href="/datenschutz">Privacy Policy</a>
+          </p>
         </form>
 
         <aside className="contact-card contact-aside" aria-label="Other ways to contact">

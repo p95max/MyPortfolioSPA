@@ -252,8 +252,15 @@ export default function Contact() {
           </button>
 
           <div className="fine-print">
-            By sending, you agree that I may contact you at the provided email.
+            This site is protected by Cloudflare Turnstile.
           </div>
+
+          <div className="fine-print">
+            By sending this form, you agree that I may process your name, email address, and message
+            for the purpose of replying to your request. For more details, see the{" "}
+            <a href="/datenschutz">Privacy Policy</a>.
+          </div>
+
         </form>
 
         <aside className="contact-card contact-aside" aria-label="Other ways to contact">

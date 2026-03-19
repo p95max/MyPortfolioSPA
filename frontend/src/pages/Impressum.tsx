@@ -3,32 +3,57 @@ export default function Impressum() {
     <main style={{ maxWidth: 960, margin: '40px auto', padding: '0 16px' }}>
       <h1>Impressum</h1>
 
-      <p>
-        Angaben gemäß § 5 TMG
-      </p>
+      <p>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</p>
 
       <p>
-        Maxx &lt;Maksym Petrykin&gt;<br />
-        &lt;Michaelstr. 70&gt;<br />
-        &lt;09116&gt; Chemnitz<br />
+        Maksym Petrykin
+        <br />
+        Michaelstr. 70
+        <br />
+        09116 Chemnitz
+        <br />
         Deutschland
       </p>
 
       <p>
-        E-Mail: &lt;m.petrykin@gmx.de&gt;
+        E-Mail:{' '}
+        <a href="mailto:m.petrykin@gmx.de">m.petrykin@gmx.de</a>
+      </p>
+
+      <h2>Verantwortlich für den Inhalt</h2>
+      <p>
+        Maksym Petrykin
+        <br />
+        Michaelstr. 70
+        <br />
+        09116 Chemnitz
+        <br />
+        Deutschland
       </p>
 
       <h2>Haftung für Inhalte</h2>
       <p>
-        Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die
-        Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch
-        keine Gewähr übernehmen.
+        Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt.
+        Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird
+        jedoch keine Gewähr übernommen.
       </p>
 
       <h2>Haftung für Links</h2>
       <p>
-        Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte
-        wir keinen Einfluss haben.
+        Diese Website enthält Links zu externen Websites Dritter. Auf deren
+        Inhalte habe ich keinen Einfluss. Deshalb kann ich für diese fremden
+        Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten
+        Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten
+        verantwortlich.
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Die durch den Seitenbetreiber erstellten Inhalte und Werke auf dieser
+        Website unterliegen dem Urheberrecht. Eine Vervielfältigung,
+        Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der
+        Grenzen des Urheberrechts bedürfen der vorherigen schriftlichen
+        Zustimmung des jeweiligen Autors bzw. Erstellers.
       </p>
     </main>
   );

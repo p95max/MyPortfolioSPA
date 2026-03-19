@@ -17,16 +17,22 @@ interface Props {
 function normalizeSrc(u: string): string {
   if (!u) return PLACEHOLDER_SVG;
   if (u.startsWith('/')) return u;
+
   try {
     const url = new URL(u);
-    if (url.origin === window.location.origin) return url.pathname + url.search;
-  } catch {}
+    if (url.origin === window.location.origin) {
+      return url.pathname + url.search;
+    }
+  } catch {
+    // ignore invalid URL
+  }
+
   return u;
 }
 
 export const ProjectCard: React.FC<Props> = ({ project }) => {
   const imgs =
-    Array.isArray(project.screenshots) && project.screenshots.length
+    Array.isArray(project.screenshots) && project.screenshots.length > 0
       ? project.screenshots.map(normalizeSrc)
       : [PLACEHOLDER_SVG];
 
@@ -36,6 +42,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
     e.stopPropagation();
     setIndex((i) => (i === 0 ? imgs.length - 1 : i - 1));
   };
+
   const next = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIndex((i) => (i === imgs.length - 1 ? 0 : i + 1));
@@ -43,10 +50,12 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
 
   const onImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
+
     if (img.dataset.fallbackApplied === '1') {
       img.src = PLACEHOLDER_SVG;
       return;
     }
+
     img.dataset.fallbackApplied = '1';
     img.src = PLACEHOLDER_SVG;
   };
@@ -54,10 +63,17 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
   const current = imgs[index];
 
   return (
-    <div className="project-card" style={{ border: '1px solid #ddd', padding: 12, borderRadius: 8, marginBottom: 12 }}>
+    <div
+      className="project-card"
+      style={{
+        border: '1px solid #ddd',
+        padding: 12,
+        borderRadius: 8,
+        marginBottom: 12
+      }}
+    >
       <h3>{project.title}</h3>
 
-      {/* Вьюпорт фиксированной высоты, центрируем изображение, вписываем без обрезания */}
       <div
         style={{
           position: 'relative',
@@ -90,6 +106,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
             <button onClick={prev} aria-label="Previous" style={navBtnStyleLeft}>
               ‹
             </button>
+
             <button onClick={next} aria-label="Next" style={navBtnStyleRight}>
               ›
             </button>
@@ -128,6 +145,34 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
       </div>
 
       <p>{project.description}</p>
+
+      {project.techStack?.length > 0 && (
+        <div
+          style={{
+            marginTop: 10,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 6
+          }}
+        >
+          {project.techStack.map((tech) => (
+            <span
+              key={tech}
+              style={{
+                fontSize: 12,
+                padding: '4px 10px',
+                borderRadius: 999,
+                background: '#0f172a',
+                color: '#fff',
+                border: '1px solid #1e293b'
+              }}
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      )}
+
       <div style={{ marginTop: 8 }}>
         {project.githubUrl && /^https?:\/\//.test(project.githubUrl) && (
           <a href={project.githubUrl} target="_blank" rel="noreferrer">

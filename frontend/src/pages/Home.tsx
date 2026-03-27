@@ -31,7 +31,7 @@ export const Home = () => {
               <a className="btn btn-primary" href="/projects">
                 View Projects
               </a>
-              <a className="btn btn-outline" href="/contact">
+              <a className="btn btn-primary" href="/contact">
                 Contact Me
               </a>
             </div>

@@ -51,28 +51,18 @@ export const Home = () => {
 
           {/* CTA */}
           <div className="ph-actions">
+
             <a className="btn btn-primary" href="/projects">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Explore Projects
             </a>
-            <a
-              className="btn btn-outline"
-              href="https://github.com/p95max/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub
+
+            <a className="btn btn-outline" href="/contact">
+              Contacts me
             </a>
-            <a
-              className="btn btn-outline"
-              href="https://linkedin.com/in/p95max/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
+
           </div>
 
         </section>

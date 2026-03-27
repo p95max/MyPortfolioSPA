@@ -33,7 +33,7 @@ export default function Contact() {
   const widgetRef = useRef<HTMLDivElement | null>(null);
   const scriptLoadedRef = useRef(false);
 
-  useEffect(() => { document.title = "Maksym Petrykin — Contact"; }, []);
+  useEffect(() => { document.title = "M.Petrykin — Contact"; }, []);
 
   const apiUrl = useMemo(() =>
     import.meta.env.VITE_API_URL

@@ -9,7 +9,7 @@ const STACK = [
 
 export const Home = () => {
   useEffect(() => {
-    document.title = "Maksym Petrykin — Python Backend Developer";
+    document.title = "M.Petrykin — Python Backend Developer";
   }, []);
 
   return (

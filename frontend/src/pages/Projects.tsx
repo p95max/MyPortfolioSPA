@@ -39,7 +39,7 @@ function Projects() {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    document.title = "Maksym Petrykin — Projects";
+    document.title = "M.Petrykin — Projects";
   }, []);
 
   useEffect(() => {

@@ -70,20 +70,6 @@ export const Home = () => {
         {/* Divider */}
         <div className="ph-divider" />
 
-        {/* Stats */}
-
-        <div className="ph-stats">
-          <div>
-            <div className="ph-stat-num">5+</div>
-            <div className="ph-stat-label">Projects shipped</div>
-          </div>
-
-          <div>
-            <div className="ph-stat-num">B2</div>
-            <div className="ph-stat-label">DE &amp; EN</div>
-          </div>
-
-        </div>
       </div>
     </div>
   );

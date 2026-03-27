@@ -262,7 +262,7 @@ export default function Contact() {
             <li>
               <a href="mailto:m.petrykin@gmx.de" className="link-item">
                 <span className="ico" aria-hidden>📧</span>
-                m.petrykin@gmx.de
+                p95maxde@gmail.com
               </a>
             </li>
             <li>

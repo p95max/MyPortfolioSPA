@@ -1,41 +1,100 @@
 import { useEffect } from "react";
 import "./Home.css";
 
+const STACK = [
+  "Python", "Django", "FastAPI", "PostgreSQL",
+  "Docker", "Redis", "gRPC", "Pytest",
+  "GitHub Actions", "Terraform", "Azure",
+];
+
 export const Home = () => {
   useEffect(() => {
-    document.title = "My SPA Portfolio - Home";
+    document.title = "Maksym Petrykin — Python Backend Developer";
   }, []);
 
   return (
     <div className="page-home">
-      <div className="container">
-        <section className="hero-card">
-          <div className="hero-content">
-            <h1 className="hero-title">
-              Hi, I&apos;m <span className="hero-title-accent">Maksym</span>
-            </h1>
+      {/* Top bar */}
+      <header className="ph-topbar">
+        <span className="ph-logo">~/petrykin</span>
+        <nav className="ph-nav">
+          <a href="/projects">Projects</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </header>
 
-            <p className="hero-subtitle">
-              <span className="hero-subtitle-accent">Python Backend Developer</span>{" "}
-              — APIs, integrations, automation.
-            </p>
+      <div className="ph-container">
+        <section className="ph-hero">
 
-            <p className="hero-description">
-              Django, FastAPI, PostgreSQL, Docker.
-              Clean architecture. Production-ready systems.
-            </p>
+          <p className="ph-eyebrow">Open to work · Chemnitz, DE</p>
 
-            <div className="hero-actions">
-              <a className="btn btn-primary" href="/projects">
-                Explore Projects
-              </a>
-              <a className="btn btn-outline" href="/contact">
-                Get in touch
-              </a>
-            </div>
+          <h1 className="ph-title">
+            <span className="ph-title-name">Hi, I&apos;m</span>
+            <span className="ph-title-accent">Maksym</span>
+          </h1>
 
+          <p className="ph-subtitle">Python Backend Developer</p>
+
+          <p className="ph-description">
+            I build APIs, integrations, and automation systems.
+            Django, FastAPI, PostgreSQL, Docker — clean architecture,
+            production-ready code, no shortcuts.
+          </p>
+
+          {/* Tech stack */}
+          <div className="ph-stack">
+            {STACK.map((tech) => (
+              <span key={tech} className="ph-chip">{tech}</span>
+            ))}
           </div>
+
+          {/* CTA */}
+          <div className="ph-actions">
+            <a className="btn btn-primary" href="/projects">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Explore Projects
+            </a>
+            <a
+              className="btn btn-outline"
+              href="https://github.com/p95max/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+            <a
+              className="btn btn-outline"
+              href="https://linkedin.com/in/p95max/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+          </div>
+
         </section>
+
+        {/* Divider */}
+        <div className="ph-divider" />
+
+        {/* Stats */}
+        <div className="ph-stats">
+          <div>
+            <div className="ph-stat-num">5+</div>
+            <div className="ph-stat-label">Projects shipped</div>
+          </div>
+          <div>
+            <div className="ph-stat-num">2</div>
+            <div className="ph-stat-label">Commercial roles</div>
+          </div>
+          <div>
+            <div className="ph-stat-num">B2</div>
+            <div className="ph-stat-label">DE &amp; EN</div>
+          </div>
+        </div>
       </div>
     </div>
   );

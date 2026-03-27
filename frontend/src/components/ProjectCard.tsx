@@ -1,34 +1,27 @@
 import React, { useState } from 'react';
 import type { Project } from '../types';
+import './ProjectCard.css';
 
 const PLACEHOLDER_SVG =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450">
-       <rect width="100%" height="100%" fill="#111"/>
-       <text x="50%" y="50%" font-size="20" fill="#aaa" text-anchor="middle" dominant-baseline="middle">No screenshot</text>
+       <rect width="100%" height="100%" fill="#0e1219"/>
+       <text x="50%" y="50%" font-size="14" fill="#3d4f63" text-anchor="middle" dominant-baseline="middle" font-family="monospace">no screenshot</text>
      </svg>`
   );
-
-interface Props {
-  project: Project;
-}
 
 function normalizeSrc(u: string): string {
   if (!u) return PLACEHOLDER_SVG;
   if (u.startsWith('/')) return u;
-
   try {
     const url = new URL(u);
-    if (url.origin === window.location.origin) {
-      return url.pathname + url.search;
-    }
-  } catch {
-    // ignore invalid URL
-  }
-
+    if (url.origin === window.location.origin) return url.pathname + url.search;
+  } catch { /* ignore */ }
   return u;
 }
+
+interface Props { project: Project; }
 
 export const ProjectCard: React.FC<Props> = ({ project }) => {
   const imgs =
@@ -38,64 +31,23 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
 
   const [index, setIndex] = useState(0);
 
-  const prev = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIndex((i) => (i === 0 ? imgs.length - 1 : i - 1));
-  };
-
-  const next = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIndex((i) => (i === imgs.length - 1 ? 0 : i + 1));
-  };
-
+  const prev = (e: React.MouseEvent) => { e.stopPropagation(); setIndex(i => i === 0 ? imgs.length - 1 : i - 1); };
+  const next = (e: React.MouseEvent) => { e.stopPropagation(); setIndex(i => i === imgs.length - 1 ? 0 : i + 1); };
   const onImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
-
-    if (img.dataset.fallbackApplied === '1') {
-      img.src = PLACEHOLDER_SVG;
-      return;
-    }
-
+    if (img.dataset.fallbackApplied === '1') return;
     img.dataset.fallbackApplied = '1';
     img.src = PLACEHOLDER_SVG;
   };
 
-  const current = imgs[index];
-
   return (
-    <div
-      className="project-card"
-      style={{
-        border: '1px solid #ddd',
-        padding: 12,
-        borderRadius: 8,
-        marginBottom: 12
-      }}
-    >
-      <h3>{project.title}</h3>
-
-      <div
-        style={{
-          position: 'relative',
-          overflow: 'hidden',
-          borderRadius: 8,
-          background: '#111',
-          height: 520,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
+    <div className="pc">
+      {/* Gallery */}
+      <div className="pc-gallery">
         <img
-          src={current}
+          className="pc-img"
+          src={imgs[index]}
           alt={`${project.title} screenshot ${index + 1}`}
-          style={{
-            maxWidth: '100%',
-            maxHeight: '100%',
-            width: 'auto',
-            height: 'auto',
-            display: 'block'
-          }}
           loading="lazy"
           crossOrigin="anonymous"
           onError={onImgError}
@@ -103,40 +55,15 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
 
         {imgs.length > 1 && (
           <>
-            <button onClick={prev} aria-label="Previous" style={navBtnStyleLeft}>
-              ‹
-            </button>
-
-            <button onClick={next} aria-label="Next" style={navBtnStyleRight}>
-              ›
-            </button>
-
-            <div
-              style={{
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                bottom: 8,
-                display: 'flex',
-                gap: 6
-              }}
-            >
+            <button className="pc-nav pc-nav-prev" onClick={prev} aria-label="Previous">‹</button>
+            <button className="pc-nav pc-nav-next" onClick={next} aria-label="Next">›</button>
+            <div className="pc-dots">
               {imgs.map((_, i) => (
                 <button
                   key={i}
-                  onClick={(ev) => {
-                    ev.stopPropagation();
-                    setIndex(i);
-                  }}
-                  aria-label={`Go to screenshot ${i + 1}`}
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: '50%',
-                    border: 'none',
-                    background: i === index ? '#fff' : 'rgba(255,255,255,0.4)',
-                    cursor: 'pointer'
-                  }}
+                  className={`pc-dot ${i === index ? 'active' : ''}`}
+                  onClick={e => { e.stopPropagation(); setIndex(i); }}
+                  aria-label={`Screenshot ${i + 1}`}
                 />
               ))}
             </div>
@@ -144,70 +71,40 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
         )}
       </div>
 
-      <p>{project.description}</p>
+      {/* Body */}
+      <div className="pc-body">
+        <h3 className="pc-title">{project.title}</h3>
+        <p className="pc-desc">{project.description}</p>
 
-      {project.techStack?.length > 0 && (
-        <div
-          style={{
-            marginTop: 10,
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 6
-          }}
-        >
-          {project.techStack.map((tech) => (
-            <span
-              key={tech}
-              style={{
-                fontSize: 12,
-                padding: '4px 10px',
-                borderRadius: 999,
-                background: '#0f172a',
-                color: '#fff',
-                border: '1px solid #1e293b'
-              }}
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <div style={{ marginTop: 8 }}>
-        {project.githubUrl && /^https?:\/\//.test(project.githubUrl) && (
-          <a href={project.githubUrl} target="_blank" rel="noreferrer">
-            GitHub
-          </a>
+        {project.techStack?.length > 0 && (
+          <div className="pc-stack">
+            {project.techStack.map(tech => (
+              <span key={tech} className="pc-chip">{tech}</span>
+            ))}
+          </div>
         )}
+
+        <div className="pc-links">
+          {project.githubUrl && /^https?:\/\//.test(project.githubUrl) && (
+            <a href={project.githubUrl} target="_blank" rel="noreferrer" className="pc-link">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+              GitHub
+            </a>
+          )}
+          {project.demoUrl && /^https?:\/\//.test(project.demoUrl) && (
+            <a href={project.demoUrl} target="_blank" rel="noreferrer" className="pc-link">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Live demo
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );
-};
-
-const navBtnStyleLeft: React.CSSProperties = {
-  position: 'absolute',
-  left: 8,
-  top: '50%',
-  transform: 'translateY(-50%)',
-  background: 'rgba(0,0,0,0.5)',
-  border: 'none',
-  color: '#fff',
-  padding: '6px 8px',
-  borderRadius: 6,
-  cursor: 'pointer'
-};
-
-const navBtnStyleRight: React.CSSProperties = {
-  position: 'absolute',
-  right: 8,
-  top: '50%',
-  transform: 'translateY(-50%)',
-  background: 'rgba(0,0,0,0.5)',
-  border: 'none',
-  color: '#fff',
-  padding: '6px 8px',
-  borderRadius: 6,
-  cursor: 'pointer'
 };
 
 export default ProjectCard;

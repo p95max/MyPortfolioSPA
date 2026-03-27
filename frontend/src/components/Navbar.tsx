@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./navbar.css";
 
@@ -6,47 +6,29 @@ export const Navbar = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
-  const [isDark, setIsDark] = useState<boolean>(() =>
-    typeof window !== "undefined" && window.matchMedia
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches
-      : true
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
   useEffect(() => setOpen(false), [location.pathname]);
 
-  const rootClass = useMemo(() => `nav-root ${isDark ? "dark" : ""}`, [isDark]);
-
   const links = [
-    { to: "/", label: "About" },
-    { to: "/projects", label: "Projects" },
-    { to: "/contact", label: "Contact" },
+    { to: "/", label: "about" },
+    { to: "/projects", label: "projects" },
+    { to: "/contact", label: "contact" },
   ];
 
   return (
-    <div className={rootClass}>
+    <div className="nav-root">
       <nav className="nav-wrap" role="navigation" aria-label="Primary">
-        {/* brand */}
-        <Link to="/" className="brand">
-          <span className="brand-logo">SPA</span>
-          <span>My Single Page Portfolio</span>
-        </Link>
+        <Link to="/" className="brand">~/petrykin</Link>
 
         <div className={`nav-center ${open ? "open" : ""}`} id="primary-menu">
-          {links.map(({ to, label }) => {
-            const active = location.pathname === to;
-            return (
-              <Link key={to} to={to} className={`nav-link ${active ? "active" : ""}`}>
-                {label}
-              </Link>
-            );
-          })}
+          {links.map(({ to, label }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`nav-link ${location.pathname === to ? "active" : ""}`}
+            >
+              {label}
+            </Link>
+          ))}
         </div>
 
         <div className="nav-right">
@@ -57,13 +39,10 @@ export const Navbar = () => {
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
-            <span />
-            <span />
-            <span />
+            <span /><span /><span />
           </button>
         </div>
       </nav>
-
       <div className="nav-spacer" />
     </div>
   );

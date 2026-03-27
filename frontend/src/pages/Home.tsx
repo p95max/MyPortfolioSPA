@@ -16,15 +16,13 @@ export const Home = () => {
             </h1>
 
             <p className="hero-subtitle">
-              A pragmatic{" "}
               <span className="hero-subtitle-accent">Python Backend Developer</span>{" "}
-              building reliable APIs, integrations and automation workflows.
+              — APIs, integrations, automation.
             </p>
 
             <p className="hero-description">
-              I work with Python, Django, FastAPI, PostgreSQL and Docker.
-              My focus is clean architecture, maintainable code and backend systems
-              that solve real business tasks.
+              Django, FastAPI, PostgreSQL, Docker.
+              Clean architecture. Production-ready systems.
             </p>
 
             <div className="hero-actions">

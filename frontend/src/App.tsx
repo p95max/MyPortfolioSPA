@@ -12,7 +12,7 @@ import Datenschutz from './pages/Datenschutz';
 
 export const App = () => {
   useEffect(() => {
-    document.title = 'My SPA Portfolio';
+    document.title = 'M.Petrykin - Backend Developer';
   }, []);
 
   return (

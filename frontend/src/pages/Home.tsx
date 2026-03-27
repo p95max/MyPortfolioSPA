@@ -60,7 +60,7 @@ export const Home = () => {
             </a>
 
             <a className="btn btn-outline" href="/contact">
-              Contacts me
+              Contact me
             </a>
 
           </div>

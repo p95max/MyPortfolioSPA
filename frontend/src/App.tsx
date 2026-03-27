@@ -5,7 +5,6 @@ import Footer  from './components/Footer';
 import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
 import Contact from './pages/Contact';
-import TinyAssistant from './components/TinyAssistant';
 import Snowfall from './components/Snowfall';
 import Impressum from './pages/Impressum';
 import Datenschutz from './pages/Datenschutz';
@@ -32,8 +31,6 @@ export const App = () => {
         </div>
         <Footer />
       </Router>
-
-      <TinyAssistant />
     </div>
   );
 };

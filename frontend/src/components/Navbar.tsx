@@ -17,7 +17,7 @@ export const Navbar = () => {
   return (
     <div className="nav-root">
       <nav className="nav-wrap" role="navigation" aria-label="Primary">
-        <Link to="/" className="brand">~/petrykin</Link>
+        <Link to="/" className="brand">~/p95max</Link>
 
         <div className={`nav-center ${open ? "open" : ""}`} id="primary-menu">
           {links.map(({ to, label }) => (

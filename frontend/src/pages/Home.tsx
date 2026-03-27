@@ -31,7 +31,7 @@ export const Home = () => {
 
           <h1 className="ph-title">
             <span className="ph-title-name">Hi, I&apos;m</span>
-            <span className="ph-title-accent">p95max</span>
+            <span className="ph-title-accent">Maksym</span>
           </h1>
 
           <p className="ph-subtitle">Python Backend Developer</p>

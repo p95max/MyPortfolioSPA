@@ -27,12 +27,13 @@ export const Home = () => {
 
             <div className="hero-actions">
               <a className="btn btn-primary" href="/projects">
-                View Projects
+                Explore Projects
               </a>
-              <a className="btn btn-primary" href="/contact">
-                Contact Me
+              <a className="btn btn-outline" href="/contact">
+                Get in touch
               </a>
             </div>
+
           </div>
         </section>
       </div>

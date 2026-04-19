@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Project } from '../types';
 import './ProjectCard.css';
 
@@ -201,7 +202,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
       </div>
 
       {/* Lightbox */}
-      {isPreviewOpen && (
+      {isPreviewOpen && createPortal(
         <div
           className="pc-lightbox"
           role="dialog"
@@ -261,7 +262,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
             </div>
           )}
         </div>
-      )}
+      , document.body)}
     </div>
   );
 };

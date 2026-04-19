@@ -39,18 +39,35 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
       : [PLACEHOLDER_SVG];
 
   const [index, setIndex] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const currentSrc = imgs[index];
   const canPreview = currentSrc !== PLACEHOLDER_SVG;
 
+  const openLightbox = () => {
+    if (!canPreview) return;
+    setLightboxIndex(index);
+    setIsPreviewOpen(true);
+  };
+
+  const lightboxPrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLightboxIndex(i => (i === 0 ? imgs.length - 1 : i - 1));
+  };
+
+  const lightboxNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLightboxIndex(i => (i === imgs.length - 1 ? 0 : i + 1));
+  };
+
   useEffect(() => {
     if (!isPreviewOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsPreviewOpen(false);
-      }
+      if (e.key === 'Escape') setIsPreviewOpen(false);
+      if (e.key === 'ArrowLeft') setLightboxIndex(i => (i === 0 ? imgs.length - 1 : i - 1));
+      if (e.key === 'ArrowRight') setLightboxIndex(i => (i === imgs.length - 1 ? 0 : i + 1));
     };
 
     const originalOverflow = document.body.style.overflow;
@@ -62,7 +79,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
       document.body.style.overflow = originalOverflow;
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isPreviewOpen]);
+  }, [isPreviewOpen, imgs.length]);
 
   const prev = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -90,11 +107,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
         <button
           type="button"
           className="pc-img-btn"
-          onClick={() => {
-            if (canPreview) {
-              setIsPreviewOpen(true);
-            }
-          }}
+          onClick={openLightbox}
           disabled={!canPreview}
           aria-label={`Open ${project.title} screenshot preview`}
         >
@@ -187,6 +200,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
         </div>
       </div>
 
+      {/* Lightbox */}
       {isPreviewOpen && (
         <div
           className="pc-lightbox"
@@ -204,13 +218,48 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
             ×
           </button>
 
+          {imgs.length > 1 && (
+            <button
+              type="button"
+              className="pc-lightbox-nav pc-lightbox-prev"
+              onClick={lightboxPrev}
+              aria-label="Previous screenshot"
+            >
+              ‹
+            </button>
+          )}
+
           <img
             className="pc-lightbox-img"
-            src={currentSrc}
-            alt={`${project.title} screenshot ${index + 1}`}
+            src={imgs[lightboxIndex]}
+            alt={`${project.title} screenshot ${lightboxIndex + 1}`}
             onClick={e => e.stopPropagation()}
             onError={onImgError}
           />
+
+          {imgs.length > 1 && (
+            <button
+              type="button"
+              className="pc-lightbox-nav pc-lightbox-next"
+              onClick={lightboxNext}
+              aria-label="Next screenshot"
+            >
+              ›
+            </button>
+          )}
+
+          {imgs.length > 1 && (
+            <div className="pc-lightbox-dots" onClick={e => e.stopPropagation()}>
+              {imgs.map((_, i) => (
+                <button
+                  key={i}
+                  className={`pc-dot ${i === lightboxIndex ? 'active' : ''}`}
+                  onClick={e => { e.stopPropagation(); setLightboxIndex(i); }}
+                  aria-label={`Screenshot ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

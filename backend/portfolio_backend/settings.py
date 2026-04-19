@@ -30,12 +30,17 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "myportfoliospa-1.onrender.com",
     "myportfoliospa.onrender.com",
-    "0.0.0.0",
+    "portfolio-backend.onrender.com",
+    "p95max.dev",
+    "www.p95max.dev",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://myportfoliospa-1.onrender.com",
     "https://myportfoliospa.onrender.com",
+    "https://p95max.dev",
+    "https://www.p95max.dev",
+
 ]
 
 if os.getenv("DATABASE_URL"):
@@ -133,13 +138,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-else:
-    CORS_ALLOWED_ORIGINS = [
-        "https://myportfoliospa-1.onrender.com",
-        "https://myportfoliospa.onrender.com",
-    ]
+CORS_ALLOW_CREDENTIALS = True
 
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
@@ -148,6 +147,7 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
 
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)

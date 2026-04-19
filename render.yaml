@@ -39,4 +39,4 @@ services:
     staticPublishPath: "dist"
     envVars:
       - key: VITE_API_URL
-        value: https://portfolio-backend.onrender.com
+        value: https://myportfoliospa.onrender.com

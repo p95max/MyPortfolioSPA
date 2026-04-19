@@ -14,12 +14,12 @@
 /* Screenshot carousel */
 .pc-gallery {
   position: relative;
-  background: #060809;
-  height: 480px;
+  height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: #0a0f16;
 }
 
 .pc-img {
@@ -27,8 +27,8 @@
   max-height: 100%;
   width: auto;
   height: auto;
-  display: block;
   object-fit: contain;
+  display: block;
 }
 
 .pc-nav {

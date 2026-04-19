@@ -177,7 +177,7 @@
 }
 
 .pc-lightbox-img {
-  max-width: calc(100vw - 32px);
+  max-width: calc(100vw - 136px); /* 44px кнопка + 12px отступ + 12px зазор = 68px × 2 */
   max-height: calc(100vh - 96px);
   width: auto;
   height: auto;
@@ -263,7 +263,7 @@
   }
 
   .pc-lightbox-img {
-    max-width: calc(100vw - 16px);
+    max-width: calc(100vw - 96px); /* 36px кнопка + 4px отступ + 8px зазор = 48px × 2 */
     max-height: calc(100vh - 80px);
   }
 

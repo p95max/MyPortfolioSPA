@@ -87,6 +87,17 @@
     "demo_url": ""
   }
 },
+{
+  "model": "api.project",
+  "pk": 9,
+  "fields": {
+    "title": "DealerFinder",
+    "description": "Built a Django-based web application for searching car dealers in Germany with cache-first architecture and optional AI enrichment: - Integrated Google Places API for dealer search and review-based data - Implemented Redis/PostgreSQL caching to reduce external API calls and costs - Added AI-generated dealer summaries with Celery background tasks, quotas, retry logic and fallback handling - Implemented filtering, ranking, distance calculation, favorites and search history - Added Google OAuth authentication, Cloudflare Turnstile protection, structured logging and health checks Focus: backend architecture, external API integration, async processing, cost control, production-oriented reliability",
+    "tech_stack": "#Python #Django #PostgreSQL #Redis #Celery #Docker #Nginx #Google-Places-API #Google-OAuth #OpenAI-API #Cloudflare-Turnstile #Bootstrap #Pytest",
+    "github_url": "https://github.com/p95max/dealerfinder",
+    "demo_url": ""
+  }
+},
 
 
 
@@ -215,6 +226,8 @@
   }
 },
 
+
+
      {
     "model": "api.projectscreenshot",
     "pk": 14,
@@ -251,6 +264,9 @@
       "caption": "JobApply — screenshot 4"
     }
   },
+
+
+
     {
     "model": "api.projectscreenshot",
     "pk": 18,
@@ -268,6 +284,31 @@
       "image_url": "/screenshots/iac-demo-vm1.png",
       "caption": "IaC DEMO - screenshot 2"
     }
+  },
+
+
+      {
+    "model": "api.projectscreenshot",
+    "pk": 20,
+    "fields": {
+      "project": 9,
+      "image_url": "/screenshots/iac-demo-vm2.png",
+      "caption": "DealerFinder - screenshot 1"
+    }
+  },
+      {
+    "model": "api.projectscreenshot",
+    "pk": 19,
+    "fields": {
+      "project": 8,
+      "image_url": "/screenshots/iac-demo-vm1.png",
+      "caption": "DealerFinder - screenshot 2"
+    }
   }
+
+
+
+
+
 
 ]

@@ -108,13 +108,13 @@ function Projects() {
 
               {availableTags.length > 0 && (
         <div className="pp-tags" aria-label="Filter projects by technology tag">
-          <button
-            type="button"
-            className={`pp-tag-btn ${selectedTag === "" ? "active" : ""}`}
-            onClick={() => setSelectedTag("")}
-          >
-            All
-          </button>
+        <button
+          type="button"
+          className={`pp-tag-btn pp-tag-btn--all ${selectedTag === "" ? "active" : ""}`}
+          onClick={() => setSelectedTag("")}
+        >
+          All
+        </button>
 
           {availableTags.map((tag) => (
             <button

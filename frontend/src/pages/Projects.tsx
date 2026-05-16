@@ -22,18 +22,12 @@ function normalizeTechStack(value: unknown): string[] {
   return [];
 }
 
+const ACCENT_TAGS = ["django", "fastapi"];
+
 function getTagAccentClass(tag: string): string {
   const normalizedTag = tag.replace(/^#/, "").toLowerCase();
 
-  if (normalizedTag === "django") {
-    return "pp-tag-btn--django";
-  }
-
-  if (normalizedTag === "fastapi") {
-    return "pp-tag-btn--fastapi";
-  }
-
-  return "";
+  return ACCENT_TAGS.includes(normalizedTag) ? "pp-tag-btn--accent" : "";
 }
 
 function toCamelCase(project: any): Project {

@@ -22,6 +22,20 @@ function normalizeTechStack(value: unknown): string[] {
   return [];
 }
 
+function getTagAccentClass(tag: string): string {
+  const normalizedTag = tag.replace(/^#/, "").toLowerCase();
+
+  if (normalizedTag === "django") {
+    return "pp-tag-btn--django";
+  }
+
+  if (normalizedTag === "fastapi") {
+    return "pp-tag-btn--fastapi";
+  }
+
+  return "";
+}
+
 function toCamelCase(project: any): Project {
   return {
     id: String(project.id),
@@ -120,7 +134,7 @@ function Projects() {
             <button
               key={tag}
               type="button"
-              className={`pp-tag-btn ${selectedTag === tag ? "active" : ""}`}
+              className={`pp-tag-btn ${getTagAccentClass(tag)} ${selectedTag === tag ? "active" : ""}`}
               onClick={() => setSelectedTag(tag)}
             >
               {tag}

@@ -303,23 +303,57 @@
     "pk": 20,
     "fields": {
       "project": 9,
-      "image_url": "/screenshots/iac-demo-vm2.png",
+      "image_url": "/screenshots/dealer_1homepage.png",
       "caption": "DealerFinder - screenshot 1"
     }
   },
       {
     "model": "api.projectscreenshot",
-    "pk": 19,
+    "pk": 21,
     "fields": {
       "project": 8,
-      "image_url": "/screenshots/iac-demo-vm1.png",
+      "image_url": "/screenshots/dealer_search_results.png",
       "caption": "DealerFinder - screenshot 2"
     }
+  },
+        {
+    "model": "api.projectscreenshot",
+    "pk": 22,
+    "fields": {
+      "project": 8,
+      "image_url": "/screenshots/dealer_details_modal.png",
+      "caption": "DealerFinder - screenshot 2"
+    }
+  },
+
+
+
+
+  {
+    "model": "api.projectscreenshot",
+    "pk": 23,
+    "fields": {
+      "project": 10,
+      "image_url": "/screenshots/is_homepage.png",
+      "caption": "InboxSignal - screenshot 1"
+    }
+  },
+  {
+    "model": "api.projectscreenshot",
+    "pk": 24,
+    "fields": {
+      "project": 10,
+      "image_url": "/screenshots/is_login.png",
+      "caption": "InboxSignal - screenshot 2"
+    }
+  },
+    {
+    "model": "api.projectscreenshot",
+    "pk": 25,
+    "fields": {
+      "project": 10,
+      "image_url": "/screenshots/is_dashboard.png",
+      "caption": "InboxSignal - screenshot 3"
+    }
   }
-
-
-
-
-
-
 ]

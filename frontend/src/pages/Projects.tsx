@@ -1,18 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./Projects.css";
 import { ProjectCard } from "../components/ProjectCard";
 import type { Project } from "../types";
 import { testProjects } from "../data/test_data";
+
+function normalizeTechStack(value: unknown): string[] {
+  if (typeof value === "string") {
+    return value
+      .split(/\s+/)
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+  }
+
+  if (Array.isArray(value)) {
+    return value
+      .flatMap((tag) => (typeof tag === "string" ? tag.split(/\s+/) : []))
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+}
 
 function toCamelCase(project: any): Project {
   return {
     id: String(project.id),
     title: project.title,
     description: project.description,
-    techStack:
-      typeof project.tech_stack === "string"
-        ? project.tech_stack.split(" ").filter((t: string) => t.trim() !== "")
-        : project.tech_stack || [],
+    techStack: normalizeTechStack(project.tech_stack ?? project.techStack),
     githubUrl: project.github_url,
     demoUrl: project.demo_url,
     screenshots: Array.isArray(project.screenshots)
@@ -37,6 +52,7 @@ function Projects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+  const [selectedTag, setSelectedTag] = useState<string>("");
 
   useEffect(() => {
     document.title = "M.Petrykin — Projects";
@@ -64,11 +80,25 @@ function Projects() {
       });
   }, []);
 
+  useEffect(() => {
+    setPage(0);
+  }, [selectedTag]);
+
+  const availableTags = useMemo(() => {
+    const tags = projects.flatMap((project) => project.techStack || []);
+    return Array.from(new Set(tags)).sort((a, b) => a.localeCompare(b));
+  }, [projects]);
+
+  const filteredProjects = useMemo(() => {
+    if (!selectedTag) return projects;
+    return projects.filter((project) => project.techStack?.includes(selectedTag));
+  }, [projects, selectedTag]);
+
   if (loading) return <div className="page-projects"><p className="pp-state">Loading projects...</p></div>;
   if (error)   return <div className="page-projects"><p className="pp-state pp-state-error">Error: {error}</p></div>;
 
-  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
-  const current = projects.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
+  const current = filteredProjects.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
   return (
     <div className="page-projects">
@@ -76,9 +106,32 @@ function Projects() {
         <p className="pp-eyebrow">Portfolio</p>
         <h1 className="title">Projects</h1>
 
-        {projects.length === 0 ? (
-          <p className="pp-state">No projects found.</p>
-        ) : (
+              {availableTags.length > 0 && (
+        <div className="pp-tags" aria-label="Filter projects by technology tag">
+          <button
+            type="button"
+            className={`pp-tag-btn ${selectedTag === "" ? "active" : ""}`}
+            onClick={() => setSelectedTag("")}
+          >
+            All
+          </button>
+
+          {availableTags.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              className={`pp-tag-btn ${selectedTag === tag ? "active" : ""}`}
+              onClick={() => setSelectedTag(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      )}
+
+            {filteredProjects.length === 0 ? (
+              <p className="pp-state">No projects found.</p>
+            ) : (
           <>
             <div className="pp-list">
               {current.map((project) => (

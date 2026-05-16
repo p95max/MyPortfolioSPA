@@ -22,7 +22,7 @@ function normalizeTechStack(value: unknown): string[] {
   return [];
 }
 
-const ACCENT_TAGS = ["django", "fastapi", "openai-api", "#full-stack-development"];
+const ACCENT_TAGS = ["django", "fastapi", "openai-api", "full-stack-development"];
 
 function getTagAccentClass(tag: string): string {
   const normalizedTag = tag.replace(/^#/, "").toLowerCase();

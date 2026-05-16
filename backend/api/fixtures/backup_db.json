@@ -98,6 +98,17 @@
     "demo_url": ""
   }
 },
+{
+  "model": "api.project",
+  "pk": 10,
+  "fields": {
+    "title": "InboxSignal",
+    "description": "Built a Django-based message monitoring and triage system for Telegram and Gmail communication streams with rules-first processing and optional AI enrichment: - Implemented multi-channel ingestion for Telegram Bot API and Gmail read-only OAuth integration - Normalized incoming Telegram messages and emails into a shared event-processing pipeline - Added rules-based classification, optional OpenAI analysis, priority scoring and structured event creation - Implemented instant Telegram alerts and scheduled digest notifications with Celery and Celery Beat - Added Redis-backed rate limiting, deduplication, alert cooldowns and anti-spam controls - Secured integrations with encrypted credential storage, Telegram webhook secrets, Google OAuth and Cloudflare Turnstile protection for public forms - Added internal ops visibility, structured logging, health checks and Pytest-based coverage for critical flows Focus: backend architecture, multi-channel integration, async processing, secure credential handling, event-driven triage and production-oriented reliability",
+    "tech_stack": "#Python #Django #PostgreSQL #Redis #Celery #Docker #Nginx #Telegram-Bot-API #Gmail-API #Google-OAuth #OpenAI-API #Cloudflare-Turnstile #Bootstrap #Pytest",
+    "github_url": "https://github.com/p95max/InboxSignal",
+    "demo_url": ""
+  }
+},
 
 
 

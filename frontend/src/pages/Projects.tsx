@@ -92,12 +92,7 @@ function Projects() {
     setPage(0);
   }, [selectedTag]);
 
-  const availableTags = useMemo(() => {
-    const tags = projects.flatMap((project) => project.techStack || []);
-    return Array.from(new Set(tags)).sort((a, b) => a.localeCompare(b));
-  }, [projects]);
-
-  const tagCounts = useMemo(() => {
+const tagCounts = useMemo(() => {
   const counts = new Map<string, number>();
 
   projects.forEach((project) => {
@@ -108,8 +103,20 @@ function Projects() {
     });
   });
 
-    return counts;
-  }, [projects]);
+  return counts;
+}, [projects]);
+
+const availableTags = useMemo(() => {
+  return Array.from(tagCounts.entries())
+    .sort(([tagA, countA], [tagB, countB]) => {
+      if (countB !== countA) {
+        return countB - countA;
+      }
+
+      return tagA.localeCompare(tagB);
+    })
+    .map(([tag]) => tag);
+}, [tagCounts]);
 
   const filteredProjects = useMemo(() => {
     if (!selectedTag) return projects;

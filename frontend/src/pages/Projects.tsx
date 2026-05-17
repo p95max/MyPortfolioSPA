@@ -97,6 +97,20 @@ function Projects() {
     return Array.from(new Set(tags)).sort((a, b) => a.localeCompare(b));
   }, [projects]);
 
+  const tagCounts = useMemo(() => {
+  const counts = new Map<string, number>();
+
+  projects.forEach((project) => {
+    const uniqueProjectTags = new Set(project.techStack || []);
+
+    uniqueProjectTags.forEach((tag) => {
+      counts.set(tag, (counts.get(tag) || 0) + 1);
+    });
+  });
+
+    return counts;
+  }, [projects]);
+
   const filteredProjects = useMemo(() => {
     if (!selectedTag) return projects;
     return projects.filter((project) => project.techStack?.includes(selectedTag));
@@ -114,28 +128,32 @@ function Projects() {
         <p className="pp-eyebrow">Portfolio</p>
         <h1 className="title">Projects</h1>
 
-              {availableTags.length > 0 && (
-        <div className="pp-tags" aria-label="Filter projects by technology tag">
-        <button
-          type="button"
-          className={`pp-tag-btn pp-tag-btn--all ${selectedTag === "" ? "active" : ""}`}
-          onClick={() => setSelectedTag("")}
-        >
-          All
-        </button>
-
-          {availableTags.map((tag) => (
+        {availableTags.length > 0 && (
+          <div className="pp-tags" aria-label="Filter projects by technology tag">
             <button
-              key={tag}
               type="button"
-              className={`pp-tag-btn ${getTagAccentClass(tag)} ${selectedTag === tag ? "active" : ""}`}
-              onClick={() => setSelectedTag(tag)}
+              className={`pp-tag-btn pp-tag-btn--all ${selectedTag === "" ? "active" : ""}`}
+              onClick={() => setSelectedTag("")}
             >
-              {tag}
+              <span>All</span>
+              <span className="pp-tag-count">{projects.length}</span>
             </button>
-          ))}
-        </div>
-      )}
+
+            {availableTags.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                className={`pp-tag-btn ${getTagAccentClass(tag)} ${
+                  selectedTag === tag ? "active" : ""
+                }`}
+                onClick={() => setSelectedTag(tag)}
+              >
+                <span>{tag}</span>
+                <span className="pp-tag-count">{tagCounts.get(tag) || 0}</span>
+              </button>
+            ))}
+          </div>
+        )}
 
             {filteredProjects.length === 0 ? (
               <p className="pp-state">No projects found.</p>

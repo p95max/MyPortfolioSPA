@@ -189,3 +189,25 @@
   color: #090c11;
   border-color: transparent;
 }
+
+.pp-tag-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  background: rgba(255,255,255,0.08);
+  color: currentColor;
+  opacity: 0.8;
+}
+
+.pp-tag-btn.active .pp-tag-count {
+  background: rgba(9, 12, 17, 0.18);
+  opacity: 1;
+}

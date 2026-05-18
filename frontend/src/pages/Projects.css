@@ -211,3 +211,27 @@
   background: rgba(9, 12, 17, 0.18);
   opacity: 1;
 }
+
+.pp-tag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pp-tag-btn--badge {
+  padding: 4px 7px 4px 4px;
+  background: rgba(255,255,255,0.025);
+}
+
+.pp-tag-badge-img {
+  display: block;
+  height: 22px;
+  width: auto;
+  max-width: 140px;
+  border-radius: 4px;
+}
+
+.pp-tag-btn--badge .pp-tag-count {
+  margin-left: 2px;
+}

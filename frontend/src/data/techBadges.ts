@@ -16,7 +16,7 @@ function makeBadge(
   alt = label
 ): TechBadge {
   const params = new URLSearchParams({
-    style: "for-the-badge",
+    style: "flat-square",
   });
 
   if (logo) {

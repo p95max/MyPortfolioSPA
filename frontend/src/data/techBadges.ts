@@ -57,6 +57,7 @@ export const TECH_BADGES: Record<string, TechBadge> = {
   gunicorn: makeBadge("Gunicorn", "298729", "gunicorn"),
   celery: makeBadge("Celery", "37814A", "celery"),
   ansible: makeBadge("Ansible", "000000", "ansible"),
+  azure: makeBadge("Azure", "0078D4", "microsoftazure"),
   terraform: makeBadge("Terraform", "7B42BC", "terraform"),
   githubactions: makeBadge("GitHub Actions", "2671E5", "githubactions"),
   git: makeBadge("Git", "F05033", "git"),

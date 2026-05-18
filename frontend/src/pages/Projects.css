@@ -123,21 +123,31 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 6px;
   border-radius: 999px;
-  font-size: 0.65rem;
-  font-weight: 700;
+  font-size: 0.66rem;
+  font-weight: 800;
   line-height: 1;
-  background: rgba(255,255,255,0.08);
-  color: currentColor;
-  opacity: 0.8;
+  letter-spacing: 0.02em;
+  color: var(--cyan, #00d4ff);
+  background: rgba(0, 212, 255, 0.12);
+  border: 1px solid rgba(0, 212, 255, 0.28);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.08);
+  opacity: 1;
+}
+
+.pp-tag-btn:hover .pp-tag-count {
+  background: rgba(0, 212, 255, 0.18);
+  border-color: rgba(0, 212, 255, 0.45);
 }
 
 .pp-tag-btn.active .pp-tag-count {
-  background: rgba(9, 12, 17, 0.18);
-  opacity: 1;
+  color: #ffffff;
+  background: rgba(9, 12, 17, 0.32);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: none;
 }
 
 .pp-tag-btn--badge .pp-tag-count {

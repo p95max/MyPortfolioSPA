@@ -60,15 +60,11 @@
   animation: fadeUp 0.6s 0.2s ease both;
 }
 
-/* Tag filter */
 .pp-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  max-height: 180px;
-  overflow-y: auto;
   margin-bottom: 32px;
-  padding-right: 4px;
   animation: fadeUp 0.6s 0.25s ease both;
 }
 
@@ -260,10 +256,6 @@
 
   .page-projects .title {
     margin-bottom: 24px;
-  }
-
-  .pp-tags {
-    max-height: 220px;
   }
 
   .pp-tag-badge-img {

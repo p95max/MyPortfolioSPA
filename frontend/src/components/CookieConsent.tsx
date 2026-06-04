@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./components/CookieConsent.css";
+import "./CookieConsent.css";
 
 const CONSENT_STORAGE_KEY = "cookie-consent-v1";
 const CONSENT_VERSION = 1;

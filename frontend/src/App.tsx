@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import Footer  from './components/Footer';
+import Footer from './components/Footer';
 import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
 import Contact from './pages/Contact';
 import Snowfall from './components/Snowfall';
 import Impressum from './pages/Impressum';
 import Datenschutz from './pages/Datenschutz';
-
+import { CookieConsent } from "./components/CookieConsent";
 
 export const App = () => {
   useEffect(() => {
@@ -19,7 +19,8 @@ export const App = () => {
     <div className="app-wrapper">
       <Router>
         <Navbar />
-         <Snowfall />
+        <Snowfall />
+
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -29,8 +30,11 @@ export const App = () => {
             <Route path="/datenschutz" element={<Datenschutz />} />
           </Routes>
         </div>
+
         <Footer />
       </Router>
+
+      <CookieConsent />
     </div>
   );
 };

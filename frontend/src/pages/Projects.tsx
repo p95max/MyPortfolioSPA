@@ -159,50 +159,86 @@ function Projects() {
         <p className="pp-eyebrow">Portfolio</p>
         <h1 className="title">Projects</h1>
 
-        {availableTags.length > 0 && (
-          <div className="pp-tags" aria-label="Filter projects by technology tag">
-            <button
-              type="button"
-              className={`pp-tag-btn pp-tag-btn--all ${
-                selectedTag === "" ? "active" : ""
-              }`}
-              onClick={() => setSelectedTag("")}
-            >
-              <span>All</span>
-              <span className="pp-tag-count">{projects.length}</span>
-            </button>
+{availableTags.length > 0 && (
+  <details className="pp-filters">
+    <summary className="pp-filters__summary">
+      <span className="pp-filters__title">
+        Technology filters
+      </span>
 
-            {availableTags.map((tag) => {
-              const badge = getTechBadge(tag);
+      <span className="pp-filters__meta">
+        {selectedTag || `${availableTags.length} tags`}
+      </span>
 
-              return (
-                <button
-                  key={tag}
-                  type="button"
-                  className={`pp-tag-btn ${badge ? "pp-tag-btn--badge" : ""} ${getTagAccentClass(
-                    tag
-                  )} ${selectedTag === tag ? "active" : ""}`}
-                  onClick={() => setSelectedTag(tag)}
-                  title={`Filter by ${tag}`}
-                >
-                  {badge ? (
-                    <img
-                      className="pp-tag-badge-img"
-                      src={badge.src}
-                      alt={badge.alt}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <span>{tag}</span>
-                  )}
+      <svg
+        className="pp-filters__icon"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M4 6l4 4 4-4"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </summary>
 
-                  <span className="pp-tag-count">{tagCounts.get(tag) || 0}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
+    <div
+      className="pp-tags"
+      aria-label="Filter projects by technology tag"
+    >
+      <button
+        type="button"
+        className={`pp-tag-btn pp-tag-btn--all ${
+          selectedTag === "" ? "active" : ""
+        }`}
+        onClick={() => setSelectedTag("")}
+      >
+        <span>All</span>
+        <span className="pp-tag-count">{projects.length}</span>
+      </button>
+
+      {availableTags.map((tag) => {
+        const badge = getTechBadge(tag);
+
+        return (
+          <button
+            key={tag}
+            type="button"
+            className={`pp-tag-btn ${
+              badge ? "pp-tag-btn--badge" : ""
+            } ${getTagAccentClass(tag)} ${
+              selectedTag === tag ? "active" : ""
+            }`}
+            onClick={() => setSelectedTag(tag)}
+            title={`Filter by ${tag}`}
+          >
+            {badge ? (
+              <img
+                className="pp-tag-badge-img"
+                src={badge.src}
+                alt={badge.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span>{tag}</span>
+            )}
+
+            <span className="pp-tag-count">
+              {tagCounts.get(tag) || 0}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  </details>
+)}
 
         {filteredProjects.length === 0 ? (
           <p className="pp-state">No projects found.</p>

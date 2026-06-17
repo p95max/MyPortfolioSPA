@@ -163,9 +163,8 @@ function Projects() {
   <details className="pp-filters">
     <summary className="pp-filters__summary">
       <span className="pp-filters__title">
-        Technology filters
+       Filter by technology
       </span>
-
       <span className="pp-filters__meta">
         {selectedTag || `${availableTags.length} tags`}
       </span>

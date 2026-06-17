@@ -1,56 +1,167 @@
-import type { Project } from '../types';
+import type { Project } from "../types";
 
 export const testProjects: Project[] = [
   {
-    id: '1',
-    title: 'ChattyM',
-    description: 'Minimal social network demo (Django + DRF). Posts, comments, likes, profiles and a small admin interface — used as a portfolio showcase.',
-    techStack: ['#Django', '#DRF', '#Bootstrap5', '#PostgreSQL'],
-    githubUrl: 'https://github.com/p95max/ChattyM',
-    demoUrl: '',
-    screenshots: [
-      '/screenshots/chattym1.png',
-      '/screenshots/chattym2.png',
-      '/screenshots/chattym3.png'
-    ]
+    id: "10",
+    title: "DealerFinder",
+    description:
+      "DealerFinder — Django car dealer search app for Germany with a cache-first Google Places workflow: Google Places API integration, Redis/PostgreSQL caching to reduce external calls and costs, flexible filtering and ranking by rating, reviews, distance and availability, optional AI-generated review summaries via Celery, Google OAuth authentication, Cloudflare Turnstile anti-bot protection, quotas, lazy-loaded dealer details, structured logging and production-oriented Docker setup.",
+    techStack: [
+      "#Python",
+      "#Django",
+      "#PostgreSQL",
+      "#Redis",
+      "#Celery",
+      "#Docker",
+      "#Nginx",
+      "#Google-Places-API",
+      "#Google-OAuth",
+      "#OpenAI-API",
+      "#Cloudflare-Turnstile",
+      "#Bootstrap",
+      "#Pytest",
+      "#Full-stack-development",
+    ],
+    githubUrl: "https://github.com/p95max/dealerfinder",
+    demoUrl: "",
+    screenshots: [],
   },
   {
-    id: '2',
-    title: 'What2Cook',
-    description: 'Lightweight recipe finder built with FastAPI and async SQLAlchemy — enter ingredients and get matching recipes.',
-    techStack: ['#FastAPI', '#SQLAlchemy', '#PostgreSQL', '#Jinja2'],
-    githubUrl: 'https://github.com/p95max/What2Cook',
-    demoUrl: '',
-    screenshots: [
-      '/screenshots/what2cook1.png',
-      '/screenshots/what2cook2.png',
-      '/screenshots/what2cook3.png'
-    ]
+    id: "11",
+    title: "InboxSignal",
+    description:
+      "InboxSignal — Django message monitoring and triage system for Telegram and Gmail: multi-channel ingestion, Telegram Bot API and Gmail read-only OAuth integration, shared event pipeline, rules-first classification with optional OpenAI enrichment, priority scoring, instant Telegram alerts, scheduled digests with Celery Beat, Redis-backed rate limits/deduplication/cooldowns, encrypted credentials, Cloudflare Turnstile contact form protection, ops visibility, health checks and Pytest coverage.",
+    techStack: [
+      "#Python",
+      "#Django",
+      "#PostgreSQL",
+      "#Redis",
+      "#Celery",
+      "#Docker",
+      "#Nginx",
+      "#Telegram-Bot-API",
+      "#Gmail-API",
+      "#Google-OAuth",
+      "#OpenAI-API",
+      "#Cloudflare-Turnstile",
+      "#Bootstrap",
+      "#Pytest",
+      "#Full-stack-development",
+    ],
+    githubUrl: "https://github.com/p95max/InboxSignal",
+    demoUrl: "",
+    screenshots: [],
   },
   {
-    id: '3',
-    title: 'AutoService Book',
-    description: 'Car service tracker — record services, fuel, parts and expenses. Demonstrates Django forms, auth, and export utilities.',
-    techStack: ['#Django', '#Docker', '#PostgreSQL', '#Bootstrap5'],
-    githubUrl: 'https://github.com/p95max/AutoService_Book',
-    demoUrl: '',
-    screenshots: [
-      '/screenshots/as_book1.png',
-      '/screenshots/as_book2.png',
-      '/screenshots/as_book3.png'
-    ]
+    id: "7",
+    title: "JobApply",
+    description:
+      "JobApply — Django job application tracker with a Google-first workflow: Google OAuth only (no passwords), Gmail API integration that automatically syncs and classifies responses into rejections, interview invites, and auto-acks. Google Drive backups with rotation policy (latest + 2 files), background backup worker, Cloudflare Turnstile anti-bot gate, per-user data isolation, CSV/XLSX export and import, and interview planner.",
+    techStack: [
+      "#Django",
+      "#Python",
+      "#GoogleAPI",
+      "#Docker",
+      "#Cloudflare-Turnstile",
+      "#Full-stack-development",
+    ],
+    githubUrl: "https://github.com/p95max/JobApply",
+    demoUrl: "",
+    screenshots: [],
   },
-    {
-    id: '4',
-    title: 'Mini-Fleet Monitor',
-    description: 'This application is a lightweight fleet-management dashboard for simulated robots. It provides real-time robot status, coordinates, movement controls, and safe deletion with a hard limit of 10 units. The stack is minimal and production-oriented: Node.js API, PostgreSQL, Redis, and a React frontend with a clean, utility-driven UI. The project demonstrates handling live state, event-driven updates, and building a focused operational interface with modern full-stack practices.',
-    techStack: ['#Full-stack development #Node.js + Express #PostgreSQL #React #Docker #Redis #JWT_Auth #REST + WebSocket #OpenLayers-Map'],
-    githubUrl: 'https://github.com/p95max',
-    demoUrl: '',
-    screenshots: [
-      '/screenshots/fleet1.png',
-      '/screenshots/fleet2.png',
-      '/screenshots/fleet3.png'
-    ]
-  }
+  {
+    id: "6",
+    title: "Table Transformer",
+    description:
+      "table_transformer — FastAPI service that transforms tabular data (CSV / Google Sheets) into geospatial features. Normalizes coordinates, dates, and values, stores results in PostGIS, and uploads them in batches to an ArcGIS Hosted Feature Layer via REST.",
+    techStack: [
+      "#FastAPI",
+      "#Python",
+      "#GeoJSON",
+      "#PostGIS",
+      "#GoogleSheetsAPI",
+      "#ETL",
+      "#Docker",
+      "#ArcGISREST",
+      "#Business-Process-Automation",
+    ],
+    githubUrl: "https://github.com/p95max/table_transformer",
+    demoUrl: "",
+    screenshots: [],
+  },
+  {
+    id: "5",
+    title: "Amazon Publisher",
+    description:
+      "amazon_publisher — FastAPI service that reads product data from Google Sheets, builds and validates Amazon SP-API Listings payloads against local Product-Type JSON schemas, and exposes preview and feed endpoints.",
+    techStack: [
+      "#FastAPI",
+      "#Python3",
+      "#Pydantic",
+      "#GoogleSheetsAPI",
+      "#JSONSchemas",
+      "#Docker",
+      "#DataPipelines",
+      "#Business-Process-Automation",
+    ],
+    githubUrl: "https://github.com/p95max/amazon_publisher",
+    demoUrl: "",
+    screenshots: [],
+  },
+  {
+    id: "4",
+    title: "Mini-Fleet Monitor",
+    description:
+      "Real-time fleet dashboard for simulated robots. Streams live position updates via WebSocket backed by Redis Pub/Sub (supports horizontal scaling). Includes Prometheus metrics, Grafana dashboards, Alertmanager alerts, JWT authentication, and automatic polling fallback when WebSocket is unavailable. Full stack: Node.js · PostgreSQL · Redis · React · OpenLayers · Docker Compose.",
+    techStack: [
+      "#Full-stack-development",
+      "#Node.js+Express",
+      "#PostgreSQL",
+      "#React",
+      "#Docker",
+      "#Redis",
+      "#JWT_Auth",
+      "#REST+WebSocket",
+      "#OpenLayers-Map",
+    ],
+    githubUrl: "https://github.com/p95max/robot-fleet-monitor",
+    demoUrl: "",
+    screenshots: [],
+  },
+  {
+    id: "8",
+    title: "Azure IaC Project (Terraform + Ansible)",
+    description:
+      "Azure IaC — OIDC-Protected Infrastructure — Production-style IaC setup on Azure: Terraform provisions the VM and networking, Ansible configures the stack via roles and Jinja2 templates. Deploys Keycloak + oauth2-proxy + Nginx with full OIDC authentication flow. CI/CD via GitHub Actions.",
+    techStack: [
+      "#Terraform",
+      "#Ansible",
+      "#Docker",
+      "#Nginx",
+      "#Keycloak-(OIDC)",
+      "#PostgreSQL",
+      "#GitHub-Actions",
+      "#Azure",
+    ],
+    githubUrl: "https://github.com/p95max/iac-demo-vm",
+    demoUrl: "",
+    screenshots: [],
+  },
+  {
+    id: "9",
+    title: "Portfolio SPA",
+    description:
+      "Full-stack SPA with Django REST backend and React (Vite) frontend, deployed on Render via Docker Compose + Nginx. Includes server-side CAPTCHA validation, IP-based rate limiting, anti-spam throttling, email notifications, and a CMS-style Django Admin for managing projects and screenshots.",
+    techStack: [
+      "#Django-REST",
+      "#React",
+      "#PostgreSQL",
+      "#Docker",
+      "#Nginx",
+      "#live-service",
+    ],
+    githubUrl: "https://github.com/p95max/MyPortfolioSPA",
+    demoUrl: "",
+    screenshots: [],
+  },
 ];

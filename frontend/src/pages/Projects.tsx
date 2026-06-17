@@ -5,6 +5,16 @@ import type { Project } from "../types";
 import { testProjects } from "../data/test_data";
 import { getTechBadge } from "../data/techBadges";
 
+const USE_TEST_DATA = false;
+
+const API_URL =
+  import.meta.env.VITE_API_URL === undefined
+    ? "http://localhost:8000"
+    : import.meta.env.VITE_API_URL;
+
+const ITEMS_PER_PAGE = 5;
+
+
 function normalizeTechStack(value: unknown): string[] {
   if (typeof value === "string") {
     return value
@@ -53,14 +63,6 @@ function toCamelCase(project: any): Project {
   };
 }
 
-const USE_TEST_DATA = false;
-
-const API_URL =
-  import.meta.env.VITE_API_URL === undefined
-    ? "http://localhost:8000"
-    : import.meta.env.VITE_API_URL;
-
-const ITEMS_PER_PAGE = 5;
 
 function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);

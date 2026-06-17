@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import Max
 
+
+
 class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -23,6 +25,8 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+
+
 class ProjectScreenshot(models.Model):
     project = models.ForeignKey(Project, related_name='screenshots', on_delete=models.CASCADE)
     image_url = models.CharField(max_length=500, blank=True)
@@ -30,6 +34,8 @@ class ProjectScreenshot(models.Model):
 
     def __str__(self):
         return f"Screenshot for {self.project.title} ({self.pk})"
+
+
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)

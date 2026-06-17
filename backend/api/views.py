@@ -20,9 +20,8 @@ from .throttles import (
     ContactMessageFingerprintThrottle,
 )
 
-
-
 logger = logging.getLogger(__name__)
+
 
 
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
@@ -41,6 +40,7 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
                 {"error": "Something went wrong while fetching projects"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
 
 
 @api_view(['POST'])

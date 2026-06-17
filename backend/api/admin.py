@@ -25,6 +25,7 @@ def _public_image_url(value: str) -> str:
     return url
 
 
+
 class ProjectScreenshotAdminForm(forms.ModelForm):
     image_url = forms.CharField(required=False)
 
@@ -63,6 +64,7 @@ class ProjectScreenshotInline(admin.TabularInline):
             "</a>",
             public,
         )
+
 
 
 @admin.register(Project)
@@ -109,6 +111,7 @@ class ProjectScreenshotAdmin(admin.ModelAdmin):
             "</a>",
             public,
         )
+
 
 
 @admin.register(ContactMessage)

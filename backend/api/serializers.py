@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Project, ContactMessage, ProjectScreenshot
 
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     screenshots = serializers.SerializerMethodField()
 
@@ -37,6 +39,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             pass
 
         return urls
+
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):

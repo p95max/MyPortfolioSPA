@@ -195,8 +195,6 @@ function Projects() {
             <summary className="pp-filters__summary">
               <span className="pp-filters__title">Filter by technology</span>
 
-              <span className="pp-filters__meta">{filtersMeta}</span>
-
               <svg
                 className="pp-filters__icon"
                 width="16"

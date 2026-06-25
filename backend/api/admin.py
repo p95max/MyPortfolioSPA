@@ -152,6 +152,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
         "processed_at",
         "processed_by",
     )
+    list_editable = ("status",)
     list_filter = ("status", "created_at", "processed_at")
     search_fields = ("name", "email", "message", "internal_note")
     readonly_fields = ("created_at", "updated_at", "processed_at", "processed_by")

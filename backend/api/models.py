@@ -39,7 +39,7 @@ class ProjectScreenshot(models.Model):
 
 
 class ContactMessageStatus(models.TextChoices):
-    NEW = "new", "New"
+    UNREADED = "unreaded", "Unreaded"
     IN_PROGRESS = "in_progress", "In progress"
     DONE = "done", "Done"
     SPAM = "spam", "Spam"

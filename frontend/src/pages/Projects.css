@@ -78,7 +78,6 @@
   padding: 0 16px;
   font-family: var(--mono, 'JetBrains Mono', monospace);
   cursor: pointer;
-  user-select: none;
   list-style: none;
   transition:
     background 0.15s ease,

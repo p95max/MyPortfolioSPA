@@ -21,4 +21,8 @@ services:
     staticPublishPath: "dist"
     envVars:
       - key: VITE_API_URL
-        value: https://myportfoliospa.onrender.com
+        sync: false
+      - key: VITE_TURNSTILE_SITEKEY
+        sync: false
+      - key: VITE_SNOW
+        value: auto

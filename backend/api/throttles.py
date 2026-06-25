@@ -1,4 +1,5 @@
 from hashlib import sha1
+import ipaddress
 from rest_framework.throttling import SimpleRateThrottle
 
 
@@ -23,10 +24,17 @@ class ContactIPThrottle(SimpleRateThrottle):
 
 class ContactSubnetThrottle(SimpleRateThrottle):
     scope = "contact_subnet"
+
     def get_cache_key(self, request, view):
-        ip = self.get_ident(request) or ""
-        parts = ip.split(".")
-        subnet = ".".join(parts[:3]) if len(parts) == 4 else ip  # грубо: /24 для IPv4
+        ip_str = self.get_ident(request) or ""
+        try:
+            network = ipaddress.ip_network(ip_str, strict=False)
+            if network.version == 4:
+                subnet = str(ipaddress.ip_network(f"{ip_str}/24", strict=False))
+            else:
+                subnet = str(ipaddress.ip_network(f"{ip_str}/48", strict=False))
+        except ValueError:
+            subnet = ip_str
         return self.cache_format % {"scope": self.scope, "ident": f"contact_subnet:{subnet}"}
 
 

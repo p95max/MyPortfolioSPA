@@ -55,7 +55,7 @@ def contact_message(request):
     logger.info("POST /contact-message/ requested")
     logger.debug(f"Request data: {request.data}")
 
-    if (request.data.get("website") or request.data.get("hp")):
+    if request.data.get("website") or request.data.get("hp"):
         logger.warning("Honeypot triggered; dropping submission")
         return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)
 
@@ -70,14 +70,18 @@ def contact_message(request):
 
     try:
         message_obj = serializer.save()
+    except Exception as e:
+        logger.error(f"Failed to save contact message: {e}", exc_info=True)
+        return Response({"error": "Could not process your message."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        recipients = getattr(settings, "NOTIFY_EMAILS", [])
-        if recipients:
+    recipients = getattr(settings, "NOTIFY_EMAILS", [])
+    if recipients:
+        try:
             subj_prefix = getattr(settings, "EMAIL_SUBJECT_PREFIX", "")
             subject = f"{subj_prefix}📩 New Contact Message".strip()
 
             name = escape(message_obj.name or "")
-            email = escape(message_obj.email or "")
+            email_display = escape(message_obj.email or "")
             msg = escape(message_obj.message or "")
 
             tzname = getattr(settings, "DISPLAY_TZ", "Europe/Berlin")
@@ -94,7 +98,7 @@ def contact_message(request):
                 f"ID: {message_obj.id}\n"
                 f"Date: {created_human}\n"
                 f"Name: {name}\n"
-                f"Email: {email}\n\n"
+                f"Email: {email_display}\n\n"
                 f"Message:\n{msg}"
             )
             html_body = (
@@ -102,7 +106,7 @@ def contact_message(request):
                 f"<p><strong>ID:</strong> {message_obj.id}<br>"
                 f"<strong>Date:</strong> {escape(created_human)}<br>"
                 f"<strong>Name:</strong> {name}<br>"
-                f"<strong>Email:</strong> {email}</p>"
+                f"<strong>Email:</strong> {email_display}</p>"
                 f"<p><em>See details in Admin.</em></p>"
                 f"<pre style='white-space:pre-wrap'>{msg}</pre>"
             )
@@ -112,24 +116,22 @@ def contact_message(request):
                 body=text_body,
                 from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
                 to=recipients,
-                reply_to=[message_obj.email] if message_obj.email else None,
+                reply_to=[message_obj.email] if message_obj.email else None,  # raw, не escaped — email headers не HTML
             )
             email_msg.attach_alternative(html_body, "text/html")
             email_msg.send(fail_silently=False)
-        else:
-            logger.warning(
-                "No recipients configured. NOTIFY_EMAILS=%s, NOTIFY_EMAIL=%s, EMAIL_HOST_USER=%s",
-                getattr(settings, "NOTIFY_EMAILS", None),
-                getattr(settings, "NOTIFY_EMAIL", None),
-                getattr(settings, "EMAIL_HOST_USER", None),
-            )
 
-        logger.info(f"Contact message saved and notification processed. ID={message_obj.id}")
-        return Response({'message': 'Thank you for your message!'}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(f"Email notification failed for ID={message_obj.id}: {e}", exc_info=True)
+    else:
+        logger.warning(
+            "No recipients configured. NOTIFY_EMAILS=%s, EMAIL_HOST_USER=%s",
+            getattr(settings, "NOTIFY_EMAILS", None),
+            getattr(settings, "EMAIL_HOST_USER", None),
+        )
 
-    except Exception as e:
-        logger.error(f"Failed to save/send contact message: {e}", exc_info=True)
-        return Response({"error": "Could not process your message."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    logger.info(f"Contact message saved. ID={message_obj.id}")
+    return Response({'message': 'Thank you for your message!'}, status=status.HTTP_201_CREATED)
 
 
 def _check_turnstile(token: str, ip: str) -> bool:
@@ -144,4 +146,5 @@ def _check_turnstile(token: str, ip: str) -> bool:
         )
         return bool(r.json().get("success"))
     except Exception:
-        return False
+        logger.error("Turnstile check failed (network/timeout); failing open", exc_info=True)
+        return True  # fail open — Cloudflare лежит, форма доступна

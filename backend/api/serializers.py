@@ -45,4 +45,4 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactMessage
-        fields = '__all__'
+        fields = ['name', 'email', 'message']

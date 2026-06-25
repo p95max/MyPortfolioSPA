@@ -28,20 +28,21 @@ ADMIN_URL = os.getenv("DJANGO_ADMIN_URL", "admin/")
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "myportfoliospa-1.onrender.com",
-    "myportfoliospa.onrender.com",
-    "portfolio-backend.onrender.com",
-    "p95max.dev",
-    "www.p95max.dev",
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://myportfoliospa-1.onrender.com",
-    "https://myportfoliospa.onrender.com",
-    "https://p95max.dev",
-    "https://www.p95max.dev",
+_primary = os.getenv("ALLOWED_HOST", "")
+if _primary:
+    ALLOWED_HOSTS.append(_primary)
 
-]
+_extra = os.getenv("EXTRA_ALLOWED_HOSTS", "")
+if _extra:
+    ALLOWED_HOSTS += [h.strip() for h in _extra.split(",") if h.strip()]
+
+CSRF_TRUSTED_ORIGINS = []
+
+_csrf = os.getenv("CSRF_TRUSTED_ORIGINS", "")
+if _csrf:
+    CSRF_TRUSTED_ORIGINS = [h.strip() for h in _csrf.split(",") if h.strip()]
 
 if os.getenv("DATABASE_URL"):
  

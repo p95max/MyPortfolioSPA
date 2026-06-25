@@ -182,7 +182,7 @@ function Projects() {
         {availableTags.length > 0 && (
           <details className="pp-filters">
             <summary className="pp-filters__summary">
-              <span className="pp-filters__title">Filter by technology</span>
+              <span className="pp-filters__title">Filter Projects by technologies</span>
 
               <svg
                 className="pp-filters__icon"

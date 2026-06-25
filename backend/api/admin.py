@@ -1,9 +1,11 @@
+from django.utils import timezone
 from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.core.validators import URLValidator
 from django.utils.html import format_html
 from adminsortable2.admin import SortableAdminMixin
+from .models import Project, ProjectScreenshot, ContactMessage, ContactMessageStatus
 
 from .models import Project, ProjectScreenshot, ContactMessage
 
@@ -114,8 +116,92 @@ class ProjectScreenshotAdmin(admin.ModelAdmin):
 
 
 
+@admin.action(description="Mark selected messages as in progress")
+def mark_as_in_progress(modeladmin, request, queryset):
+    queryset.update(
+        status=ContactMessageStatus.IN_PROGRESS,
+        processed_at=None,
+        processed_by=None,
+    )
+
+
+@admin.action(description="Mark selected messages as done")
+def mark_as_done(modeladmin, request, queryset):
+    queryset.update(
+        status=ContactMessageStatus.DONE,
+        processed_at=timezone.now(),
+        processed_by=request.user,
+    )
+
+
+@admin.action(description="Mark selected messages as spam")
+def mark_as_spam(modeladmin, request, queryset):
+    queryset.update(
+        status=ContactMessageStatus.SPAM,
+        processed_at=timezone.now(),
+        processed_by=request.user,
+    )
+
+
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = (
+        "status_badge",
+        "name",
+        "email",
+        "short_message",
+        "created_at",
+        "processed_at",
+        "processed_by",
+    )
+    list_filter = ("status", "created_at", "processed_at")
+    search_fields = ("name", "email", "message", "internal_note")
+    readonly_fields = ("created_at", "updated_at", "processed_at", "processed_by")
+    fields = (
+        "status",
+        "name",
+        "email",
+        "message",
+        "internal_note",
+        "created_at",
+        "updated_at",
+        "processed_at",
+        "processed_by",
+    )
+    actions = (mark_as_in_progress, mark_as_done, mark_as_spam)
+    date_hierarchy = "created_at"
+    ordering = ("-created_at",)
+
+    @admin.display(description="Status", ordering="status")
+    def status_badge(self, obj):
+        colors = {
+            ContactMessageStatus.NEW: "#2563eb",
+            ContactMessageStatus.IN_PROGRESS: "#f59e0b",
+            ContactMessageStatus.DONE: "#16a34a",
+            ContactMessageStatus.SPAM: "#dc2626",
+        }
+
+        return format_html(
+            '<span style="'
+            'padding:4px 8px;'
+            'border-radius:999px;'
+            'background:{};'
+            'color:white;'
+            'font-weight:600;'
+            'font-size:12px;'
+            '">{}</span>',
+            colors.get(obj.status, "#6b7280"),
+            obj.get_status_display(),
+        )
+
+    @admin.display(description="Message")
+    def short_message(self, obj):
+        text = obj.message.strip()
+
+        if len(text) <= 80:
+            return text
+
+        return f"{text[:80]}..."
     list_display = ("name", "email", "created_at")
     search_fields = ("name", "email", "message")
     list_filter = ("created_at",)

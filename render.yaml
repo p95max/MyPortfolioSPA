@@ -25,4 +25,4 @@ services:
       - key: VITE_TURNSTILE_SITEKEY
         sync: false
       - key: VITE_SNOW
-        value: auto
+        sync: false 

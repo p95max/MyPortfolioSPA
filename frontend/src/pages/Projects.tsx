@@ -150,17 +150,6 @@ function Projects() {
     );
   }, [projects, selectedTags]);
 
-  const filtersMeta = useMemo(() => {
-    if (selectedTags.length === 0) {
-      return `${availableTags.length} tags`;
-    }
-
-    if (selectedTags.length === 1) {
-      return selectedTags[0];
-    }
-
-    return `${selectedTags.length} selected`;
-  }, [availableTags.length, selectedTags]);
 
   if (loading) {
     return (

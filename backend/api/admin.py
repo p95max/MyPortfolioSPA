@@ -7,8 +7,6 @@ from django.utils.html import format_html
 from adminsortable2.admin import SortableAdminMixin
 from .models import Project, ProjectScreenshot, ContactMessage, ContactMessageStatus
 
-from .models import Project, ProjectScreenshot, ContactMessage
-
 
 def _public_image_url(value: str) -> str:
     """
@@ -202,6 +200,3 @@ class ContactMessageAdmin(admin.ModelAdmin):
             return text
 
         return f"{text[:80]}..."
-    list_display = ("name", "email", "created_at")
-    search_fields = ("name", "email", "message")
-    list_filter = ("created_at",)

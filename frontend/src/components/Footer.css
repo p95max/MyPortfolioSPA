@@ -1,0 +1,57 @@
+.github-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.github-link--tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  z-index: 20;
+  transform: translateX(-50%) translateY(4px);
+  padding: 6px 10px;
+  border: 1px solid rgba(0, 212, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(9, 12, 17, 0.96);
+  color: var(--text, #e8edf4);
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.github-link--tooltip::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 5px);
+  z-index: 21;
+  transform: translateX(-50%) translateY(4px);
+  border: 5px solid transparent;
+  border-top-color: rgba(9, 12, 17, 0.96);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.github-link--tooltip:hover::after,
+.github-link--tooltip:hover::before,
+.github-link--tooltip:focus-visible::after,
+.github-link--tooltip:focus-visible::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

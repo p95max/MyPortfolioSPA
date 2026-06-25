@@ -1,3 +1,5 @@
+import './Footer.css';
+
 export default function Footer() {
   return (
     <footer
@@ -42,13 +44,8 @@ export default function Footer() {
             href="https://github.com/p95max/MyPortfolioSPA"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              fontWeight: 600,
-              textDecoration: 'none',
-            }}
+            className="github-link github-link--tooltip"
+            data-tooltip="View source on GitHub"
             aria-label="View source on GitHub"
           >
             <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true">
@@ -58,6 +55,7 @@ export default function Footer() {
               />
             </svg>
           </a>
+
         </div>
       </div>
     </footer>

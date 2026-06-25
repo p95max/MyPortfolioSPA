@@ -119,7 +119,7 @@ def mark_as_in_progress(modeladmin, request, queryset):
     queryset.update(
         status=ContactMessageStatus.IN_PROGRESS,
         processed_at=None,
-        processed_by=None,
+        processed_by_id=None,
     )
 
 
@@ -128,7 +128,7 @@ def mark_as_done(modeladmin, request, queryset):
     queryset.update(
         status=ContactMessageStatus.DONE,
         processed_at=timezone.now(),
-        processed_by=request.user,
+        processed_by_id=request.user.pk,
     )
 
 
@@ -137,7 +137,7 @@ def mark_as_spam(modeladmin, request, queryset):
     queryset.update(
         status=ContactMessageStatus.SPAM,
         processed_at=timezone.now(),
-        processed_by=request.user,
+        processed_by_id=request.user.pk,
     )
 
 
@@ -169,6 +169,24 @@ class ContactMessageAdmin(admin.ModelAdmin):
     actions = (mark_as_in_progress, mark_as_done, mark_as_spam)
     date_hierarchy = "created_at"
     ordering = ("-created_at",)
+    
+    def save_model(self, request, obj, form, change):
+        if "status" in form.changed_data:
+            if obj.status in (
+                ContactMessageStatus.DONE,
+                ContactMessageStatus.SPAM,
+            ):
+                obj.processed_at = timezone.now()
+                obj.processed_by = request.user
+
+            elif obj.status in (
+                ContactMessageStatus.NEW,
+                ContactMessageStatus.IN_PROGRESS,
+            ):
+                obj.processed_at = None
+                obj.processed_by = None
+
+        super().save_model(request, obj, form, change)
 
     @admin.display(description="Status", ordering="status")
     def status_badge(self, obj):

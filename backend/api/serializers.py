@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, ContactMessage, ProjectScreenshot
+from .models import Project, ContactMessage, ProjectScreenshot, AnalyticsEvent
 
 
 
@@ -46,3 +46,35 @@ class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactMessage
         fields = ['name', 'email', 'message']
+        
+        
+
+class AnalyticsEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnalyticsEvent
+        fields = [
+            "event_type",
+            "path",
+            "referrer",
+            "language",
+            "screen_width",
+            "screen_height",
+            "anonymous_id",
+        ]
+
+    def validate_path(self, value):
+        value = (value or "").strip()
+
+        if not value.startswith("/"):
+            raise serializers.ValidationError("Path must start with '/'.")
+
+        return value[:300]
+
+    def validate_referrer(self, value):
+        return (value or "").strip()[:500]
+
+    def validate_language(self, value):
+        return (value or "").strip()[:50]
+
+    def validate_anonymous_id(self, value):
+        return (value or "").strip()[:64]

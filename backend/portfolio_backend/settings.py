@@ -261,6 +261,7 @@ REST_FRAMEWORK = {
         "contact_subnet": "200/hour",
         "contact_global": "500/hour",
         "contact_fingerprint": "3/hour",
+        "analytics": "120/minute",
     }
 }
 

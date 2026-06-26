@@ -6,8 +6,8 @@ import requests
 from django.utils import timezone
 from zoneinfo import ZoneInfo
 
-from .models import Project
-from .serializers import ProjectSerializer, ContactMessageSerializer
+from .models import Project, AnalyticsEvent
+from .serializers import ProjectSerializer, ContactMessageSerializer, AnalyticsEventSerializer
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import escape
 
@@ -18,6 +18,7 @@ from .throttles import (
     ContactSubnetThrottle,
     ContactGlobalThrottle,
     ContactMessageFingerprintThrottle,
+    AnalyticsThrottle,
 )
 
 logger = logging.getLogger(__name__)
@@ -159,3 +160,18 @@ def _check_turnstile(token: str | None, ip: str | None) -> bool:
     except requests.RequestException:
         logger.exception("Turnstile verification failed")
         return False
+    
+    
+
+@api_view(["POST"])
+@throttle_classes([AnalyticsThrottle])
+def analytics_event(request):
+    serializer = AnalyticsEventSerializer(data=request.data)
+
+    if not serializer.is_valid():
+        logger.warning("Invalid analytics event: %s", serializer.errors)
+        return Response({"detail": "invalid_event"}, status=status.HTTP_400_BAD_REQUEST)
+
+    serializer.save()
+
+    return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)

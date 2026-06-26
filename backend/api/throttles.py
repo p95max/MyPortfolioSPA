@@ -54,3 +54,14 @@ class ContactMessageFingerprintThrottle(SimpleRateThrottle):
             return None
         h = sha1(raw.encode("utf-8")).hexdigest()
         return self.cache_format % {"scope": self.scope, "ident": f"contact_msg:{h}"}
+    
+
+class AnalyticsThrottle(SimpleRateThrottle):
+    scope = "analytics"
+
+    def get_cache_key(self, request, view):
+        ip = self.get_ident(request)
+        return self.cache_format % {
+            "scope": self.scope,
+            "ident": f"analytics:{ip}",
+        }

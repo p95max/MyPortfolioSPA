@@ -5,7 +5,13 @@ from django.contrib import admin
 from django.core.validators import URLValidator
 from django.utils.html import format_html
 from adminsortable2.admin import SortableAdminMixin
-from .models import Project, ProjectScreenshot, ContactMessage, ContactMessageStatus
+from .models import (
+    Project,
+    ProjectScreenshot,
+    ContactMessage,
+    ContactMessageStatus,
+    AnalyticsEvent,
+)
 
 
 def _public_image_url(value: str) -> str:
@@ -218,3 +224,36 @@ class ContactMessageAdmin(admin.ModelAdmin):
             return text
 
         return f"{text[:80]}..."
+    
+
+@admin.register(AnalyticsEvent)
+class AnalyticsEventAdmin(admin.ModelAdmin):
+    list_display = (
+        "created_at",
+        "event_type",
+        "path",
+        "language",
+        "screen_size",
+        "anonymous_id",
+    )
+    list_filter = ("event_type", "path", "language", "created_at")
+    search_fields = ("path", "referrer", "anonymous_id")
+    readonly_fields = (
+        "event_type",
+        "path",
+        "referrer",
+        "language",
+        "screen_width",
+        "screen_height",
+        "anonymous_id",
+        "created_at",
+    )
+    date_hierarchy = "created_at"
+    ordering = ("-created_at",)
+
+    @admin.display(description="Screen")
+    def screen_size(self, obj):
+        if obj.screen_width and obj.screen_height:
+            return f"{obj.screen_width}×{obj.screen_height}"
+
+        return "—"

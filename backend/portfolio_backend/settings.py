@@ -58,8 +58,8 @@ else:
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": os.getenv("POSTGRES_DB", "port_db"),
-            "USER": os.getenv("POSTGRES_USER", "maxx"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "0451"),
+            "USER": os.getenv("POSTGRES_USER", "admin"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "12345678"),
             "HOST": os.getenv("DB_HOST", "db"),
             "PORT": os.getenv("DB_PORT", "5432"),
         }
@@ -145,9 +145,13 @@ if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
     CORS_ALLOWED_ORIGINS = [
-        "https://p95max.dev",
-        "https://www.p95max.dev",
+        origin.strip()
+        for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+        if origin.strip()
     ]
+
+    if not CORS_ALLOWED_ORIGINS:
+        raise RuntimeError("CORS_ALLOWED_ORIGINS is required in production")
 
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True

@@ -134,17 +134,28 @@ def contact_message(request):
     return Response({'message': 'Thank you for your message!'}, status=status.HTTP_201_CREATED)
 
 
-def _check_turnstile(token: str, ip: str) -> bool:
+def _check_turnstile(token: str | None, ip: str | None) -> bool:
     secret = getattr(settings, "TURNSTILE_SECRET", "")
+
     if not secret:
-        return True
+        logger.error("TURNSTILE_SECRET is not configured")
+        return False
+
+    if not token:
+        return False
+
     try:
-        r = requests.post(
+        response = requests.post(
             "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-            data={"secret": secret, "response": token, "remoteip": ip},
+            data={
+                "secret": secret,
+                "response": token,
+                "remoteip": ip,
+            },
             timeout=3,
         )
-        return bool(r.json().get("success"))
-    except Exception:
-        logger.error("Turnstile check failed (network/timeout); failing open", exc_info=True)
-        return True  # fail open — Cloudflare лежит, форма доступна
+        response.raise_for_status()
+        return bool(response.json().get("success"))
+    except requests.RequestException:
+        logger.exception("Turnstile verification failed")
+        return False

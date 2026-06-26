@@ -6,21 +6,22 @@ export function useAnalytics(): void {
   const location = useLocation();
 
   useEffect(() => {
-    const path = `${location.pathname}${location.search}`;
+    const path = location.pathname || "/";
 
     trackPageView(path);
-  }, [location.pathname, location.search]);
+  }, [location.pathname]);
 
   useEffect(() => {
-    function handleConsentUpdate() {
-      const path = `${window.location.pathname}${window.location.search}`;
-      trackPageView(path);
-    }
+    const handleConsentUpdated = () => {
+      const path = window.location.pathname || "/";
 
-    window.addEventListener("cookie-consent-updated", handleConsentUpdate);
+      trackPageView(path);
+    };
+
+    window.addEventListener("cookie-consent-updated", handleConsentUpdated);
 
     return () => {
-      window.removeEventListener("cookie-consent-updated", handleConsentUpdate);
+      window.removeEventListener("cookie-consent-updated", handleConsentUpdated);
     };
   }, []);
 }

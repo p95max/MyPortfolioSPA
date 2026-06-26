@@ -70,14 +70,14 @@ class AnalyticsEventSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Path must start with '/'.")
 
         return value[:300]
-    
-    def validate_os(self, value):
-        return (value or "").strip()[:50]
 
     def validate_referrer(self, value):
         return (value or "").strip()[:500]
 
     def validate_language(self, value):
+        return (value or "").strip()[:50]
+
+    def validate_os(self, value):
         return (value or "").strip()[:50]
 
     def validate_anonymous_id(self, value):

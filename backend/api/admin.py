@@ -239,18 +239,18 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
         "anonymous_id",
     )
     list_filter = ("event_type", "country", "os", "path", "language", "created_at")
-    search_fields = ("path", "referrer", "anonymous_id")
+    search_fields = ("path", "referrer", "anonymous_id", "country", "os")
     readonly_fields = (
         "event_type",
         "path",
         "referrer",
         "language",
+        "country",
+        "os",
         "screen_width",
         "screen_height",
         "anonymous_id",
         "created_at",
-        "country",
-        "os",
     )
     date_hierarchy = "created_at"
     ordering = ("-created_at",)

@@ -59,6 +59,7 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
     if has_previous_events:
         return
 
+
     created_at = timezone.localtime(event.created_at).strftime("%d.%m.%Y %H:%M")
 
     source = event.source_type or "unknown"

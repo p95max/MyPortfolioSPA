@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import {
+  ANALYTICS_SESSION_STORAGE_KEY,
+  ANALYTICS_SOURCE_STORAGE_KEY,
   ANALYTICS_STORAGE_KEY,
   CONSENT_STORAGE_KEY,
   CONSENT_VERSION,
@@ -52,8 +54,11 @@ function saveCookieConsent(preferences: CookieConsentPreferences): void {
   );
 }
 
-function removeAnalyticsAnonymousId(): void {
+function removeAnalyticsStorage(): void {
   localStorage.removeItem(ANALYTICS_STORAGE_KEY);
+
+  sessionStorage.removeItem(ANALYTICS_SESSION_STORAGE_KEY);
+  sessionStorage.removeItem(ANALYTICS_SOURCE_STORAGE_KEY);
 }
 
 export function CookieConsent() {
@@ -74,7 +79,7 @@ export function CookieConsent() {
   function handleRejectOptional() {
     const preferences = createConsentPreferences(false);
 
-    removeAnalyticsAnonymousId();
+    removeAnalyticsStorage();
     saveCookieConsent(preferences);
     setAnalyticsEnabled(false);
     setIsVisible(false);
@@ -92,7 +97,7 @@ export function CookieConsent() {
     const preferences = createConsentPreferences(analyticsEnabled);
 
     if (!analyticsEnabled) {
-      removeAnalyticsAnonymousId();
+      removeAnalyticsStorage();
     }
 
     saveCookieConsent(preferences);

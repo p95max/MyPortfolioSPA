@@ -123,7 +123,11 @@ export default function Datenschutz() {
           <li>Referrer-URL, sofern vom Browser übermittelt</li>
           <li>Spracheinstellung des Browsers</li>
           <li>Betriebssystem</li>
-          <li>Bildschirmgröße</li>
+          <li>Gerätetyp, z. B. mobile, tablet oder desktop</li>
+          <li>Browser</li>
+          <li>Traffic-Quelle, z. B. direct, search, LinkedIn, GitHub oder referral</li>
+          <li>UTM-Parameter, sofern in der URL vorhanden</li>
+          <li>Sitzungskennung</li>
           <li>
             ungefähres Land, sofern über technische Header des Hosting- oder
             Proxy-Anbieters verfügbar

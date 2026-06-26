@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import {
+  trackOutboundLinkClick,
+  trackProjectGithubClick,
+  trackProjectView,
+} from '../analytics';
 import type { Project } from '../types';
 import './ProjectCard.css';
 
@@ -43,8 +48,45 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
   const currentSrc = imgs[index];
   const canPreview = currentSrc !== PLACEHOLDER_SVG;
+
+  useEffect(() => {
+    const element = cardRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      trackProjectView(project.id, project.title);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        const entry = entries[0];
+
+        if (!entry?.isIntersecting) {
+          return;
+        }
+
+        trackProjectView(project.id, project.title);
+        observer.disconnect();
+      },
+      {
+        threshold: 0.6,
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [project.id, project.title]);
 
   const openLightbox = () => {
     if (!canPreview) return;
@@ -66,9 +108,17 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
     if (!isPreviewOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsPreviewOpen(false);
-      if (e.key === 'ArrowLeft') setLightboxIndex(i => (i === 0 ? imgs.length - 1 : i - 1));
-      if (e.key === 'ArrowRight') setLightboxIndex(i => (i === imgs.length - 1 ? 0 : i + 1));
+      if (e.key === 'Escape') {
+        setIsPreviewOpen(false);
+      }
+
+      if (e.key === 'ArrowLeft') {
+        setLightboxIndex(i => (i === 0 ? imgs.length - 1 : i - 1));
+      }
+
+      if (e.key === 'ArrowRight') {
+        setLightboxIndex(i => (i === imgs.length - 1 ? 0 : i + 1));
+      }
     };
 
     const originalOverflow = document.body.style.overflow;
@@ -102,7 +152,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
   };
 
   return (
-    <div className="pc">
+    <div className="pc" ref={cardRef}>
       {/* Gallery */}
       <div className="pc-gallery">
         <button
@@ -124,11 +174,21 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
 
         {imgs.length > 1 && (
           <>
-            <button className="pc-nav pc-nav-prev" onClick={prev} aria-label="Previous">
+            <button
+              type="button"
+              className="pc-nav pc-nav-prev"
+              onClick={prev}
+              aria-label="Previous"
+            >
               ‹
             </button>
 
-            <button className="pc-nav pc-nav-next" onClick={next} aria-label="Next">
+            <button
+              type="button"
+              className="pc-nav pc-nav-next"
+              onClick={next}
+              aria-label="Next"
+            >
               ›
             </button>
 
@@ -136,6 +196,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
               {imgs.map((_, i) => (
                 <button
                   key={i}
+                  type="button"
                   className={`pc-dot ${i === index ? 'active' : ''}`}
                   onClick={e => {
                     e.stopPropagation();
@@ -171,6 +232,13 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
               target="_blank"
               rel="noreferrer"
               className="pc-link"
+              onClick={() =>
+                trackProjectGithubClick(
+                  project.id,
+                  project.title,
+                  project.githubUrl || ''
+                )
+              }
             >
               <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
@@ -185,6 +253,9 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
               target="_blank"
               rel="noreferrer"
               className="pc-link"
+              onClick={() =>
+                trackOutboundLinkClick('project_demo', project.demoUrl || '')
+              }
             >
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
                 <path
@@ -202,67 +273,76 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
       </div>
 
       {/* Lightbox */}
-      {isPreviewOpen && createPortal(
-        <div
-          className="pc-lightbox"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${project.title} screenshot preview`}
-          onClick={() => setIsPreviewOpen(false)}
-        >
-          <button
-            type="button"
-            className="pc-lightbox-close"
+      {isPreviewOpen &&
+        createPortal(
+          <div
+            className="pc-lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${project.title} screenshot preview`}
             onClick={() => setIsPreviewOpen(false)}
-            aria-label="Close preview"
           >
-            ×
-          </button>
-
-          {imgs.length > 1 && (
             <button
               type="button"
-              className="pc-lightbox-nav pc-lightbox-prev"
-              onClick={lightboxPrev}
-              aria-label="Previous screenshot"
+              className="pc-lightbox-close"
+              onClick={() => setIsPreviewOpen(false)}
+              aria-label="Close preview"
             >
-              ‹
+              ×
             </button>
-          )}
 
-          <img
-            className="pc-lightbox-img"
-            src={imgs[lightboxIndex]}
-            alt={`${project.title} screenshot ${lightboxIndex + 1}`}
-            onClick={e => e.stopPropagation()}
-            onError={onImgError}
-          />
+            {imgs.length > 1 && (
+              <button
+                type="button"
+                className="pc-lightbox-nav pc-lightbox-prev"
+                onClick={lightboxPrev}
+                aria-label="Previous screenshot"
+              >
+                ‹
+              </button>
+            )}
 
-          {imgs.length > 1 && (
-            <button
-              type="button"
-              className="pc-lightbox-nav pc-lightbox-next"
-              onClick={lightboxNext}
-              aria-label="Next screenshot"
-            >
-              ›
-            </button>
-          )}
+            <img
+              className="pc-lightbox-img"
+              src={imgs[lightboxIndex]}
+              alt={`${project.title} screenshot ${lightboxIndex + 1}`}
+              onClick={e => e.stopPropagation()}
+              onError={onImgError}
+            />
 
-          {imgs.length > 1 && (
-            <div className="pc-lightbox-dots" onClick={e => e.stopPropagation()}>
-              {imgs.map((_, i) => (
-                <button
-                  key={i}
-                  className={`pc-dot ${i === lightboxIndex ? 'active' : ''}`}
-                  onClick={e => { e.stopPropagation(); setLightboxIndex(i); }}
-                  aria-label={`Screenshot ${i + 1}`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      , document.body)}
+            {imgs.length > 1 && (
+              <button
+                type="button"
+                className="pc-lightbox-nav pc-lightbox-next"
+                onClick={lightboxNext}
+                aria-label="Next screenshot"
+              >
+                ›
+              </button>
+            )}
+
+            {imgs.length > 1 && (
+              <div
+                className="pc-lightbox-dots"
+                onClick={e => e.stopPropagation()}
+              >
+                {imgs.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`pc-dot ${i === lightboxIndex ? 'active' : ''}`}
+                    onClick={e => {
+                      e.stopPropagation();
+                      setLightboxIndex(i);
+                    }}
+                    aria-label={`Screenshot ${i + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

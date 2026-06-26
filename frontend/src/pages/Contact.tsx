@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import "./Contact.css";
-import { trackAnalyticsEvent } from "../analytics";
+import { trackContactSubmit, trackOutboundLinkClick } from "../analytics";
 
 type Form = {
   name: string;
@@ -187,7 +187,6 @@ export default function Contact() {
 
     // Honeypot: bots may fill this hidden field.
     if (form.hp) {
-      trackAnalyticsEvent("contact_submit", window.location.pathname);
       setOk(true);
       return;
     }
@@ -262,7 +261,7 @@ export default function Contact() {
 
         throw new Error(detail);
       }
-      trackAnalyticsEvent("contact_submit", window.location.pathname);
+      trackContactSubmit();
       setOk(true);
     } catch (error: unknown) {
       setErr(
@@ -415,7 +414,11 @@ export default function Contact() {
 
           <ul className="link-list">
             <li>
-              <a href="mailto:m.petrykin@gmx.de" className="link-item">
+              <a
+                  href="mailto:m.petrykin@gmx.de"
+                  className="link-item"
+                  onClick={() => trackOutboundLinkClick("email", "mailto:m.petrykin@gmx.de")}
+                >
                 <span className="ico" aria-hidden>
                   ✉
                 </span>
@@ -429,6 +432,7 @@ export default function Contact() {
                 target="_blank"
                 rel="noreferrer"
                 className="link-item"
+                onClick={() => trackOutboundLinkClick("github_profile", "https://github.com/p95max")}
               >
                 <span className="ico" aria-hidden>
                   <svg
@@ -445,12 +449,13 @@ export default function Contact() {
             </li>
 
             <li>
-              <a
-                href="https://linkedin.com/in/p95max"
-                target="_blank"
-                rel="noreferrer"
-                className="link-item"
-              >
+           <a
+              href="https://linkedin.com/in/p95max"
+              target="_blank"
+              rel="noreferrer"
+              className="link-item"
+              onClick={() => trackOutboundLinkClick("linkedin_profile", "https://linkedin.com/in/p95max")}
+            >
                 <span className="ico" aria-hidden>
                   in
                 </span>
@@ -459,11 +464,12 @@ export default function Contact() {
             </li>
 
             <li>
-              <a
+             <a
                 href="https://t.me/max_p95"
                 target="_blank"
                 rel="noreferrer"
                 className="link-item"
+                onClick={() => trackOutboundLinkClick("telegram", "https://t.me/max_p95")}
               >
                 <span className="ico" aria-hidden>
                   ✈

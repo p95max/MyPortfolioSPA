@@ -139,7 +139,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False
 
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
@@ -281,5 +281,23 @@ REST_FRAMEWORK = {
 TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET", "")
 
 FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
+
+
+REDIS_URL = os.getenv("REDIS_URL")
+
+if REDIS_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": REDIS_URL,
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "portfolio-local-cache",
+        }
+    }
 
 

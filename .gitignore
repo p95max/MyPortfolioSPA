@@ -44,3 +44,6 @@ Thumbs.db
 *.lock
 
 node_modules
+
+
+debug.txt

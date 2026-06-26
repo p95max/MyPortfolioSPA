@@ -80,23 +80,26 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
 
     utm_text = ", ".join(utm_parts) if utm_parts else "—"
 
-    subject = f"[Portfolio] New visitor: {source} {event.path}"
+    subject = f"[Portfolio] 🔎 New visitor: {source} {event.path}"
 
     message = (
-        "New portfolio visitor detected.\n\n"
-        f"Time: {created_at}\n"
-        f"Path: {event.path}\n"
+        "👀 New portfolio visitor\n\n"
+        "📍 Source\n"
         f"Source type: {source}\n"
         f"UTM: {utm_text}\n"
+        f"Path: {event.path}\n\n"
+        "🖥 Device\n"
         f"Country: {country}\n"
         f"Device: {device}\n"
         f"Browser: {browser}\n"
         f"OS: {os_name}\n"
         f"Language: {event.language or '—'}\n\n"
+        "🕒 Time\n"
+        f"{created_at}\n\n"
+        "🔎 Tracking\n"
         f"Anonymous ID: {event.anonymous_id}\n"
         f"Session ID: {event.session_id or '—'}\n\n"
-        "This is a self-hosted analytics notification. "
-        "Further actions from this visitor are available in Django Admin."
+        "Open Django Admin to review further actions from this visitor."
     )
 
     send_mail(

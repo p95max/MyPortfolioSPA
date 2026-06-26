@@ -53,7 +53,7 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
 ])
 def contact_message(request):
     logger.info("POST /contact-message/ requested")
-    logger.debug(f"Request data: {request.data}")
+    logger.info("Contact form submitted from IP=%s", request.META.get("REMOTE_ADDR"))
 
     if request.data.get("website") or request.data.get("hp"):
         logger.warning("Honeypot triggered; dropping submission")

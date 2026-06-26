@@ -311,6 +311,69 @@ DJANGO_SUPERUSER_PASSWORD=adminpass
 
 ---
 
+### Analytics
+
+```http
+POST /api/analytics/
+Content-Type: application/json
+```
+
+The project includes simple self-hosted analytics for basic portfolio usage insights.
+
+Analytics are optional and only run after the user accepts analytics storage in the cookie consent banner. If analytics consent is not given, no analytics request is sent and no anonymous analytics ID is created.
+
+Request body:
+
+```json
+{
+  "event_type": "page_view",
+  "path": "/projects",
+  "referrer": "",
+  "language": "en-US",
+  "os": "Linux",
+  "screen_width": 1920,
+  "screen_height": 1080,
+  "anonymous_id": "client-generated-random-id"
+}
+```
+
+Supported event types:
+
+* `page_view`
+* `contact_submit`
+
+Stored backend fields:
+
+* event type
+* visited path
+* referrer
+* browser language
+* country code from proxy/CDN request headers, when available
+* detected operating system
+* screen width and height
+* client-side anonymous ID
+* creation timestamp
+
+The analytics endpoint is throttled through DRF throttling:
+
+```text
+analytics: 120/minute
+```
+
+Analytics data is stored in the `AnalyticsEvent` model and can be reviewed in Django Admin.
+
+Frontend storage used for consent and analytics:
+
+```text
+cookie-consent-v1
+analytics-anonymous-id-v1
+```
+
+No external analytics provider such as Google Analytics is used.
+
+
+---
+
 ## Screenshots Storage
 
 Project screenshots are currently served from the frontend public assets path:

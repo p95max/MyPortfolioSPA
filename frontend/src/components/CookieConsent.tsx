@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import {
+  ANALYTICS_STORAGE_KEY,
+  CONSENT_STORAGE_KEY,
+  CONSENT_VERSION,
+} from "../privacy";
 import "./CookieConsent.css";
-
-const CONSENT_STORAGE_KEY = "cookie-consent-v1";
-const CONSENT_VERSION = 1;
 
 export type CookieConsentPreferences = {
   necessary: true;
@@ -50,6 +52,10 @@ function saveCookieConsent(preferences: CookieConsentPreferences): void {
   );
 }
 
+function removeAnalyticsAnonymousId(): void {
+  localStorage.removeItem(ANALYTICS_STORAGE_KEY);
+}
+
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
   const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
@@ -68,6 +74,7 @@ export function CookieConsent() {
   function handleRejectOptional() {
     const preferences = createConsentPreferences(false);
 
+    removeAnalyticsAnonymousId();
     saveCookieConsent(preferences);
     setAnalyticsEnabled(false);
     setIsVisible(false);
@@ -83,6 +90,10 @@ export function CookieConsent() {
 
   function handleSaveSettings() {
     const preferences = createConsentPreferences(analyticsEnabled);
+
+    if (!analyticsEnabled) {
+      removeAnalyticsAnonymousId();
+    }
 
     saveCookieConsent(preferences);
     setIsVisible(false);
@@ -122,7 +133,9 @@ export function CookieConsent() {
               />
               <span>
                 <strong>Analytics</strong>
-                <small>Helps understand website usage. Disabled by default.</small>
+                <small>
+                  Helps understand website usage. Disabled by default.
+                </small>
               </span>
             </label>
           </div>

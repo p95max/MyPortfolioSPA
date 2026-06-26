@@ -1,6 +1,5 @@
 import { getStoredCookieConsent } from "./components/CookieConsent";
-
-const ANALYTICS_STORAGE_KEY = "analytics-anonymous-id-v1";
+import { ANALYTICS_STORAGE_KEY } from "./privacy";
 
 type AnalyticsEventType = "page_view" | "contact_submit";
 
@@ -24,20 +23,29 @@ function getApiBaseUrl(): string {
   return baseUrl.replace(/\/$/, "");
 }
 
-function getAnonymousId(): string {
-  const existingId = localStorage.getItem(ANALYTICS_STORAGE_KEY);
-
-  if (existingId) {
-    return existingId;
+function createAnonymousId(): string {
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
   }
 
-  const newId =
-    crypto.randomUUID?.() ??
-    `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
 
-  localStorage.setItem(ANALYTICS_STORAGE_KEY, newId);
+function getAnonymousId(): string {
+  try {
+    const existingId = localStorage.getItem(ANALYTICS_STORAGE_KEY);
 
-  return newId;
+    if (existingId) {
+      return existingId;
+    }
+
+    const newId = createAnonymousId();
+    localStorage.setItem(ANALYTICS_STORAGE_KEY, newId);
+
+    return newId;
+  } catch {
+    return createAnonymousId();
+  }
 }
 
 function getOperatingSystem(): string {
@@ -97,7 +105,6 @@ export function trackAnalyticsEvent(
     body: JSON.stringify(payload),
     keepalive: true,
   }).catch(() => {
-    // Analytics must never break UX.
   });
 }
 

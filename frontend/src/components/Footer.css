@@ -55,3 +55,19 @@
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+.footer-link-button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #6b7280;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.footer-link-button:hover,
+.footer-link-button:focus-visible {
+  color: var(--cyan, #00d4ff);
+  text-decoration: underline;
+}

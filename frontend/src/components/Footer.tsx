@@ -1,3 +1,4 @@
+import { resetPrivacyPreferences } from '../privacy';
 import './Footer.css';
 
 export default function Footer() {
@@ -25,19 +26,28 @@ export default function Footer() {
         </span>
 
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          {/* Legal links (for Germany) */}
+          {/* Legal links */}
           <a
             href="/impressum"
             style={{ color: '#6b7280', textDecoration: 'none' }}
           >
             Impressum
           </a>
+
           <a
             href="/datenschutz"
             style={{ color: '#6b7280', textDecoration: 'none' }}
           >
             Datenschutz
           </a>
+
+          <button
+            type="button"
+            className="footer-link-button"
+            onClick={resetPrivacyPreferences}
+          >
+            Privacy settings
+          </button>
 
           {/* GitHub */}
           <a
@@ -55,7 +65,6 @@ export default function Footer() {
               />
             </svg>
           </a>
-
         </div>
       </div>
     </footer>

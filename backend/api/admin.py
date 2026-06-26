@@ -229,7 +229,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
 @admin.register(AnalyticsEvent)
 class AnalyticsEventAdmin(admin.ModelAdmin):
     list_display = (
-        "created_at",
+        "created_at_display",
         "event_type",
         "path",
         "country",
@@ -238,21 +238,23 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
         "screen_size",
         "anonymous_id",
     )
-    list_filter = ("event_type", "country", "os", "path", "language", "created_at")
-    search_fields = ("path", "referrer", "anonymous_id", "country", "os")
-    readonly_fields = (
+
+    list_filter = (
         "event_type",
-        "path",
-        "referrer",
-        "language",
         "country",
+        "language",
         "os",
-        "screen_width",
-        "screen_height",
-        "anonymous_id",
         "created_at",
     )
-    date_hierarchy = "created_at"
+
+    search_fields = (
+        "path",
+        "country",
+        "language",
+        "os",
+        "anonymous_id",
+    )
+
     ordering = ("-created_at",)
 
     @admin.display(description="Created at", ordering="created_at")
@@ -261,7 +263,7 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
         return local_time.strftime("%d.%m.%Y %H:%M")
 
     @admin.display(description="Screen")
-    def screen_display(self, obj):
+    def screen_size(self, obj):
         if obj.screen_width and obj.screen_height:
             return f"{obj.screen_width}×{obj.screen_height}"
         return "-"

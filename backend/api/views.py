@@ -172,6 +172,13 @@ def analytics_event(request):
         logger.warning("Invalid analytics event: %s", serializer.errors)
         return Response({"detail": "invalid_event"}, status=status.HTTP_400_BAD_REQUEST)
 
-    serializer.save()
+    country = (
+        request.headers.get("CF-IPCountry")
+        or request.headers.get("X-Country-Code")
+        or request.headers.get("X-Vercel-IP-Country")
+        or ""
+    ).strip().upper()[:2]
+
+    serializer.save(country=country)
 
     return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)

@@ -95,6 +95,9 @@ class AnalyticsEvent(models.Model):
     path = models.CharField(max_length=300)
     referrer = models.CharField(max_length=500, blank=True)
     language = models.CharField(max_length=50, blank=True)
+    country = models.CharField(max_length=2, blank=True, db_index=True)
+    operating_system = models.CharField(max_length=50, blank=True)
+    
     screen_width = models.PositiveIntegerField(null=True, blank=True)
     screen_height = models.PositiveIntegerField(null=True, blank=True)
 

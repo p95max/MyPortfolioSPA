@@ -9,6 +9,7 @@ type AnalyticsPayload = {
   path: string;
   referrer: string;
   language: string;
+  os: string;
   screen_width: number;
   screen_height: number;
   anonymous_id: string;
@@ -39,6 +40,36 @@ function getAnonymousId(): string {
   return newId;
 }
 
+function getOperatingSystem(): string {
+  const userAgent = navigator.userAgent.toLowerCase();
+
+  if (userAgent.includes("windows")) {
+    return "Windows";
+  }
+
+  if (userAgent.includes("mac os") || userAgent.includes("macintosh")) {
+    return "macOS";
+  }
+
+  if (userAgent.includes("android")) {
+    return "Android";
+  }
+
+  if (
+    userAgent.includes("iphone") ||
+    userAgent.includes("ipad") ||
+    userAgent.includes("ipod")
+  ) {
+    return "iOS";
+  }
+
+  if (userAgent.includes("linux")) {
+    return "Linux";
+  }
+
+  return "Unknown";
+}
+
 export function trackAnalyticsEvent(
   eventType: AnalyticsEventType,
   path: string
@@ -52,6 +83,7 @@ export function trackAnalyticsEvent(
     path,
     referrer: document.referrer || "",
     language: navigator.language || "",
+    os: getOperatingSystem(),
     screen_width: window.screen?.width ?? 0,
     screen_height: window.screen?.height ?? 0,
     anonymous_id: getAnonymousId(),

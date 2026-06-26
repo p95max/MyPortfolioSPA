@@ -121,6 +121,89 @@ If `VITE_TURNSTILE_SITEKEY` is missing, the form shows a configuration error and
 
 ---
 
+### Analytics API
+
+The frontend sends optional self-hosted analytics events to:
+
+```text
+<VITE_API_URL>/api/analytics/
+```
+
+Analytics events are only sent after analytics consent is saved in the cookie consent banner. If analytics consent is not available, no analytics request is sent and no analytics identifiers are created.
+
+Tracked frontend events:
+
+* `page_view` — sent when the active route changes.
+* `project_view` — sent when a project screenshot preview is opened.
+* `project_github_click` — sent when a project GitHub link is clicked.
+* `contact_submit` — sent after a successful contact form submission.
+* `outbound_link_click` — sent when an external link is clicked, for example GitHub, LinkedIn, Telegram, email, or live demo.
+
+Example payload:
+
+```json
+{
+  "event_type": "project_github_click",
+  "path": "/projects",
+  "referrer": "",
+  "language": "en-US",
+  "source_type": "linkedin",
+  "utm_source": "linkedin",
+  "utm_medium": "profile",
+  "utm_campaign": "job_search",
+  "os": "Linux",
+  "browser": "Chrome",
+  "device_type": "desktop",
+  "anonymous_id": "client-generated-random-id",
+  "session_id": "session-generated-random-id",
+  "metadata": {
+    "project_id": "jobapply",
+    "project_title": "JobApply",
+    "target": "project_github",
+    "url_host": "github.com"
+  }
+}
+```
+
+The `path` field is normalized before sending and does not include query parameters. UTM parameters are read from the current URL and sent separately as:
+
+* `utm_source`
+* `utm_medium`
+* `utm_campaign`
+
+Traffic source attribution is stored per browser session. For example, if the user opens:
+
+```text
+/?utm_source=linkedin&utm_medium=profile&utm_campaign=job_search
+```
+
+then following route changes during the same session keep:
+
+```text
+source_type=linkedin
+utm_source=linkedin
+utm_medium=profile
+utm_campaign=job_search
+```
+
+Internal same-origin navigation is not stored as external referrer.
+
+The frontend detects and sends:
+
+* operating system
+* browser
+* device type: `mobile`, `tablet`, or `desktop`
+* browser language
+* external referrer, if available
+* anonymous visitor ID
+* session ID
+* event metadata
+
+No external analytics provider such as Google Analytics is used.
+
+
+---
+
 ## Local Development
 
 Install dependencies:

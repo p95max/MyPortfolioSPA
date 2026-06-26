@@ -244,6 +244,113 @@ Captcha failure:
 
 ---
 
+### Analytics
+
+```http
+POST /api/analytics/
+```
+
+Self-hosted analytics endpoint for basic portfolio usage insights.
+
+Analytics are optional and are only sent by the frontend after the user accepts analytics storage in the cookie consent banner. If analytics consent is not given, the frontend does not send analytics requests and does not create analytics identifiers.
+
+Request body:
+
+```json
+{
+  "event_type": "project_github_click",
+  "path": "/projects",
+  "referrer": "",
+  "language": "en-US",
+  "source_type": "linkedin",
+  "utm_source": "linkedin",
+  "utm_medium": "profile",
+  "utm_campaign": "job_search",
+  "os": "Linux",
+  "browser": "Chrome",
+  "device_type": "desktop",
+  "anonymous_id": "client-generated-random-id",
+  "session_id": "session-generated-random-id",
+  "metadata": {
+    "project_id": "jobapply",
+    "project_title": "JobApply",
+    "target": "project_github",
+    "url_host": "github.com"
+  }
+}
+```
+
+Supported event types:
+
+* `page_view`
+* `project_view`
+* `project_github_click`
+* `contact_submit`
+* `outbound_link_click`
+
+Event semantics:
+
+* `page_view` — sent when a page is opened.
+* `project_view` — sent when a project screenshot preview is opened.
+* `project_github_click` — sent when a project GitHub link is clicked.
+* `contact_submit` — sent after a successful contact form submission.
+* `outbound_link_click` — sent when an external link is clicked, for example GitHub, LinkedIn, Telegram, email, or live demo.
+
+Stored backend fields:
+
+* event type
+* normalized path without query parameters
+* external referrer, if available
+* browser language
+* country code from proxy/CDN request headers, when available
+* normalized source type, for example `direct`, `linkedin`, `github`, `search`, `social`, or `referral`
+* UTM parameters:
+
+  * `utm_source`
+  * `utm_medium`
+  * `utm_campaign`
+* detected operating system
+* detected browser
+* device type:
+
+  * `mobile`
+  * `tablet`
+  * `desktop`
+  * `unknown`
+* client-side anonymous ID
+* session-level anonymous ID
+* event metadata
+* creation timestamp
+
+The `path` field is stored without query parameters. UTM values are stored separately in dedicated fields.
+
+Country detection is handled server-side from request headers when available. The frontend does not send the country manually.
+
+The analytics endpoint is throttled through DRF throttling:
+
+```text
+analytics: 120/minute
+```
+
+Analytics data is stored in the `AnalyticsEvent` model and can be reviewed in Django Admin.
+
+The Django Admin list view intentionally shows only key fields:
+
+* created at
+* event type
+* path
+* source type
+* country
+* device type
+* browser
+* event details summary
+
+Additional data such as referrer, UTM parameters, anonymous identifiers, legacy screen fields, and raw metadata is available in the analytics event detail view.
+
+No external analytics provider such as Google Analytics is used.
+
+---
+
 ## API Documentation
 
 Swagger UI:

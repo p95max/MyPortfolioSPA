@@ -320,39 +320,68 @@ Content-Type: application/json
 
 The project includes simple self-hosted analytics for basic portfolio usage insights.
 
-Analytics are optional and only run after the user accepts analytics storage in the cookie consent banner. If analytics consent is not given, no analytics request is sent and no anonymous analytics ID is created.
+Analytics are optional and only run after the user accepts analytics storage in the cookie consent banner. If analytics consent is not given, no analytics request is sent and no anonymous analytics ID or session ID is created.
 
 Request body:
 
 ```json
 {
-  "event_type": "page_view",
+  "event_type": "project_github_click",
   "path": "/projects",
   "referrer": "",
   "language": "en-US",
+  "source_type": "linkedin",
+  "utm_source": "linkedin",
+  "utm_medium": "profile",
+  "utm_campaign": "job_search",
   "os": "Linux",
-  "screen_width": 1920,
-  "screen_height": 1080,
-  "anonymous_id": "client-generated-random-id"
+  "browser": "Chrome",
+  "device_type": "desktop",
+  "anonymous_id": "client-generated-random-id",
+  "session_id": "session-generated-random-id",
+  "metadata": {
+    "project_id": "jobapply",
+    "project_title": "JobApply",
+    "target": "project_github",
+    "url_host": "github.com"
+  }
 }
 ```
 
 Supported event types:
 
 * `page_view`
+* `project_view`
+* `project_github_click`
 * `contact_submit`
+* `outbound_link_click`
+
+Tracked event examples:
+
+* `page_view` — when a page is opened
+* `project_view` — when a project preview/screenshot is opened
+* `project_github_click` — when a project GitHub link is clicked
+* `contact_submit` — when the contact form is successfully submitted
+* `outbound_link_click` — when an external link is clicked, for example GitHub, LinkedIn, Telegram, email or live demo
 
 Stored backend fields:
 
 * event type
-* visited path
-* referrer
+* normalized path without query parameters
+* external referrer, if available
 * browser language
 * country code from proxy/CDN request headers, when available
+* normalized source type, for example `direct`, `linkedin`, `github`, `search`, `social` or `referral`
+* UTM parameters: `utm_source`, `utm_medium`, `utm_campaign`
 * detected operating system
-* screen width and height
+* detected browser
+* device type: `mobile`, `tablet`, `desktop` or `unknown`
 * client-side anonymous ID
+* session-level anonymous ID
+* event metadata
 * creation timestamp
+
+The `path` field is stored without query parameters. UTM values are stored separately in dedicated fields.
 
 The analytics endpoint is throttled through DRF throttling:
 
@@ -362,11 +391,26 @@ analytics: 120/minute
 
 Analytics data is stored in the `AnalyticsEvent` model and can be reviewed in Django Admin.
 
+The Django Admin list view shows only key fields:
+
+* created at
+* event type
+* path
+* source type
+* country
+* device type
+* browser
+* event details summary
+
+Additional data such as referrer, UTM parameters, anonymous identifiers and raw metadata is available in the analytics event detail view.
+
 Frontend storage used for consent and analytics:
 
 ```text
 cookie-consent-v1
 analytics-anonymous-id-v1
+analytics-session-id-v1
+analytics-source-context-v1
 ```
 
 No external analytics provider such as Google Analytics is used.

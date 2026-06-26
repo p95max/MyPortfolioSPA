@@ -293,6 +293,15 @@ function getUrlHost(url: string): string {
   }
 }
 
+function cleanPath(path: string): string {
+  try {
+    const url = new URL(path, window.location.origin);
+    return url.pathname || "/";
+  } catch {
+    return path.split("?")[0] || "/";
+  }
+}
+
 export function trackAnalyticsEvent(
   eventType: AnalyticsEventType,
   path: string,
@@ -306,7 +315,7 @@ export function trackAnalyticsEvent(
 
   const payload: AnalyticsPayload = {
     event_type: eventType,
-    path,
+    path: cleanPath(path),
     referrer: getExternalReferrer(),
     language: navigator.language || "",
     source_type: sourceContext.source_type,

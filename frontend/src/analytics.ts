@@ -19,7 +19,8 @@ function analyticsAllowed(): boolean {
 }
 
 function getApiBaseUrl(): string {
-  return import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+  const baseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+  return baseUrl.replace(/\/$/, "");
 }
 
 function getAnonymousId(): string {

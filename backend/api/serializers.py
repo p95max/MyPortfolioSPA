@@ -57,10 +57,16 @@ class AnalyticsEventSerializer(serializers.ModelSerializer):
             "path",
             "referrer",
             "language",
+            "source_type",
+            "utm_source",
+            "utm_medium",
+            "utm_campaign",
             "os",
-            "screen_width",
-            "screen_height",
+            "browser",
+            "device_type",
             "anonymous_id",
+            "session_id",
+            "metadata",
         ]
 
     def validate_path(self, value):
@@ -77,8 +83,62 @@ class AnalyticsEventSerializer(serializers.ModelSerializer):
     def validate_language(self, value):
         return (value or "").strip()[:50]
 
+    def validate_source_type(self, value):
+        return (value or "").strip().lower()[:30]
+
+    def validate_utm_source(self, value):
+        return (value or "").strip()[:100]
+
+    def validate_utm_medium(self, value):
+        return (value or "").strip()[:100]
+
+    def validate_utm_campaign(self, value):
+        return (value or "").strip()[:100]
+
     def validate_os(self, value):
         return (value or "").strip()[:50]
 
+    def validate_browser(self, value):
+        return (value or "").strip()[:50]
+
+    def validate_device_type(self, value):
+        value = (value or "").strip().lower()[:20]
+
+        if value not in {"mobile", "tablet", "desktop", "unknown", ""}:
+            return "unknown"
+
+        return value
+
     def validate_anonymous_id(self, value):
         return (value or "").strip()[:64]
+
+    def validate_session_id(self, value):
+        return (value or "").strip()[:64]
+
+    def validate_metadata(self, value):
+        if value in (None, ""):
+            return {}
+
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("Metadata must be an object.")
+
+        allowed_keys = {
+            "project_id",
+            "project_title",
+            "target",
+            "url_host",
+        }
+
+        cleaned = {}
+
+        for key, raw_value in value.items():
+            if key not in allowed_keys:
+                continue
+
+            if raw_value is None:
+                cleaned[key] = None
+                continue
+
+            cleaned[key] = str(raw_value).strip()[:200]
+
+        return cleaned

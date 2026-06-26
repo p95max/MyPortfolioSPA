@@ -1,3 +1,4 @@
+import json
 from django.utils import timezone
 from django import forms
 from django.conf import settings
@@ -230,31 +231,126 @@ class ContactMessageAdmin(admin.ModelAdmin):
 class AnalyticsEventAdmin(admin.ModelAdmin):
     list_display = (
         "created_at_display",
-        "event_type",
+        "event_badge",
         "path",
+        "source_type",
         "country",
-        "language",
-        "os",
-        "screen_size",
-        "anonymous_id",
+        "device_type",
+        "browser",
+        "details_summary",
     )
-
     list_filter = (
         "event_type",
+        "source_type",
         "country",
-        "language",
+        "device_type",
+        "browser",
         "os",
         "created_at",
     )
-
     search_fields = (
         "path",
-        "country",
-        "language",
-        "os",
+        "referrer",
         "anonymous_id",
+        "session_id",
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
     )
-
+    readonly_fields = (
+        "created_at_display",
+        "created_at",
+        "event_type",
+        "path",
+        "referrer",
+        "language",
+        "country",
+        "source_type",
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "os",
+        "browser",
+        "device_type",
+        "screen_width",
+        "screen_height",
+        "anonymous_id",
+        "session_id",
+        "metadata_pretty",
+    )
+    fieldsets = (
+        (
+            "Key information",
+            {
+                "fields": (
+                    "created_at_display",
+                    "event_type",
+                    "path",
+                    "source_type",
+                    "country",
+                )
+            },
+        ),
+        (
+            "Device",
+            {
+                "fields": (
+                    "device_type",
+                    "browser",
+                    "os",
+                    "language",
+                )
+            },
+        ),
+        (
+            "Traffic source",
+            {
+                "fields": (
+                    "referrer",
+                    "utm_source",
+                    "utm_medium",
+                    "utm_campaign",
+                )
+            },
+        ),
+        (
+            "Anonymous identifiers",
+            {
+                "fields": (
+                    "anonymous_id",
+                    "session_id",
+                )
+            },
+        ),
+        (
+            "Event details",
+            {
+                "fields": (
+                    "metadata_pretty",
+                )
+            },
+        ),
+        (
+            "Legacy screen data",
+            {
+                "classes": ("collapse",),
+                "fields": (
+                    "screen_width",
+                    "screen_height",
+                ),
+            },
+        ),
+        (
+            "Raw timestamp",
+            {
+                "classes": ("collapse",),
+                "fields": (
+                    "created_at",
+                ),
+            },
+        ),
+    )
+    date_hierarchy = "created_at"
     ordering = ("-created_at",)
 
     @admin.display(description="Created at", ordering="created_at")
@@ -262,8 +358,66 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
         local_time = timezone.localtime(obj.created_at)
         return local_time.strftime("%d.%m.%Y %H:%M")
 
-    @admin.display(description="Screen")
-    def screen_size(self, obj):
-        if obj.screen_width and obj.screen_height:
-            return f"{obj.screen_width}×{obj.screen_height}"
-        return "-"
+    @admin.display(description="Event", ordering="event_type")
+    def event_badge(self, obj):
+        colors = {
+            AnalyticsEvent.EVENT_PAGE_VIEW: "#2563eb",
+            AnalyticsEvent.EVENT_PROJECT_VIEW: "#7c3aed",
+            AnalyticsEvent.EVENT_PROJECT_GITHUB_CLICK: "#111827",
+            AnalyticsEvent.EVENT_CONTACT_SUBMIT: "#16a34a",
+            AnalyticsEvent.EVENT_OUTBOUND_LINK_CLICK: "#f59e0b",
+        }
+
+        return format_html(
+            '<span style="'
+            'padding:4px 8px;'
+            'border-radius:999px;'
+            'background:{};'
+            'color:white;'
+            'font-weight:600;'
+            'font-size:12px;'
+            'white-space:nowrap;'
+            '">{}</span>',
+            colors.get(obj.event_type, "#6b7280"),
+            obj.get_event_type_display(),
+        )
+
+    @admin.display(description="Details")
+    def details_summary(self, obj):
+        metadata = obj.metadata or {}
+
+        if obj.event_type in {
+            AnalyticsEvent.EVENT_PROJECT_VIEW,
+            AnalyticsEvent.EVENT_PROJECT_GITHUB_CLICK,
+        }:
+            return metadata.get("project_title") or metadata.get("project_id") or "—"
+
+        if obj.event_type == AnalyticsEvent.EVENT_OUTBOUND_LINK_CLICK:
+            target = metadata.get("target") or "outbound"
+            host = metadata.get("url_host") or ""
+            return f"{target} → {host}" if host else target
+
+        if obj.event_type == AnalyticsEvent.EVENT_CONTACT_SUBMIT:
+            return "contact form"
+
+        return "—"
+
+    @admin.display(description="Metadata")
+    def metadata_pretty(self, obj):
+        metadata = obj.metadata or {}
+
+        if not metadata:
+            return "—"
+
+        return format_html(
+            '<pre style="'
+            'white-space:pre-wrap;'
+            'margin:0;'
+            'font-size:12px;'
+            'line-height:1.4;'
+            '">{}</pre>',
+            json.dumps(metadata, ensure_ascii=False, indent=2),
+        )
+
+    def has_add_permission(self, request):
+        return False

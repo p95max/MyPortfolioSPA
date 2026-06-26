@@ -79,11 +79,17 @@ class ContactMessage(models.Model):
     
 class AnalyticsEvent(models.Model):
     EVENT_PAGE_VIEW = "page_view"
+    EVENT_PROJECT_VIEW = "project_view"
+    EVENT_PROJECT_GITHUB_CLICK = "project_github_click"
     EVENT_CONTACT_SUBMIT = "contact_submit"
+    EVENT_OUTBOUND_LINK_CLICK = "outbound_link_click"
 
     EVENT_TYPES = (
         (EVENT_PAGE_VIEW, "Page view"),
+        (EVENT_PROJECT_VIEW, "Project view"),
+        (EVENT_PROJECT_GITHUB_CLICK, "Project GitHub click"),
         (EVENT_CONTACT_SUBMIT, "Contact form submit"),
+        (EVENT_OUTBOUND_LINK_CLICK, "Outbound link click"),
     )
 
     event_type = models.CharField(
@@ -92,13 +98,35 @@ class AnalyticsEvent(models.Model):
         default=EVENT_PAGE_VIEW,
         db_index=True,
     )
+
     path = models.CharField(max_length=300)
     referrer = models.CharField(max_length=500, blank=True)
     language = models.CharField(max_length=50, blank=True)
 
     country = models.CharField(max_length=2, blank=True, db_index=True)
-    os = models.CharField(max_length=50, blank=True)
+    source_type = models.CharField(
+        max_length=30,
+        blank=True,
+        default="",
+        db_index=True,
+        help_text="Normalized traffic source: direct, search, linkedin, github, social, referral, unknown.",
+    )
 
+    utm_source = models.CharField(max_length=100, blank=True, default="")
+    utm_medium = models.CharField(max_length=100, blank=True, default="")
+    utm_campaign = models.CharField(max_length=100, blank=True, default="")
+
+    os = models.CharField(max_length=50, blank=True)
+    browser = models.CharField(max_length=50, blank=True, default="")
+    device_type = models.CharField(
+        max_length=20,
+        blank=True,
+        default="",
+        db_index=True,
+        help_text="mobile, tablet, desktop or unknown.",
+    )
+
+    # Legacy fields. Kept for backward compatibility, no longer sent by frontend.
     screen_width = models.PositiveIntegerField(null=True, blank=True)
     screen_height = models.PositiveIntegerField(null=True, blank=True)
 
@@ -108,6 +136,15 @@ class AnalyticsEvent(models.Model):
         db_index=True,
         help_text="Client-side anonymous id created only after analytics consent.",
     )
+    session_id = models.CharField(
+        max_length=64,
+        blank=True,
+        default="",
+        db_index=True,
+        help_text="Session-level anonymous id stored in sessionStorage.",
+    )
+
+    metadata = models.JSONField(default=dict, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 

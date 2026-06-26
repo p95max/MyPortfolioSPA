@@ -81,7 +81,7 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
 
     utm_text = ", ".join(utm_parts) if utm_parts else "—"
 
-    subject = f"[Portfolio] 🔎 New visitor: {source} {event.path}"
+    subject = f"[Portfolio] 🔎 New visitor from: {source} {event.path}"
 
     message = (
         "👀 New portfolio visitor\n\n"

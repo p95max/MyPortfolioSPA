@@ -83,7 +83,6 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
 
     subject = f"[Portfolio] 🔎 New visitor: {source} {event.path}"
 
-
     message = (
         "👀 New portfolio visitor\n\n"
         "📍 Source\n"

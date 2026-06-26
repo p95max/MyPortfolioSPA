@@ -299,6 +299,15 @@ if not NOTIFY_EMAILS and EMAIL_HOST_USER:
 DISPLAY_TZ = os.getenv("DISPLAY_TZ", "Europe/Berlin")
 
 
+ANALYTICS_NEW_VISITOR_EMAIL_ENABLED = (
+    os.getenv("ANALYTICS_NEW_VISITOR_EMAIL_ENABLED", "False").lower() == "true"
+)
+
+ANALYTICS_NOTIFY_DIRECT_VISITORS = (
+    os.getenv("ANALYTICS_NOTIFY_DIRECT_VISITORS", "False").lower() == "true"
+)
+
+
 # =============================================================================
 # External services
 # =============================================================================

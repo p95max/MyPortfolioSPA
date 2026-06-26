@@ -6,6 +6,7 @@ import requests
 from django.utils import timezone
 from zoneinfo import ZoneInfo
 
+from .analytics_notifications import notify_new_analytics_visitor
 from .models import Project, AnalyticsEvent
 from .serializers import ProjectSerializer, ContactMessageSerializer, AnalyticsEventSerializer
 from django.core.mail import EmailMultiAlternatives
@@ -179,6 +180,7 @@ def analytics_event(request):
         or ""
     ).strip().upper()[:2]
 
-    serializer.save(country=country)
+    event = serializer.save(country=country)
+    notify_new_analytics_visitor(event)
 
     return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)

@@ -112,35 +112,3 @@ class AnalyticsEvent(models.Model):
 
     def __str__(self):
         return f"{self.event_type}: {self.path}"
-    EVENT_PAGE_VIEW = "page_view"
-
-    EVENT_TYPES = (
-        (EVENT_PAGE_VIEW, "Page view"),
-    )
-
-    event_type = models.CharField(
-        max_length=50,
-        choices=EVENT_TYPES,
-        default=EVENT_PAGE_VIEW,
-        db_index=True,
-    )
-    path = models.CharField(max_length=300)
-    referrer = models.CharField(max_length=500, blank=True)
-    language = models.CharField(max_length=50, blank=True)
-    screen_width = models.PositiveIntegerField(null=True, blank=True)
-    screen_height = models.PositiveIntegerField(null=True, blank=True)
-
-    anonymous_id = models.CharField(
-        max_length=64,
-        blank=True,
-        db_index=True,
-        help_text="Client-side anonymous id created only after analytics consent.",
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-
-    class Meta:
-        ordering = ("-created_at",)
-
-    def __str__(self):
-        return f"{self.event_type}: {self.path}"

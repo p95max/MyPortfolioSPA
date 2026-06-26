@@ -150,9 +150,6 @@ else:
         if origin.strip()
     ]
 
-    if not CORS_ALLOWED_ORIGINS:
-        raise RuntimeError("CORS_ALLOWED_ORIGINS is required in production")
-
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True

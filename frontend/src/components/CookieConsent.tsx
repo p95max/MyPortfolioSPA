@@ -63,7 +63,7 @@ function removeAnalyticsStorage(): void {
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
 
   useEffect(() => {
     const storedConsent = getStoredCookieConsent();
@@ -138,9 +138,9 @@ export function CookieConsent() {
               />
               <span>
                 <strong>Analytics</strong>
-                <small>
-                  Helps understand website usage. Disabled by default.
-                </small>
+              <small>
+                Helps understand website usage. You can disable it before saving.
+              </small>
               </span>
             </label>
           </div>

@@ -210,7 +210,31 @@ function getReferrerHost(): string {
   }
 
   try {
-    return new URL(document.referrer).hostname.replace(/^www\./, "");
+    const referrerUrl = new URL(document.referrer);
+
+    if (referrerUrl.origin === window.location.origin) {
+      return "";
+    }
+
+    return referrerUrl.hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
+
+function getExternalReferrer(): string {
+  if (!document.referrer) {
+    return "";
+  }
+
+  try {
+    const referrerUrl = new URL(document.referrer);
+
+    if (referrerUrl.origin === window.location.origin) {
+      return "";
+    }
+
+    return document.referrer;
   } catch {
     return "";
   }
@@ -229,7 +253,7 @@ function createSourceContext(): SourceContext {
   }
 
   if (!sourceType) {
-    sourceType = document.referrer ? "referral" : "direct";
+    sourceType = referrerHost ? "referral" : "direct";
   }
 
   return {
@@ -249,6 +273,7 @@ function getSourceContext(): SourceContext {
     }
 
     const sourceContext = createSourceContext();
+
     sessionStorage.setItem(
       ANALYTICS_SOURCE_STORAGE_KEY,
       JSON.stringify(sourceContext)
@@ -282,7 +307,7 @@ export function trackAnalyticsEvent(
   const payload: AnalyticsPayload = {
     event_type: eventType,
     path,
-    referrer: document.referrer || "",
+    referrer: getExternalReferrer(),
     language: navigator.language || "",
     source_type: sourceContext.source_type,
     utm_source: sourceContext.utm_source,

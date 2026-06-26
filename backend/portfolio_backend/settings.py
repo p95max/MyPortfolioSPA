@@ -1,23 +1,40 @@
 """
 Django settings for portfolio_backend project.
 """
+
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+
 import dj_database_url
-try:
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-except ImportError:
-    sentry_sdk = None
+from dotenv import load_dotenv
 
 
+# =============================================================================
+# Base paths and environment
+# =============================================================================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 if os.path.exists(BASE_DIR / ".env.dev"):
     load_dotenv(BASE_DIR / ".env.dev")
+
+
+def split_env_list(name: str) -> list[str]:
+    """
+    Read comma-separated environment variable into a clean list.
+    Example:
+    CORS_ALLOWED_ORIGINS=https://a.com,https://b.com
+    """
+    return [
+        value.strip()
+        for value in os.getenv(name, "").split(",")
+        if value.strip()
+    ]
+
+
+# =============================================================================
+# Core Django settings
+# =============================================================================
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "insecure-secret")
 
@@ -25,27 +42,108 @@ DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
 
 ADMIN_URL = os.getenv("DJANGO_ADMIN_URL", "admin/")
 
+ROOT_URLCONF = "portfolio_backend.urls"
+WSGI_APPLICATION = "portfolio_backend.wsgi.application"
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
+USE_I18N = True
+USE_TZ = True
+
+
+# =============================================================================
+# Hosts and CSRF
+# =============================================================================
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
 ]
 
-_primary = os.getenv("ALLOWED_HOST", "")
-if _primary:
-    ALLOWED_HOSTS.append(_primary)
+_primary_host = os.getenv("ALLOWED_HOST", "")
+if _primary_host:
+    ALLOWED_HOSTS.append(_primary_host)
 
-_extra = os.getenv("EXTRA_ALLOWED_HOSTS", "")
-if _extra:
-    ALLOWED_HOSTS += [h.strip() for h in _extra.split(",") if h.strip()]
+ALLOWED_HOSTS += split_env_list("EXTRA_ALLOWED_HOSTS")
 
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = split_env_list("CSRF_TRUSTED_ORIGINS")
 
-_csrf = os.getenv("CSRF_TRUSTED_ORIGINS", "")
-if _csrf:
-    CSRF_TRUSTED_ORIGINS = [h.strip() for h in _csrf.split(",") if h.strip()]
+
+# =============================================================================
+# Applications
+# =============================================================================
+
+INSTALLED_APPS = [
+    # Third-party admin extensions
+    "adminsortable2",
+    "jazzmin",
+
+    # Django apps
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+
+    # Third-party API/security apps
+    "rest_framework",
+    "corsheaders",
+    "drf_yasg",
+
+    # Local apps
+    "api",
+]
+
+
+# =============================================================================
+# Middleware
+# =============================================================================
+
+MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
+    "utils.new_visit.LogVisitMiddleware",
+
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+
+# =============================================================================
+# Templates
+# =============================================================================
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+
+
+# =============================================================================
+# Database
+# =============================================================================
 
 if os.getenv("DATABASE_URL"):
- 
     DATABASES = {
         "default": dj_database_url.config(
             default=os.getenv("DATABASE_URL"),
@@ -65,231 +163,40 @@ else:
         }
     }
 
-INSTALLED_APPS = [
-    "adminsortable2",
-    'jazzmin',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
 
-    'rest_framework',
-    'corsheaders',
-    'drf_yasg',
-    'api',
-]
-
-MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    "utils.new_visit.LogVisitMiddleware",
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-ROOT_URLCONF = 'portfolio_backend.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
-WSGI_APPLICATION = 'portfolio_backend.wsgi.application'
+# =============================================================================
+# Password validation
+# =============================================================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# =============================================================================
+# Static files
+# =============================================================================
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CORS_ALLOW_CREDENTIALS = False
-
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-else:
-    CORS_ALLOWED_ORIGINS = [
-        origin.strip()
-        for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
-        if origin.strip()
-    ]
-
-if not DEBUG:
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = "DENY"
-
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = "Lax"
-    CSRF_COOKIE_SAMESITE = "Lax"
-    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
-
-LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(parents=True, exist_ok=True)
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {asctime} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG' if DEBUG else 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose' if DEBUG else 'simple',
-        },
-        'file': {
-            'level': 'DEBUG' if DEBUG else 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'django.log',
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'django.request': {
-            'handlers': ['console', 'file'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
-        'api': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG' if DEBUG else 'INFO',
-            'propagate': False,
-        },
-        'portfolio_backend': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        '': {
-            'handlers': ['console', 'file'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
-    },
-}
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-EMAIL_SUBJECT_PREFIX = "[Portfolio] "
-
-NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", os.getenv("EMAIL_HOST_USER", ""))
-
-_notify_source = os.getenv(
-    "NOTIFY_EMAILS",
-    NOTIFY_EMAIL if NOTIFY_EMAIL is not None else ""
-)
-NOTIFY_EMAILS = [e.strip() for e in _notify_source.split(",") if e and e.strip()]
-
-if not NOTIFY_EMAILS and EMAIL_HOST_USER:
-    NOTIFY_EMAILS = [EMAIL_HOST_USER]
-
-DISPLAY_TZ = os.getenv("DISPLAY_TZ", "Europe/Berlin")
-
-
-
-JAZZMIN_SETTINGS = {
-    "site_title": "Portfolio Admin",
-    "site_header": "My Portfolio",
-    "site_brand": "My Portfolio",
-    "welcome_sign": "Welcome to My Portfolio Admin",
-    "show_ui_builder": True,
-    "topmenu_links": [
-        {"name": "Docs", "url": "https://www.django-rest-framework.org/"},
-        {"app": "api"},
-    ],
-    "icons": {
-        "api.contactmessage": "fas fa-envelope",
-        "api.project": "fas fa-diagram-project",
-    },
-}
-JAZZMIN_UI_TWEAKS = {
-    "theme": "flatly",
-    "navbar_small_text": False,
-    "body_small_text": False,
-    "brand_small_text": False,
-}
-
-
-
-REST_FRAMEWORK = {
-    "DEFAULT_THROTTLE_RATES": {
-        "contact_email": "5/hour",
-        "contact_ip": "60/hour",
-        "contact_subnet": "200/hour",
-        "contact_global": "500/hour",
-        "contact_fingerprint": "3/hour",
-    }
-}
-
-TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET", "")
-
-FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
-
+# =============================================================================
+# Cache / Redis
+# Used by DRF throttling.
+# =============================================================================
 
 REDIS_URL = os.getenv("REDIS_URL")
 
@@ -309,3 +216,187 @@ else:
     }
 
 
+# =============================================================================
+# CORS
+# =============================================================================
+
+CORS_ALLOW_CREDENTIALS = False
+
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = split_env_list("CORS_ALLOWED_ORIGINS")
+
+
+# =============================================================================
+# Production security
+# =============================================================================
+
+if not DEBUG:
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"
+
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SAMESITE = "Lax"
+
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+
+# =============================================================================
+# Django REST Framework
+# =============================================================================
+
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_RATES": {
+        "contact_email": "5/hour",
+        "contact_ip": "60/hour",
+        "contact_subnet": "200/hour",
+        "contact_global": "500/hour",
+        "contact_fingerprint": "3/hour",
+    }
+}
+
+
+# =============================================================================
+# Email notifications
+# =============================================================================
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_SUBJECT_PREFIX = "[Portfolio] "
+
+NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL", os.getenv("EMAIL_HOST_USER", ""))
+
+_notify_source = os.getenv(
+    "NOTIFY_EMAILS",
+    NOTIFY_EMAIL if NOTIFY_EMAIL is not None else "",
+)
+
+NOTIFY_EMAILS = [
+    email.strip()
+    for email in _notify_source.split(",")
+    if email and email.strip()
+]
+
+if not NOTIFY_EMAILS and EMAIL_HOST_USER:
+    NOTIFY_EMAILS = [EMAIL_HOST_USER]
+
+DISPLAY_TZ = os.getenv("DISPLAY_TZ", "Europe/Berlin")
+
+
+# =============================================================================
+# External services
+# =============================================================================
+
+TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET", "")
+FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
+
+
+# =============================================================================
+# Logging
+# =============================================================================
+
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {asctime} {message}",
+            "style": "{",
+        },
+    },
+
+    "handlers": {
+        "console": {
+            "level": "DEBUG" if DEBUG else "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose" if DEBUG else "simple",
+        },
+        "file": {
+            "level": "DEBUG" if DEBUG else "INFO",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "django.log",
+            "formatter": "verbose",
+        },
+    },
+
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console", "file"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "api": {
+            "handlers": ["console", "file"],
+            "level": "DEBUG" if DEBUG else "INFO",
+            "propagate": False,
+        },
+        "portfolio_backend": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "": {
+            "handlers": ["console", "file"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+    },
+}
+
+
+# =============================================================================
+# Jazzmin admin
+# =============================================================================
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Portfolio Admin",
+    "site_header": "My Portfolio",
+    "site_brand": "My Portfolio",
+    "welcome_sign": "Welcome to My Portfolio Admin",
+    "show_ui_builder": True,
+    "topmenu_links": [
+        {"name": "Docs", "url": "https://www.django-rest-framework.org/"},
+        {"app": "api"},
+    ],
+    "icons": {
+        "api.contactmessage": "fas fa-envelope",
+        "api.project": "fas fa-diagram-project",
+    },
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "navbar_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+}

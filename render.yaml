@@ -9,10 +9,60 @@ services:
     rootDir: backend
     env: python
     buildCommand: "./build.sh"
-    startCommand: "poetry run gunicorn portfolio_backend.wsgi --workers 3 --threads 2 --bind 0.0.0.0:$PORT --log-file -"
+    startCommand: "poetry run gunicorn portfolio_backend.wsgi:application -c gunicorn.conf.py"
     envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: portfolio-db
+          property: connectionString
+
       - key: DJANGO_SECRET_KEY
         generateValue: true
+
+      - key: DJANGO_DEBUG
+        value: "False"
+
+      - key: DJANGO_ADMIN_URL
+        sync: false
+
+      - key: ALLOWED_HOST
+        sync: false
+
+      - key: EXTRA_ALLOWED_HOSTS
+        sync: false
+
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+
+      - key: TURNSTILE_SECRET
+        sync: false
+
+      - key: REDIS_URL
+        sync: false
+
+      - key: EMAIL_HOST
+        value: "smtp.gmail.com"
+
+      - key: EMAIL_HOST_USER
+        sync: false
+
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+
+      - key: NOTIFY_EMAILS
+        sync: false
+
+      - key: DISPLAY_TZ
+        value: "Europe/Berlin"
+
+      - key: FRONTEND_BASE_URL
+        sync: false
+
+      - key: MEMORY_LIMIT
+        value: "512"
 
   - type: static
     name: portfolio-frontend
@@ -20,27 +70,11 @@ services:
     buildCommand: "npm ci && npm run build"
     staticPublishPath: "dist"
     envVars:
-      - key: DJANGO_SECRET_KEY
+      - key: VITE_API_URL
         sync: false
-      - key: DJANGO_DEBUG
-        value: "False"
-      - key: DJANGO_ADMIN_URL
+
+      - key: VITE_TURNSTILE_SITEKEY
         sync: false
-      - key: ALLOWED_HOST
-        sync: false
-      - key: EXTRA_ALLOWED_HOSTS
-        sync: false
-      - key: CSRF_TRUSTED_ORIGINS
-        sync: false
-      - key: CORS_ALLOWED_ORIGINS
-        sync: false
-      - key: TURNSTILE_SECRET
-        sync: false
-      - key: REDIS_URL
-        sync: false
-      - key: EMAIL_HOST_USER
-        sync: false
-      - key: EMAIL_HOST_PASSWORD
-        sync: false
-      - key: NOTIFY_EMAILS
-        sync: false
+
+      - key: VITE_SNOW
+        value: "auto"

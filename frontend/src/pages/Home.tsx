@@ -14,15 +14,6 @@ export const Home = () => {
 
   return (
     <div className="page-home">
-      {/* Top bar */}
-      <header className="ph-topbar">
-        <span className="ph-logo">~/p95max</span>
-        <nav className="ph-nav">
-          <a href="/projects">Projects</a>
-          <a href="/about">About</a>
-          <a href="/contact">Contact</a>
-        </nav>
-      </header>
 
       <div className="ph-container">
         <section className="ph-hero">

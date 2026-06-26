@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import "./Contact.css";
+import { trackAnalyticsEvent } from "../analytics";
 
 type Form = {
   name: string;
@@ -186,6 +187,7 @@ export default function Contact() {
 
     // Honeypot: bots may fill this hidden field.
     if (form.hp) {
+      trackAnalyticsEvent("contact_submit", window.location.pathname);
       setOk(true);
       return;
     }
@@ -260,7 +262,7 @@ export default function Contact() {
 
         throw new Error(detail);
       }
-
+      trackAnalyticsEvent("contact_submit", window.location.pathname);
       setOk(true);
     } catch (error: unknown) {
       setErr(

@@ -2,8 +2,10 @@ import { getStoredCookieConsent } from "./components/CookieConsent";
 
 const ANALYTICS_STORAGE_KEY = "analytics-anonymous-id-v1";
 
+type AnalyticsEventType = "page_view" | "contact_submit";
+
 type AnalyticsPayload = {
-  event_type: "page_view";
+  event_type: AnalyticsEventType;
   path: string;
   referrer: string;
   language: string;
@@ -36,13 +38,16 @@ function getAnonymousId(): string {
   return newId;
 }
 
-export function trackPageView(path: string): void {
+export function trackAnalyticsEvent(
+  eventType: AnalyticsEventType,
+  path: string
+): void {
   if (!analyticsAllowed()) {
     return;
   }
 
   const payload: AnalyticsPayload = {
-    event_type: "page_view",
+    event_type: eventType,
     path,
     referrer: document.referrer || "",
     language: navigator.language || "",
@@ -51,23 +56,18 @@ export function trackPageView(path: string): void {
     anonymous_id: getAnonymousId(),
   };
 
-  const endpoint = `${getApiBaseUrl()}/api/analytics/`;
-  const body = JSON.stringify(payload);
-
-  if (navigator.sendBeacon) {
-    const blob = new Blob([body], { type: "application/json" });
-    navigator.sendBeacon(endpoint, blob);
-    return;
-  }
-
-  fetch(endpoint, {
+  fetch(`${getApiBaseUrl()}/api/analytics/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body,
+    body: JSON.stringify(payload),
     keepalive: true,
   }).catch(() => {
     // Analytics must never break UX.
   });
+}
+
+export function trackPageView(path: string): void {
+  trackAnalyticsEvent("page_view", path);
 }

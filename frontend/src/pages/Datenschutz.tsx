@@ -99,6 +99,19 @@ export default function Datenschutz() {
           haben.
         </p>
 
+        <h2>Optional analytics</h2>
+        <p>
+          Diese Website kann einfache, selbst gehostete Nutzungsstatistiken erfassen,
+          wenn Sie optionalen Analytics-Cookies bzw. Analytics-Speicherung zustimmen.
+          Dabei werden besuchte Seiten, Referrer, Sprache, Bildschirmgröße und eine
+          anonyme Kennung verarbeitet. Es werden keine externen Analytics-Dienste wie
+          Google Analytics eingesetzt.
+        </p>
+        <p>
+          Die Verarbeitung erfolgt nur auf Grundlage Ihrer Einwilligung gemäß
+          Art. 6 Abs. 1 lit. a DSGVO. Sie können optionale Analytics ablehnen.
+        </p>
+
         <h2>8. Speicherdauer</h2>
         <p>
           Die im Rahmen des Kontaktformulars übermittelten Daten werden nur so

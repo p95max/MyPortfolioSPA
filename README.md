@@ -179,7 +179,9 @@ This ensures you never miss incoming messages from your portfolio website.
 ## Testing
 
 ```bash
-curl -X POST http://localhost:8000/contact-message/   -H 'Content-Type: application/json'   -d '{"name":"Test","email":"a@a.com","message":"hi","captcha_token":"x"}'
+curl -X POST http://localhost:8000/api/contact/ \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"a@a.com","message":"hi","cf_turnstile_token":"x"}'
 ```
 
 ---

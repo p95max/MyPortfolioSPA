@@ -20,9 +20,27 @@ services:
     buildCommand: "npm ci && npm run build"
     staticPublishPath: "dist"
     envVars:
-      - key: VITE_API_URL
+      - key: DJANGO_SECRET_KEY
         sync: false
-      - key: VITE_TURNSTILE_SITEKEY
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ADMIN_URL
         sync: false
-      - key: VITE_SNOW
-        sync: false 
+      - key: ALLOWED_HOST
+        sync: false
+      - key: EXTRA_ALLOWED_HOSTS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: TURNSTILE_SECRET
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: NOTIFY_EMAILS
+        sync: false

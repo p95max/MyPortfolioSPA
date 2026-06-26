@@ -255,9 +255,13 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
     date_hierarchy = "created_at"
     ordering = ("-created_at",)
 
+    @admin.display(description="Created at", ordering="created_at")
+    def created_at_display(self, obj):
+        local_time = timezone.localtime(obj.created_at)
+        return local_time.strftime("%d.%m.%Y %H:%M")
+
     @admin.display(description="Screen")
-    def screen_size(self, obj):
+    def screen_display(self, obj):
         if obj.screen_width and obj.screen_height:
             return f"{obj.screen_width}×{obj.screen_height}"
-
-        return "—"
+        return "-"

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   trackOutboundLinkClick,
@@ -48,48 +48,13 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  const cardRef = useRef<HTMLDivElement | null>(null);
-
   const currentSrc = imgs[index];
   const canPreview = currentSrc !== PLACEHOLDER_SVG;
 
-  useEffect(() => {
-    const element = cardRef.current;
-
-    if (!element) {
-      return;
-    }
-
-    if (!('IntersectionObserver' in window)) {
-      trackProjectView(project.id, project.title);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      entries => {
-        const entry = entries[0];
-
-        if (!entry?.isIntersecting) {
-          return;
-        }
-
-        trackProjectView(project.id, project.title);
-        observer.disconnect();
-      },
-      {
-        threshold: 0.6,
-      }
-    );
-
-    observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [project.id, project.title]);
-
   const openLightbox = () => {
     if (!canPreview) return;
+
+    trackProjectView(project.id, project.title);
     setLightboxIndex(index);
     setIsPreviewOpen(true);
   };
@@ -152,7 +117,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
   };
 
   return (
-    <div className="pc" ref={cardRef}>
+    <div className="pc">
       {/* Gallery */}
       <div className="pc-gallery">
         <button

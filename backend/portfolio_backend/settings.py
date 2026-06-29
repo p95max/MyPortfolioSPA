@@ -36,7 +36,13 @@ def split_env_list(name: str) -> list[str]:
 # Core Django settings
 # =============================================================================
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "insecure-secret")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+
+if not SECRET_KEY and not DEBUG:
+    raise RuntimeError("DJANGO_SECRET_KEY is required when DEBUG=False")
+
+if not SECRET_KEY:
+    SECRET_KEY = "insecure-secret-for-local-dev-only"
 
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
 

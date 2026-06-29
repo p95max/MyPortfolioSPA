@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+if [ "$DJANGO_DEBUG" != "True" ] && [ "$DJANGO_DEBUG" != "true" ] && [ -z "$DJANGO_SECRET_KEY" ]; then
+  echo "DJANGO_SECRET_KEY is required when DJANGO_DEBUG is False"
+  exit 1
+fi
+
 echo "Applying migrations..."
 poetry run python manage.py migrate --noinput
 

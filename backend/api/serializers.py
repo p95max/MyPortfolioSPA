@@ -43,9 +43,52 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(
+        required=True,
+        min_length=2,
+        max_length=80,
+        trim_whitespace=True,
+        error_messages={
+            "blank": "Name is required.",
+            "min_length": "Name must be at least 2 characters.",
+            "max_length": "Name must be at most 80 characters.",
+        },
+    )
+    email = serializers.EmailField(
+        required=True,
+        max_length=254,
+        error_messages={
+            "blank": "Email is required.",
+            "invalid": "Please provide a valid email address.",
+            "max_length": "Email must be at most 254 characters.",
+        },
+    )
+    message = serializers.CharField(
+        required=True,
+        min_length=10,
+        max_length=1000,
+        trim_whitespace=True,
+        error_messages={
+            "blank": "Message is required.",
+            "min_length": "Message must be at least 10 characters.",
+            "max_length": "Message must be at most 1000 characters.",
+        },
+    )
+
     class Meta:
         model = ContactMessage
-        fields = ['name', 'email', 'message']
+        fields = ["name", "email", "message"]
+
+    def validate_email(self, value):
+        return value.strip().lower()
+
+    def validate_message(self, value):
+        message = value.strip()
+
+        if not message:
+            raise serializers.ValidationError("Message is required.")
+
+        return message
         
         
 

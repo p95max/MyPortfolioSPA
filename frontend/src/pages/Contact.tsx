@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent, FocusEvent, FormEvent } from "react";
 import "./Contact.css";
 import { trackContactSubmit, trackOutboundLinkClick } from "../analytics";
 
@@ -8,6 +8,19 @@ type Form = {
   email: string;
   message: string;
   hp?: string;
+};
+
+type ContactFieldName = "name" | "email" | "message";
+
+type FieldErrors = Partial<Record<ContactFieldName, string>>;
+
+type TouchedFields = Record<ContactFieldName, boolean>;
+
+const CONTACT_LIMITS = {
+  nameMin: 2,
+  nameMax: 80,
+  messageMin: 10,
+  messageMax: 1000,
 };
 
 declare global {
@@ -52,7 +65,6 @@ function loadTurnstileScript(): Promise<void> {
       existingScript.addEventListener("load", () => resolve(), { once: true });
       existingScript.addEventListener("error", () => reject(), { once: true });
 
-      // Fallback: if the script was already appended and loaded before listeners.
       setTimeout(() => {
         if (window.turnstile) {
           resolve();
@@ -82,6 +94,92 @@ function isErrorLike(x: unknown): x is { message?: string } {
   return typeof x === "object" && x !== null && "message" in x;
 }
 
+function isContactFieldName(value: string): value is ContactFieldName {
+  return value === "name" || value === "email" || value === "message";
+}
+
+function validateContactForm(form: Form): FieldErrors {
+  const errors: FieldErrors = {};
+
+  const name = form.name.trim();
+  const email = form.email.trim();
+  const message = form.message.trim();
+
+  if (!name) {
+    errors.name = "Name is required.";
+  } else if (name.length < CONTACT_LIMITS.nameMin) {
+    errors.name = "Name must be at least 2 characters.";
+  } else if (name.length > CONTACT_LIMITS.nameMax) {
+    errors.name = "Name must be at most 80 characters.";
+  }
+
+  if (!email) {
+    errors.email = "Email is required.";
+  } else if (!/\S+@\S+\.\S+/.test(email)) {
+    errors.email = "Please provide a valid email address.";
+  }
+
+  if (!message) {
+    errors.message = "Message is required.";
+  } else if (message.length < CONTACT_LIMITS.messageMin) {
+    errors.message = "Message must be at least 10 characters.";
+  } else if (message.length > CONTACT_LIMITS.messageMax) {
+    errors.message = "Message must be at most 1000 characters.";
+  }
+
+  return errors;
+}
+
+function hasValidationErrors(errors: FieldErrors): boolean {
+  return Object.keys(errors).length > 0;
+}
+
+function extractServerFieldErrors(data: unknown): FieldErrors {
+  const errors: FieldErrors = {};
+
+  if (typeof data !== "object" || data === null) {
+    return errors;
+  }
+
+  for (const [key, rawValue] of Object.entries(data)) {
+    if (!isContactFieldName(key)) {
+      continue;
+    }
+
+    if (Array.isArray(rawValue)) {
+      const firstError = rawValue.find((item) => typeof item === "string");
+
+      if (firstError) {
+        errors[key] = firstError;
+      }
+
+      continue;
+    }
+
+    if (typeof rawValue === "string") {
+      errors[key] = rawValue;
+    }
+  }
+
+  return errors;
+}
+
+function extractApiDetail(data: unknown): string | null {
+  if (typeof data !== "object" || data === null) {
+    return null;
+  }
+
+  if ("detail" in data && typeof data.detail === "string") {
+    return data.detail;
+  }
+
+  if ("message" in data && typeof data.message === "string") {
+    return data.message;
+  }
+
+  return null;
+}
+
 export default function Contact() {
   const [form, setForm] = useState<Form>({
     name: "",
@@ -94,6 +192,14 @@ export default function Contact() {
   const [ok, setOk] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+  const [touched, setTouched] = useState<TouchedFields>({
+    name: false,
+    email: false,
+    message: false,
+  });
+
+  const [serverFieldErrors, setServerFieldErrors] = useState<FieldErrors>({});
 
   const widgetRef = useRef<HTMLDivElement | null>(null);
   const widgetIdRef = useRef<string | null>(null);
@@ -165,10 +271,61 @@ export default function Contact() {
     };
   }, [siteKey]);
 
+  const clientFieldErrors = useMemo(() => {
+    return validateContactForm(form);
+  }, [form.name, form.email, form.message]);
+
+  const messageLength = form.message.length;
+
+  const messageLimitReached =
+    messageLength >= CONTACT_LIMITS.messageMax;
+
+  const messageCounterClassName = [
+    "field-counter",
+    messageLimitReached ? "field-counter--limit" : "",
+    messageErrorPreview(clientFieldErrors, touched, serverFieldErrors)
+      ? "field-counter--with-error"
+      : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const fieldName = e.target.name;
+
     setForm((currentForm) => ({
       ...currentForm,
-      [e.target.name]: e.target.value,
+      [fieldName]: e.target.value,
+    }));
+
+    if (isContactFieldName(fieldName)) {
+      setServerFieldErrors((currentErrors) => {
+        if (!currentErrors[fieldName]) {
+          return currentErrors;
+        }
+
+        const nextErrors = { ...currentErrors };
+        delete nextErrors[fieldName];
+
+        return nextErrors;
+      });
+    }
+
+    if (err) {
+      setErr(null);
+    }
+  };
+
+  const onBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const fieldName = e.target.name;
+
+    if (!isContactFieldName(fieldName)) {
+      return;
+    }
+
+    setTouched((currentTouched) => ({
+      ...currentTouched,
+      [fieldName]: true,
     }));
   };
 
@@ -180,24 +337,49 @@ export default function Contact() {
     }
   };
 
+  const getVisibleFieldError = (
+    fieldName: ContactFieldName
+  ): string | undefined => {
+    if (serverFieldErrors[fieldName]) {
+      return serverFieldErrors[fieldName];
+    }
+
+    if (!touched[fieldName]) {
+      return undefined;
+    }
+
+    return clientFieldErrors[fieldName];
+  };
+
+  const nameError = getVisibleFieldError("name");
+  const emailError = getVisibleFieldError("email");
+  const messageError = getVisibleFieldError("message");
+
+  const messageDescribedBy = [
+    messageError ? "message-error" : "",
+    "message-counter",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     setErr(null);
 
-    // Honeypot: bots may fill this hidden field.
     if (form.hp) {
       setOk(true);
       return;
     }
 
-    if (!form.name || !form.email || !form.message) {
-      setErr("Please fill out all fields.");
-      return;
-    }
+    setTouched({
+      name: true,
+      email: true,
+      message: true,
+    });
 
-    if (!/\S+@\S+\.\S+/.test(form.email)) {
-      setErr("Please provide a valid email.");
+    if (hasValidationErrors(clientFieldErrors)) {
+      setErr("Please fix the highlighted fields.");
       return;
     }
 
@@ -220,7 +402,10 @@ export default function Contact() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...form,
+          name: form.name.trim(),
+          email: form.email.trim().toLowerCase(),
+          message: form.message.trim(),
+          hp: form.hp ?? "",
           cf_turnstile_token: captchaToken,
         }),
       });
@@ -231,20 +416,18 @@ export default function Contact() {
         try {
           const data: unknown = await resp.json();
 
-          if (
-            typeof data === "object" &&
-            data !== null &&
-            "detail" in data &&
-            typeof data.detail === "string"
-          ) {
-            detail = data.detail;
-          } else if (
-            typeof data === "object" &&
-            data !== null &&
-            "message" in data &&
-            typeof data.message === "string"
-          ) {
-            detail = data.message;
+          const nextServerFieldErrors = extractServerFieldErrors(data);
+
+          if (hasValidationErrors(nextServerFieldErrors)) {
+            setServerFieldErrors(nextServerFieldErrors);
+            setTouched({
+              name: true,
+              email: true,
+              message: true,
+            });
+            detail = "Please fix the highlighted fields.";
+          } else {
+            detail = extractApiDetail(data) ?? detail;
           }
         } catch {
           // Backend returned non-JSON response.
@@ -261,6 +444,7 @@ export default function Contact() {
 
         throw new Error(detail);
       }
+
       trackContactSubmit();
       setOk(true);
     } catch (error: unknown) {
@@ -276,14 +460,12 @@ export default function Contact() {
 
   const canSubmit = useMemo(() => {
     return (
-      !!form.name &&
-      !!form.message &&
-      /\S+@\S+\.\S+/.test(form.email) &&
+      !hasValidationErrors(clientFieldErrors) &&
       !!siteKey &&
       !!captchaToken &&
       !loading
     );
-  }, [form.name, form.email, form.message, siteKey, captchaToken, loading]);
+  }, [clientFieldErrors, siteKey, captchaToken, loading]);
 
   if (ok) {
     return (
@@ -341,43 +523,84 @@ export default function Contact() {
 
           <div className="field">
             <input
-              className="input"
+              className={`input ${nameError ? "input-error" : ""}`}
               name="name"
               value={form.name}
               onChange={onChange}
+              onBlur={onBlur}
+              maxLength={CONTACT_LIMITS.nameMax}
               required
               placeholder=" "
               aria-label="Your name"
+              aria-invalid={!!nameError}
+              aria-describedby={nameError ? "name-error" : undefined}
             />
             <label className="label">Your name</label>
+
+            {nameError && (
+              <p className="field-error" id="name-error">
+                {nameError}
+              </p>
+            )}
           </div>
 
           <div className="field">
             <input
-              className="input"
+              className={`input ${emailError ? "input-error" : ""}`}
               type="email"
               name="email"
               value={form.email}
               onChange={onChange}
+              onBlur={onBlur}
               required
               placeholder=" "
               aria-label="Email address"
+              aria-invalid={!!emailError}
+              aria-describedby={emailError ? "email-error" : undefined}
             />
             <label className="label">Email address</label>
+
+            {emailError && (
+              <p className="field-error" id="email-error">
+                {emailError}
+              </p>
+            )}
           </div>
 
           <div className="field">
             <textarea
-              className="input textarea"
+              className={`input textarea ${messageError ? "input-error" : ""}`}
               name="message"
               rows={6}
               value={form.message}
               onChange={onChange}
+              onBlur={onBlur}
+              maxLength={CONTACT_LIMITS.messageMax}
               required
               placeholder=" "
               aria-label="Message"
+              aria-invalid={!!messageError}
+              aria-describedby={messageDescribedBy}
             />
             <label className="label">Message</label>
+
+            <div className="field-meta">
+              {messageError ? (
+                <p className="field-error" id="message-error">
+                  {messageError}
+                </p>
+              ) : (
+                <span aria-hidden="true" />
+              )}
+
+              <p
+                className={messageCounterClassName}
+                id="message-counter"
+                aria-live="polite"
+              >
+                {messageLength}/{CONTACT_LIMITS.messageMax}
+              </p>
+            </div>
           </div>
 
           <div className="captcha-wrap">
@@ -415,10 +638,12 @@ export default function Contact() {
           <ul className="link-list">
             <li>
               <a
-                  href="mailto:m.petrykin@gmx.de"
-                  className="link-item"
-                  onClick={() => trackOutboundLinkClick("email", "mailto:m.petrykin@gmx.de")}
-                >
+                href="mailto:m.petrykin@gmx.de"
+                className="link-item"
+                onClick={() =>
+                  trackOutboundLinkClick("email", "mailto:m.petrykin@gmx.de")
+                }
+              >
                 <span className="ico" aria-hidden>
                   ✉
                 </span>
@@ -432,7 +657,12 @@ export default function Contact() {
                 target="_blank"
                 rel="noreferrer"
                 className="link-item"
-                onClick={() => trackOutboundLinkClick("github_profile", "https://github.com/p95max")}
+                onClick={() =>
+                  trackOutboundLinkClick(
+                    "github_profile",
+                    "https://github.com/p95max"
+                  )
+                }
               >
                 <span className="ico" aria-hidden>
                   <svg
@@ -449,13 +679,18 @@ export default function Contact() {
             </li>
 
             <li>
-           <a
-              href="https://linkedin.com/in/p95max"
-              target="_blank"
-              rel="noreferrer"
-              className="link-item"
-              onClick={() => trackOutboundLinkClick("linkedin_profile", "https://linkedin.com/in/p95max")}
-            >
+              <a
+                href="https://linkedin.com/in/p95max"
+                target="_blank"
+                rel="noreferrer"
+                className="link-item"
+                onClick={() =>
+                  trackOutboundLinkClick(
+                    "linkedin_profile",
+                    "https://linkedin.com/in/p95max"
+                  )
+                }
+              >
                 <span className="ico" aria-hidden>
                   in
                 </span>
@@ -464,12 +699,14 @@ export default function Contact() {
             </li>
 
             <li>
-             <a
+              <a
                 href="https://t.me/max_p95"
                 target="_blank"
                 rel="noreferrer"
                 className="link-item"
-                onClick={() => trackOutboundLinkClick("telegram", "https://t.me/max_p95")}
+                onClick={() =>
+                  trackOutboundLinkClick("telegram", "https://t.me/max_p95")
+                }
               >
                 <span className="ico" aria-hidden>
                   ✈
@@ -482,4 +719,12 @@ export default function Contact() {
       </div>
     </div>
   );
+}
+
+function messageErrorPreview(
+  clientFieldErrors: FieldErrors,
+  touched: TouchedFields,
+  serverFieldErrors: FieldErrors
+): boolean {
+  return Boolean(serverFieldErrors.message || (touched.message && clientFieldErrors.message));
 }

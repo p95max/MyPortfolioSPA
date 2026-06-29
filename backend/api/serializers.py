@@ -82,13 +82,16 @@ class ContactMessageSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         return value.strip().lower()
 
-    def validate_message(self, value):
-        message = value.strip()
+def validate_message(self, value):
+    message = value.strip()
 
-        if not message:
-            raise serializers.ValidationError("Message is required.")
+    if not message:
+        raise serializers.ValidationError("Message is required.")
 
-        return message
+    if message.lower().count("http://") + message.lower().count("https://") > 2:
+        raise serializers.ValidationError("Message contains too many links.")
+
+    return message
         
         
 

@@ -36,6 +36,8 @@ def split_env_list(name: str) -> list[str]:
 # Core Django settings
 # =============================================================================
 
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
+
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 if not SECRET_KEY and not DEBUG:
@@ -43,8 +45,6 @@ if not SECRET_KEY and not DEBUG:
 
 if not SECRET_KEY:
     SECRET_KEY = "insecure-secret-for-local-dev-only"
-
-DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
 
 ADMIN_URL = os.getenv("DJANGO_ADMIN_URL", "admin/")
 

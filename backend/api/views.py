@@ -107,12 +107,17 @@ def contact_message(request):
                 f"Message:\n{msg}\n\n"
                 f"Admin:\n{admin_url}"
             )
+
             html_body = (
                 f"<h3>New Contact Message</h3>"
                 f"<p><strong>ID:</strong> {message_obj.id}<br>"
                 f"<strong>Date:</strong> {escape(created_human)}<br>"
                 f"<strong>Name:</strong> {name}<br>"
                 f"<strong>Email:</strong> {email_display}</p>"
+
+                f"<p><strong>Message:</strong></p>"
+                f"<pre style='white-space:pre-wrap'>{msg}</pre>"
+
                 f"<p>"
                 f"<a href='{escape(admin_url)}' "
                 f"style='display:inline-block;padding:10px 14px;background:#0d6efd;color:#ffffff;"
@@ -120,7 +125,6 @@ def contact_message(request):
                 f"Open in Django Admin"
                 f"</a>"
                 f"</p>"
-                f"<pre style='white-space:pre-wrap'>{msg}</pre>"
             )
 
             email_msg = EmailMultiAlternatives(

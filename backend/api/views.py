@@ -21,6 +21,7 @@ from .throttles import (
     ContactMessageFingerprintThrottle,
     AnalyticsThrottle,
 )
+from .utils.admin_links import _build_admin_change_url
 
 logger = logging.getLogger(__name__)
 
@@ -95,13 +96,16 @@ def contact_message(request):
             created_dt = getattr(message_obj, "created_at", None) or timezone.now()
             created_local = timezone.localtime(created_dt, tz)
             created_human = created_local.strftime("%d %b %Y, %H:%M %Z")
+            
+            admin_url = _build_admin_change_url(message_obj)
 
             text_body = (
                 f"ID: {message_obj.id}\n"
                 f"Date: {created_human}\n"
                 f"Name: {name}\n"
                 f"Email: {email_display}\n\n"
-                f"Message:\n{msg}"
+                f"Message:\n{msg}\n\n"
+                f"Admin:\n{admin_url}"
             )
             html_body = (
                 f"<h3>New Contact Message</h3>"
@@ -109,7 +113,13 @@ def contact_message(request):
                 f"<strong>Date:</strong> {escape(created_human)}<br>"
                 f"<strong>Name:</strong> {name}<br>"
                 f"<strong>Email:</strong> {email_display}</p>"
-                f"<p><em>See details in Admin.</em></p>"
+                f"<p>"
+                f"<a href='{escape(admin_url)}' "
+                f"style='display:inline-block;padding:10px 14px;background:#0d6efd;color:#ffffff;"
+                f"text-decoration:none;border-radius:6px;'>"
+                f"Open in Django Admin"
+                f"</a>"
+                f"</p>"
                 f"<pre style='white-space:pre-wrap'>{msg}</pre>"
             )
 

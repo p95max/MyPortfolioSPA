@@ -6,6 +6,8 @@ from django.utils import timezone
 
 from .models import AnalyticsEvent
 
+from .utils.admin_links import _build_admin_change_url
+
 def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
     if not getattr(settings, "ANALYTICS_NEW_VISITOR_EMAIL_ENABLED", False):
         return
@@ -98,13 +100,6 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
         fail_silently=True,
     )
     
-
-def _build_admin_change_url(obj) -> str:
-    admin_path = reverse(
-        f"admin:{obj._meta.app_label}_{obj._meta.model_name}_change",
-        args=[obj.pk],
-    )
-    return f"{settings.BACKEND_BASE_URL}{admin_path}"
 
 
 def _get_notify_recipients() -> list[str]:

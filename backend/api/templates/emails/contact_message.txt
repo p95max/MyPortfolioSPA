@@ -1,0 +1,10 @@
+ID: {{ id }}
+Date: {{ created_human }}
+Name: {{ name }}
+Email: {{ email }}
+
+Message:
+{{ message }}
+
+Admin:
+{{ admin_url }}

@@ -5,6 +5,7 @@ from rest_framework.response import Response
 import requests
 from django.utils import timezone
 from zoneinfo import ZoneInfo
+from django.template.loader import render_to_string
 
 from .analytics_notifications import notify_new_analytics_visitor
 from .models import Project, AnalyticsEvent
@@ -108,24 +109,19 @@ def contact_message(request):
                 f"Admin:\n{admin_url}"
             )
 
-            html_body = (
-                f"<h3>New Contact Message</h3>"
-                f"<p><strong>ID:</strong> {message_obj.id}<br>"
-                f"<strong>Date:</strong> {escape(created_human)}<br>"
-                f"<strong>Name:</strong> {name}<br>"
-                f"<strong>Email:</strong> {email_display}</p>"
+            email_raw = message_obj.email or ""
 
-                f"<p><strong>Message:</strong></p>"
-                f"<pre style='white-space:pre-wrap'>{msg}</pre>"
+            context = {
+                "id": message_obj.id,
+                "created_human": created_human,
+                "name": message_obj.name or "",
+                "email": email_raw,
+                "message": message_obj.message or "",
+                "admin_url": admin_url,
+            }
 
-                f"<p>"
-                f"<a href='{escape(admin_url)}' "
-                f"style='display:inline-block;padding:10px 14px;background:#0d6efd;color:#ffffff;"
-                f"text-decoration:none;border-radius:6px;'>"
-                f"Open in Django Admin"
-                f"</a>"
-                f"</p>"
-            )
+            text_body = render_to_string("emails/contact_message.txt", context).strip()
+            html_body = render_to_string("emails/contact_message.html", context).strip()
 
             email_msg = EmailMultiAlternatives(
                 subject=subject,

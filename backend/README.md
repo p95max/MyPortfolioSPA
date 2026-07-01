@@ -161,7 +161,6 @@ If the username is missing, no superuser is created automatically.
 | Variable | Required | Description |
 |---|---:|---|
 | `FRONTEND_BASE_URL` | recommended | Used by admin screenshot preview for relative `/screenshots/...` paths. |
-
 | `BACKEND_BASE_URL` | recommended | Public backend base URL used for Django Admin links in notification emails. |
 
 ### Email

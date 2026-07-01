@@ -6,6 +6,9 @@ from django.contrib import admin
 from django.core.validators import URLValidator
 from django.utils.html import format_html
 from adminsortable2.admin import SortableAdminMixin
+
+from .utils.image_urls import build_public_image_url
+from .utils.admin_formatting import admin_badge
 from .models import (
     Project,
     ProjectScreenshot,
@@ -62,7 +65,7 @@ class ProjectScreenshotInline(admin.TabularInline):
 
     @admin.display(description="Preview")
     def preview(self, obj: ProjectScreenshot):
-        public = _public_image_url(obj.image_url)
+        public = build_public_image_url(obj.image_url)
         if not public:
             return "—"
         return format_html(
@@ -102,14 +105,14 @@ class ProjectScreenshotAdmin(admin.ModelAdmin):
 
     @admin.display(description="Image")
     def image_link(self, obj: ProjectScreenshot):
-        public = _public_image_url(obj.image_url)
+        public = build_public_image_url(obj.image_url)
         if not public:
             return "—"
         return format_html('<a href="{0}" target="_blank" rel="noopener">{0}</a>', public)
 
     @admin.display(description="Preview")
     def preview(self, obj: ProjectScreenshot):
-        public = _public_image_url(obj.image_url)
+        public = build_public_image_url(obj.image_url)
         if not public:
             return "—"
         return format_html(

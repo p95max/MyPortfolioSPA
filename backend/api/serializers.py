@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import AnalyticsEvent, ContactMessage, Project
+from .utils.image_urls import normalize_screenshot_url
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -24,7 +25,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         try:
             for screenshot in qs.all():
-                url = getattr(screenshot, "image_url", "") or ""
+                url = normalize_screenshot_url(getattr(screenshot, "image_url", ""))
 
                 if not url:
                     continue

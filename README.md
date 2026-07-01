@@ -105,34 +105,44 @@ https://p95max.dev
 
 ```text
 .
-├── backend/
-│   ├── api/
-│   │   ├── admin.py
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── throttles.py
-│   │   ├── urls.py
-│   │   ├── views.py
-│   │   └── fixtures/
-│   ├── portfolio_backend/
+├── backend/                     # Django REST API
+│   ├── api/                     # Portfolio, contact form, analytics logic
+│   │   ├── fixtures/            # Project data fixtures
+│   │   ├── migrations/          # Django migrations
+│   │   ├── templates/emails/    # Email notification templates
+│   │   └── utils/               # Shared backend helpers
+│   ├── portfolio_backend/       # Django project settings and URL config
 │   │   ├── settings.py
+│   │   ├── test_settings.py
 │   │   └── urls.py
+│   ├── tests/                   # Pytest critical backend tests
 │   ├── Dockerfile
+│   ├── Procfile
 │   ├── build.sh
 │   ├── entrypoint.sh
 │   ├── gunicorn.conf.py
+│   ├── manage.py
 │   └── pyproject.toml
-├── frontend/
+│
+├── frontend/                    # React + Vite frontend
+│   ├── public/
+│   │   └── screenshots/         # Project screenshots
 │   ├── src/
-│   │   ├── components/
-│   │   ├── data/
-│   │   ├── pages/
+│   │   ├── components/          # Shared UI components
+│   │   ├── data/                # Static frontend data
+│   │   ├── hooks/               # React hooks
+│   │   ├── pages/               # Main pages
+│   │   ├── analytics.ts
+│   │   ├── privacy.ts
 │   │   └── types.ts
-│   ├── env.example
+│   ├── nginx/                   # Frontend Nginx config
 │   ├── package.json
 │   └── vite.config.ts
-├── nginx/
+│
+├── nginx/                       # Root reverse proxy config
 │   └── default.conf
+│
+├── .env.example
 ├── docker-compose.yml
 ├── render.yaml
 └── README.md

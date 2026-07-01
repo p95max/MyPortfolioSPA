@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Project, ContactMessage, ProjectScreenshot, AnalyticsEvent
 
+from .models import AnalyticsEvent, ContactMessage, Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -8,7 +8,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = "__all__"
 
     def get_screenshots(self, obj):
         """
@@ -17,29 +17,35 @@ class ProjectSerializer(serializers.ModelSerializer):
         Handles legacy fixture values like "img/screenshots/..." and raw filenames.
         """
         urls = []
-        qs = getattr(obj, 'screenshots', None)
+        qs = getattr(obj, "screenshots", None)
+
         if not qs:
             return urls
 
         try:
-            for s in qs.all():
-                url = getattr(s, 'image_url', '') or ''
+            for screenshot in qs.all():
+                url = getattr(screenshot, "image_url", "") or ""
+
                 if not url:
                     continue
 
-                if url.startswith('img/screenshots/'):
-                    url = '/' + url[len('img/'):]
-                elif url.startswith('screenshots/'):
-                    url = '/' + url
-                elif not (url.startswith('/') or url.startswith('http://') or url.startswith('https://')):
-                    url = '/screenshots/' + url.lstrip('/')
+                if url.startswith("img/screenshots/"):
+                    url = "/" + url[len("img/"):]
+                elif url.startswith("screenshots/"):
+                    url = "/" + url
+                elif not (
+                    url.startswith("/")
+                    or url.startswith("http://")
+                    or url.startswith("https://")
+                ):
+                    url = "/screenshots/" + url.lstrip("/")
 
                 urls.append(url)
+
         except Exception:
             pass
 
         return urls
-
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):
@@ -88,25 +94,18 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         if not message:
             raise serializers.ValidationError("Message is required.")
 
-        links_count = message.lower().count("http://") + message.lower().count("https://")
+        links_count = (
+            message.lower().count("http://")
+            + message.lower().count("https://")
+        )
 
         if links_count > 2:
-            raise serializers.ValidationError("Message contains too many links.")
+            raise serializers.ValidationError(
+                "Message contains too many links."
+            )
 
         return message
 
-def validate_message(self, value):
-    message = value.strip()
-
-    if not message:
-        raise serializers.ValidationError("Message is required.")
-
-    if message.lower().count("http://") + message.lower().count("https://") > 2:
-        raise serializers.ValidationError("Message contains too many links.")
-
-    return message
-        
-        
 
 class AnalyticsEventSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,4 +1,4 @@
-﻿import sys
+import sys
 sys.path.append('/app')
 
 import os

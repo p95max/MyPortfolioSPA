@@ -1,4 +1,4 @@
-﻿databases:
+databases:
   - name: portfolio-db
     databaseName: portfolio_db
     user: portfolio_user

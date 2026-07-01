@@ -14,8 +14,18 @@ $body = @{
   browser = "curl"
   os = "Windows"
   language = "ru-RU"
-}
+} | ConvertTo-Json -Compress
+
+
+
 
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-[System.IO.File]::WriteAllText((Resolve-Path ".").Path + "\analytics-test.json", $body, $utf8NoBom)| ConvertTo-Json -Compress
+[System.IO.File]::WriteAllText((Resolve-Path ".").Path + "\analytics-test.json", $body, $utf8NoBom)
+
+
+
+curl.exe -i -X POST "https://myportfoliospa.onrender.com/api/analytics/" `
+  -H "Content-Type: application/json" `
+  -H "CF-IPCountry: DE" `
+  --data-binary "@analytics-test.json"

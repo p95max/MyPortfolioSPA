@@ -1,9 +1,18 @@
 from django.conf import settings
+from django.urls import reverse
 from django.core.cache import cache
 from django.core.mail import send_mail
 from django.utils import timezone
 
 from .models import AnalyticsEvent
+
+
+def build_admin_change_url(obj) -> str:
+    admin_path = reverse(
+        f"admin:{obj._meta.app_label}_{obj._meta.model_name}_change",
+        args=[obj.pk],
+    )
+    return f"{settings.BACKEND_BASE_URL}{admin_path}"
 
 
 def _get_notify_recipients() -> list[str]:
@@ -83,6 +92,8 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
 
     subject = f"[Portfolio] 🔎 New visitor from: {source} {event.path}"
 
+    admin_url = build_admin_change_url(event)
+
     message = (
         "👀 New portfolio visitor\n\n"
         "📍 Source\n"
@@ -100,6 +111,8 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
         "🔎 Tracking\n"
         f"Anonymous ID: {event.anonymous_id}\n"
         f"Session ID: {event.session_id or '—'}\n\n"
+        "🔗 Admin\n"
+         f"{admin_url}\n\n"
         "Open Django Admin to review further actions from this visitor."
     )
 

@@ -7,6 +7,7 @@ from django.utils import timezone
 from .models import AnalyticsEvent
 from .utils.admin_links import _build_admin_change_url
 
+
 def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
     if not getattr(settings, "ANALYTICS_NEW_VISITOR_EMAIL_ENABLED", False):
         return
@@ -107,7 +108,6 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
     email_msg.attach_alternative(html_body, "text/html")
     email_msg.send(fail_silently=True)
     
-
 
 def _get_notify_recipients() -> list[str]:
     notify_emails = getattr(settings, "NOTIFY_EMAILS", None)

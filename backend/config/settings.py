@@ -1,5 +1,5 @@
-"""
-Django settings for portfolio_backend project.
+﻿"""
+Django settings for config project.
 """
 
 import os
@@ -45,8 +45,8 @@ SECRET_KEY = os.getenv(
 
 ADMIN_URL = os.getenv("DJANGO_ADMIN_URL", "admin/")
 
-ROOT_URLCONF = "portfolio_backend.urls"
-WSGI_APPLICATION = "portfolio_backend.wsgi.application"
+ROOT_URLCONF = "config.urls"
+WSGI_APPLICATION = "config.wsgi.application"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -372,7 +372,7 @@ LOGGING = {
             "level": "DEBUG" if DEBUG else "INFO",
             "propagate": False,
         },
-        "portfolio_backend": {
+        "config": {
             "handlers": ["console", "file"],
             "level": "INFO",
             "propagate": False,

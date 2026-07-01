@@ -1,4 +1,4 @@
-#!/bin/sh
+﻿#!/bin/sh
 set -e
 
 if [ "$DJANGO_DEBUG" != "True" ] && [ "$DJANGO_DEBUG" != "true" ] && [ -z "$DJANGO_SECRET_KEY" ]; then
@@ -25,4 +25,4 @@ else:
 "
 
 echo "Starting Gunicorn..."
-exec poetry run gunicorn portfolio_backend.wsgi --bind 0.0.0.0:${PORT:-8000} --log-file -
+exec poetry run gunicorn config.wsgi --bind 0.0.0.0:${PORT:-8000} --log-file -

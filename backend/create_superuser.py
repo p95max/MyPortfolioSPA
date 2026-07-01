@@ -1,10 +1,10 @@
-import sys
+﻿import sys
 sys.path.append('/app')
 
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'portfolio_backend.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 django.setup()
 

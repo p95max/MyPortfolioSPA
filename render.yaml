@@ -1,4 +1,4 @@
-databases:
+﻿databases:
   - name: portfolio-db
     databaseName: portfolio_db
     user: portfolio_user
@@ -9,7 +9,7 @@ services:
     rootDir: backend
     env: python
     buildCommand: "./build.sh"
-    startCommand: "poetry run gunicorn portfolio_backend.wsgi:application -c gunicorn.conf.py"
+    startCommand: "poetry run gunicorn config.wsgi:application -c gunicorn.conf.py"
     envVars:
       - key: DATABASE_URL
         fromDatabase:

@@ -1,4 +1,4 @@
-# Portfolio SPA Project
+﻿# Portfolio SPA Project
 
 Single Page Application portfolio built with **React (Vite)** on the frontend and **Django REST Framework** on the backend.
 
@@ -340,7 +340,7 @@ Covered areas:
 Tests use a dedicated Django test settings module:
 
 ```text
-portfolio_backend.test_settings
+config.test_settings
 ```
 
 The test settings use SQLite and disabled migrations for fast local test execution.
@@ -348,7 +348,7 @@ The test settings use SQLite and disabled migrations for fast local test executi
 Run tests from the `backend` directory:
 
 ```bash
-poetry run pytest --ds=portfolio_backend.test_settings --nomigrations -vv -ra --tb=short
+poetry run pytest --ds=config.test_settings --nomigrations -vv -ra --tb=short
 ```
 
 Expected result:

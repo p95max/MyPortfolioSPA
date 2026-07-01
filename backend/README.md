@@ -162,6 +162,8 @@ If the username is missing, no superuser is created automatically.
 |---|---:|---|
 | `FRONTEND_BASE_URL` | recommended | Used by admin screenshot preview for relative `/screenshots/...` paths. |
 
+| `BACKEND_BASE_URL` | recommended | Public backend base URL used for Django Admin links in notification emails. |
+
 ### Email
 
 | Variable | Required | Description |
@@ -180,6 +182,15 @@ EMAIL_PORT=587
 EMAIL_USE_TLS=True
 EMAIL_SUBJECT_PREFIX=[Portfolio]
 ```
+
+---
+
+### Analytics visitor notification settings
+
+| Variable | Required | Description |
+|---|---:|---|
+| `ANALYTICS_NEW_VISITOR_EMAIL_ENABLED` | optional | Enables first-time analytics visitor email notifications. Defaults to `False`. |
+| `ANALYTICS_NOTIFY_DIRECT_VISITORS` | optional | Allows email notifications for direct visitors. Defaults to `False`. |
 
 ---
 

@@ -185,12 +185,17 @@ CORS_ALLOWED_ORIGINS=http://localhost:3000
 
 TURNSTILE_SECRET=your-turnstile-secret
 FRONTEND_BASE_URL=http://localhost:3000
+BACKEND_BASE_URL=http://localhost:8000
 
 EMAIL_HOST=smtp.gmail.com
 EMAIL_HOST_USER=your_email@gmail.com
 EMAIL_HOST_PASSWORD=your_gmail_app_password
 NOTIFY_EMAILS=your_email@gmail.com
 DISPLAY_TZ=Europe/Berlin
+
+# Optional analytics email alerts.
+ANALYTICS_NEW_VISITOR_EMAIL_ENABLED=False
+ANALYTICS_NOTIFY_DIRECT_VISITORS=False
 
 # Optional. If omitted, Django uses local memory cache.
 REDIS_URL=
@@ -435,7 +440,7 @@ The `path` field is stored without query parameters. UTM values are stored separ
 The analytics endpoint is throttled through DRF throttling:
 
 ```text
-analytics: 120/minute
+analytics: 30/minute
 ```
 
 Analytics data is stored in the `AnalyticsEvent` model and can be reviewed in Django Admin.
@@ -536,6 +541,27 @@ These values are configured in `settings.py`, not through environment variables.
 
 ---
 
+### Analytics Visitor Notifications
+
+The backend can optionally send an email when a new first-time analytics visitor is detected.
+
+This feature is disabled by default and controlled through:
+
+```env
+ANALYTICS_NEW_VISITOR_EMAIL_ENABLED=False
+ANALYTICS_NOTIFY_DIRECT_VISITORS=False
+BACKEND_BASE_URL=https://your-backend-domain.example.com
+```
+
+Behavior:
+-only page_view events can trigger a new visitor notification;
+-visitors without anonymous_id are ignored;
+-direct visitors are ignored unless ANALYTICS_NOTIFY_DIRECT_VISITORS=True;
+-duplicate notifications for the same anonymous visitor are suppressed through cache;
+-notification recipients use the same NOTIFY_EMAILS fallback chain as contact form emails. 
+
+---
+
 ## Security Notes
 
 Implemented:
@@ -583,14 +609,18 @@ Current Compose service layout:
 - `web`: Django backend
 - `frontend`: Nginx static frontend
 
-Important check: the current compose file maps PostgreSQL as:
+PostgreSQL is exposed to the host as:
 
 ```yaml
 ports:
-  - "5440:5440"
+  - "5440:5432"
 ```
 
-PostgreSQL normally listens on `5432` inside the container unless `PGPORT=5440` is configured. For normal local development, either use `5432:5432` or configure PostgreSQL and Django consistently.
+This means:
+- inside Docker Compose, Django connects to PostgreSQL through DB_HOST=db and DB_PORT=5432;
+- from the host machine, PostgreSQL is available on localhost:5440.
+
+Do not set DB_PORT=5440 for the Django container unless the database service itself is also configured to listen on 5440 internally.
 
 ---
 
@@ -615,6 +645,10 @@ Backend service:
   - `EMAIL_HOST_USER`
   - `EMAIL_HOST_PASSWORD`
   - `NOTIFY_EMAILS`
+  Optional backend environment variables:
+  - `ANALYTICS_NEW_VISITOR_EMAIL_ENABLED`
+  - `ANALYTICS_NOTIFY_DIRECT_VISITORS`
+  - `MEMORY_LIMIT`
 
 Frontend static service:
 

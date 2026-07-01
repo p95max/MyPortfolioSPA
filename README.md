@@ -96,7 +96,7 @@ Production URL depends on the Render service configuration.
 Current public frontend URL used in the project documentation:
 
 ```text
-https://myportfoliospa-1.onrender.com/
+https://p95max.dev
 ```
 
 ---

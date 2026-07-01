@@ -338,13 +338,13 @@ The test settings use SQLite and disabled migrations for fast local test executi
 Run tests from the `backend` directory:
 
 ```bash
-poetry run pytest --ds=portfolio_backend.test_settings --nomigrations
+poetry run pytest --ds=portfolio_backend.test_settings --nomigrations -vv -ra --tb=short
 ```
 
 Expected result:
 
 ```text
-17 passed
+-- passed in -.--s
 ```
 
 

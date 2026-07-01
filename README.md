@@ -311,6 +311,45 @@ DJANGO_SUPERUSER_PASSWORD=adminpass
 
 ---
 
+## Tests
+
+The backend has a pytest-based test suite for critical API and business logic.
+
+Covered areas:
+
+* contact form validation;
+* Cloudflare Turnstile flow;
+* honeypot spam protection;
+* contact message saving;
+* email notification fail-safe behavior;
+* analytics event validation and saving;
+* project ordering;
+* screenshot URL normalization;
+* contact message admin status actions.
+
+Tests use a dedicated Django test settings module:
+
+```text
+portfolio_backend.test_settings
+```
+
+The test settings use SQLite and disabled migrations for fast local test execution.
+
+Run tests from the `backend` directory:
+
+```bash
+poetry run pytest --ds=portfolio_backend.test_settings --nomigrations
+```
+
+Expected result:
+
+```text
+17 passed
+```
+
+
+---
+
 ### Analytics
 
 ```http

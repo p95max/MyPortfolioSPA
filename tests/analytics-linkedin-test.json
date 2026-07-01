@@ -1,0 +1,30 @@
+$visitorId = "curl-linkedin-visitor-" + [guid]::NewGuid().ToString()
+$sessionId = "curl-linkedin-session-" + [guid]::NewGuid().ToString()
+
+$body = @{
+  event_type = "page_view"
+  path = "/?utm_source=linkedin&utm_medium=social&utm_campaign=profile"
+  source_type = "linkedin"
+  utm_source = "linkedin"
+  utm_medium = "social"
+  utm_campaign = "profile"
+  anonymous_id = $visitorId
+  session_id = $sessionId
+  device_type = "desktop"
+  browser = "curl"
+  os = "Windows"
+  language = "ru-RU"
+} | ConvertTo-Json -Compress
+
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+[System.IO.File]::WriteAllText(
+  (Resolve-Path ".").Path + "\tests\analytics-linkedin-test.json",
+  $body,
+  $utf8NoBom
+)
+
+curl.exe -i -X POST "https://myportfoliospa.onrender.com/api/analytics/" `
+  -H "Content-Type: application/json" `
+  -H "CF-IPCountry: DE" `
+  --data-binary "@.\tests\analytics-linkedin-test.json"

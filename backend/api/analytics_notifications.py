@@ -1,11 +1,10 @@
 from django.conf import settings
-from django.urls import reverse
 from django.core.cache import cache
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.utils import timezone
 
 from .models import AnalyticsEvent
-
 from .utils.admin_links import _build_admin_change_url
 
 def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
@@ -44,14 +43,16 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
     if has_previous_events:
         return
 
-
     created_at = timezone.localtime(event.created_at).strftime("%d.%m.%Y %H:%M")
 
     source = event.source_type or "unknown"
+    path = event.path or "—"
     country = event.country or "—"
     device = event.device_type or "—"
     browser = event.browser or "—"
     os_name = event.os or "—"
+    language = event.language or "—"
+    session_id = event.session_id or "—"
 
     utm_parts = []
 
@@ -66,39 +67,45 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
 
     utm_text = ", ".join(utm_parts) if utm_parts else "—"
 
-    subject = f"[Portfolio] 🔎 New visitor from: {source} {event.path}"
-
     admin_url = _build_admin_change_url(event)
 
-    message = (
-        "👀 New portfolio visitor\n\n"
-        "📍 Source\n"
-        f"Source type: {source}\n"
-        f"UTM: {utm_text}\n"
-        f"Path: {event.path}\n\n"
-        "🖥 Device\n"
-        f"Country: {country}\n"
-        f"Device: {device}\n"
-        f"Browser: {browser}\n"
-        f"OS: {os_name}\n"
-        f"Language: {event.language or '—'}\n\n"
-        "🕒 Time\n"
-        f"{created_at}\n\n"
-        "🔎 Tracking\n"
-        f"Anonymous ID: {event.anonymous_id}\n"
-        f"Session ID: {event.session_id or '—'}\n\n"
-        "🔗 Admin\n"
-         f"{admin_url}\n\n"
-        "Open Django Admin to review further actions from this visitor."
+    subj_prefix = getattr(settings, "EMAIL_SUBJECT_PREFIX", "[Portfolio] ")
+    subject = f"{subj_prefix}🔎 New visitor from: {source} {path}".strip()
+
+    context = {
+        "source": source,
+        "utm_text": utm_text,
+        "path": path,
+        "country": country,
+        "device": device,
+        "browser": browser,
+        "os_name": os_name,
+        "language": language,
+        "created_at": created_at,
+        "anonymous_id": event.anonymous_id,
+        "session_id": session_id,
+        "admin_url": admin_url,
+    }
+
+    text_body = render_to_string(
+        "emails/analytics_new_visitor.txt",
+        context,
+    ).strip()
+
+    html_body = render_to_string(
+        "emails/analytics_new_visitor.html",
+        context,
+    ).strip()
+
+    email_msg = EmailMultiAlternatives(
+        subject=subject,
+        body=text_body,
+        from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+        to=recipients,
     )
 
-    send_mail(
-        subject=subject,
-        message=message,
-        from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
-        recipient_list=recipients,
-        fail_silently=True,
-    )
+    email_msg.attach_alternative(html_body, "text/html")
+    email_msg.send(fail_silently=True)
     
 
 

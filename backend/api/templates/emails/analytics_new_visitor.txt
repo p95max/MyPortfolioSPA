@@ -1,0 +1,25 @@
+New portfolio visitor
+
+Source:
+Source type: {{ source }}
+UTM: {{ utm_text }}
+Path: {{ path }}
+
+Device:
+Country: {{ country }}
+Device: {{ device }}
+Browser: {{ browser }}
+OS: {{ os_name }}
+Language: {{ language }}
+
+Time:
+{{ created_at }}
+
+Tracking:
+Anonymous ID: {{ anonymous_id }}
+Session ID: {{ session_id }}
+
+Admin:
+{{ admin_url }}
+
+Open Django Admin to review further actions from this visitor.

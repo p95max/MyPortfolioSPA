@@ -111,7 +111,7 @@ https://p95max.dev
 │   │   ├── migrations/          # Django migrations
 │   │   ├── templates/emails/    # Email notification templates
 │   │   └── utils/               # Shared backend helpers
-│   ├── portfolio_backend/       # Django project settings and URL config
+│   ├── config/                  # Django project settings and URL config
 │   │   ├── settings.py
 │   │   ├── test_settings.py
 │   │   └── urls.py

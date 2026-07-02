@@ -195,6 +195,7 @@ DISPLAY_TZ=Europe/Berlin
 # Optional analytics email alerts.
 ANALYTICS_NEW_VISITOR_EMAIL_ENABLED=False
 ANALYTICS_NOTIFY_DIRECT_VISITORS=False
+TRUST_ANALYTICS_GEO_HEADERS=False
 
 # Optional. If omitted, Django uses local memory cache.
 REDIS_URL=
@@ -431,7 +432,7 @@ Stored backend fields:
 * normalized path without query parameters
 * external referrer, if available
 * browser language
-* country code from proxy/CDN request headers, when available
+* country code from trusted proxy/CDN request headers, when explicitly enabled
 * normalized source type, for example `direct`, `linkedin`, `github`, `search`, `social` or `referral`
 * UTM parameters: `utm_source`, `utm_medium`, `utm_campaign`
 * detected operating system
@@ -444,10 +445,15 @@ Stored backend fields:
 
 The `path` field is stored without query parameters. UTM values are stored separately in dedicated fields.
 
+Country detection is disabled by default. Set
+`TRUST_ANALYTICS_GEO_HEADERS=True` only when the request reaches Django through a
+trusted CDN/proxy path that prevents clients from spoofing geo headers.
+
 The analytics endpoint is throttled through DRF throttling:
 
 ```text
 analytics: 30/minute
+analytics_global: 1000/hour
 ```
 
 Analytics data is stored in the `AnalyticsEvent` model and can be reviewed in Django Admin.
@@ -584,6 +590,8 @@ Implemented:
 - DRF throttling for contact submissions
 - Redis-backed throttling when `REDIS_URL` is configured
 - local-memory throttling fallback for development
+- DRF proxy hop count via `DRF_NUM_PROXIES` / `NUM_PROXIES`
+- opt-in analytics geo header trust through `TRUST_ANALYTICS_GEO_HEADERS`
 - production-only secure cookies
 - production-only SSL redirect
 - production-only HSTS
@@ -599,6 +607,7 @@ Operational notes:
 - Use a non-obvious `DJANGO_ADMIN_URL` in production.
 - Configure `CSRF_TRUSTED_ORIGINS` and `CORS_ALLOWED_ORIGINS` explicitly in production.
 - Use Redis in production if contact throttling must survive process restarts and scale across instances.
+- Leave `TRUST_ANALYTICS_GEO_HEADERS=False` unless the origin only receives trusted CDN/proxy headers.
 
 ---
 
@@ -655,12 +664,14 @@ Backend service:
   - `TURNSTILE_SECRET`
   - `FRONTEND_BASE_URL`
   - `REDIS_URL`, recommended for production throttling
+  - `DRF_NUM_PROXIES=1`
   - `EMAIL_HOST_USER`
   - `EMAIL_HOST_PASSWORD`
   - `NOTIFY_EMAILS`
   Optional backend environment variables:
   - `ANALYTICS_NEW_VISITOR_EMAIL_ENABLED`
   - `ANALYTICS_NOTIFY_DIRECT_VISITORS`
+  - `TRUST_ANALYTICS_GEO_HEADERS`
   - `MEMORY_LIMIT`
 
 Frontend static service:

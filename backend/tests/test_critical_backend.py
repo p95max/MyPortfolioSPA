@@ -181,8 +181,7 @@ def test_contact_invalid_payload_returns_400(api_client):
 # -------------------------
 
 
-@override_settings(ANALYTICS_NEW_VISITOR_EMAIL_ENABLED=False)
-def test_analytics_event_is_saved_with_country_from_header(api_client):
+def analytics_payload(**overrides):
     payload = {
         "event_type": "project_github_click",
         "path": "/projects?utm_source=linkedin",
@@ -205,11 +204,19 @@ def test_analytics_event_is_saved_with_country_from_header(api_client):
             "unexpected_key": "must be removed",
         },
     }
+    payload.update(overrides)
+    return payload
 
+
+@override_settings(
+    ANALYTICS_NEW_VISITOR_EMAIL_ENABLED=False,
+    TRUST_ANALYTICS_GEO_HEADERS=True,
+)
+def test_analytics_event_is_saved_with_country_from_header(api_client):
     with patch("api.views.notify_new_analytics_visitor") as notify_mock:
         response = api_client.post(
             "/api/analytics/",
-            payload,
+            analytics_payload(),
             format="json",
             HTTP_CF_IPCOUNTRY="de",
         )
@@ -229,6 +236,23 @@ def test_analytics_event_is_saved_with_country_from_header(api_client):
     }
 
     notify_mock.assert_called_once_with(event)
+
+
+@override_settings(
+    ANALYTICS_NEW_VISITOR_EMAIL_ENABLED=False,
+    TRUST_ANALYTICS_GEO_HEADERS=False,
+)
+def test_analytics_country_header_is_ignored_when_not_trusted(api_client):
+    response = api_client.post(
+        "/api/analytics/",
+        analytics_payload(),
+        format="json",
+        HTTP_CF_IPCOUNTRY="de",
+    )
+
+    assert response.status_code == 201
+    event = AnalyticsEvent.objects.get()
+    assert event.country == ""
 
 
 def test_analytics_rejects_path_without_leading_slash(api_client):

@@ -281,7 +281,7 @@ if not DEBUG:
 
 DRF_NUM_PROXIES = int_env(
     "DRF_NUM_PROXIES",
-    0 if DEBUG else 1,
+    int_env("NUM_PROXIES", 0 if DEBUG else 1),
 )
 
 REST_FRAMEWORK = {
@@ -350,6 +350,10 @@ ANALYTICS_NOTIFY_DIRECT_VISITORS = (
 TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET", "")
 FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
 BACKEND_BASE_URL = os.getenv("BACKEND_BASE_URL", "http://localhost:8000").rstrip("/")
+TRUST_ANALYTICS_GEO_HEADERS = (
+    os.getenv("TRUST_ANALYTICS_GEO_HEADERS", "False").lower()
+    in ("1", "true", "yes", "on")
+)
 
 
 # =============================================================================

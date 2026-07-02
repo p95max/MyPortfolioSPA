@@ -184,14 +184,24 @@ def analytics_event(request):
         logger.warning("Invalid analytics event: %s", serializer.errors)
         return Response({"detail": "invalid_event"}, status=status.HTTP_400_BAD_REQUEST)
 
-    country = (
-        request.headers.get("CF-IPCountry")
-        or request.headers.get("X-Country-Code")
-        or request.headers.get("X-Vercel-IP-Country")
-        or ""
-    ).strip().upper()[:2]
-
-    event = serializer.save(country=country)
+    event = serializer.save(country=_get_analytics_country(request))
     notify_new_analytics_visitor(event)
 
     return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)
+
+
+def _get_analytics_country(request) -> str:
+    if not getattr(settings, "TRUST_ANALYTICS_GEO_HEADERS", False):
+        return ""
+
+    for header_name in (
+        "CF-IPCountry",
+        "X-Country-Code",
+        "X-Vercel-IP-Country",
+    ):
+        country = (request.headers.get(header_name) or "").strip().upper()
+
+        if len(country) == 2 and country.isalpha():
+            return country
+
+    return ""

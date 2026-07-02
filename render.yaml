@@ -43,6 +43,12 @@ services:
       - key: REDIS_URL
         sync: false
 
+      - key: DRF_NUM_PROXIES
+        value: "1"
+
+      - key: TRUST_ANALYTICS_GEO_HEADERS
+        sync: false
+
       - key: EMAIL_HOST
         value: "smtp.gmail.com"
 

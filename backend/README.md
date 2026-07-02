@@ -90,6 +90,8 @@ NOTIFY_EMAILS=your_email@gmail.com
 DISPLAY_TZ=Europe/Berlin
 
 REDIS_URL=
+DRF_NUM_PROXIES=0
+TRUST_ANALYTICS_GEO_HEADERS=False
 ```
 
 ---
@@ -155,6 +157,8 @@ If the username is missing, no superuser is created automatically.
 |---|---:|---|
 | `TURNSTILE_SECRET` | yes | Cloudflare Turnstile secret key for server-side verification. |
 | `REDIS_URL` | recommended in production | Redis cache URL for DRF throttling. Falls back to local memory cache if empty. |
+| `DRF_NUM_PROXIES` | recommended in production | Number of trusted proxy hops used by DRF throttling. Defaults to `1` when `DJANGO_DEBUG=False`. |
+| `TRUST_ANALYTICS_GEO_HEADERS` | optional | Set to `True` only when requests reach Django through trusted CDN/proxy headers. Defaults to `False`. |
 
 ### Frontend integration
 
@@ -312,7 +316,7 @@ Stored backend fields:
 * normalized path without query parameters
 * external referrer, if available
 * browser language
-* country code from proxy/CDN request headers, when available
+* country code from trusted proxy/CDN request headers, when explicitly enabled
 * normalized source type, for example `direct`, `linkedin`, `github`, `search`, `social`, or `referral`
 * UTM parameters:
 
@@ -334,12 +338,15 @@ Stored backend fields:
 
 The `path` field is stored without query parameters. UTM values are stored separately in dedicated fields.
 
-Country detection is handled server-side from request headers when available. The frontend does not send the country manually.
+Country detection is handled server-side from request headers only when
+`TRUST_ANALYTICS_GEO_HEADERS=True`. Keep it disabled unless the origin only
+receives trusted CDN/proxy headers.
 
 The analytics endpoint is throttled through DRF throttling:
 
 ```text
-analytics: 120/minute
+analytics: 30/minute
+analytics_global: 1000/hour
 ```
 
 Analytics data is stored in the `AnalyticsEvent` model and can be reviewed in Django Admin.

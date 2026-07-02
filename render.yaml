@@ -64,8 +64,9 @@ services:
       - key: MEMORY_LIMIT
         value: "512"
 
-  - type: static
+  - type: web
     name: portfolio-frontend
+    runtime: static
     rootDir: frontend
     buildCommand: "npm ci && npm run build"
     staticPublishPath: "dist"

@@ -1,0 +1,102 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: portfolio_db
+      POSTGRES_USER: portfolio_user
+      POSTGRES_PASSWORD: portfolio_password
+    volumes:
+      - pgdata_codespaces:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio_user -d portfolio_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - portfolio_codespaces
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - portfolio_codespaces
+
+  web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: sh /app/entrypoint.codespaces.sh
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SECRET_KEY: django-insecure-codespaces-dev-key
+      DJANGO_DEBUG: "True"
+      DJANGO_ADMIN_URL: admin/
+
+      POSTGRES_DB: portfolio_db
+      POSTGRES_USER: portfolio_user
+      POSTGRES_PASSWORD: portfolio_password
+      DB_HOST: db
+      DB_PORT: 5432
+
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      DJANGO_SUPERUSER_PASSWORD: adminpass
+
+      ALLOWED_HOST: localhost
+      EXTRA_ALLOWED_HOSTS: 127.0.0.1,web,*.app.github.dev
+      CSRF_TRUSTED_ORIGINS: https://*.app.github.dev,http://localhost:3000,http://localhost:8000
+      CORS_ALLOWED_ORIGINS: ""
+
+      TURNSTILE_SECRET: 1x0000000000000000000000000000000AA
+
+      FRONTEND_BASE_URL: ""
+      BACKEND_BASE_URL: ""
+
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+      EMAIL_HOST: ""
+      EMAIL_HOST_USER: ""
+      EMAIL_HOST_PASSWORD: ""
+      NOTIFY_EMAILS: ""
+      DISPLAY_TZ: Europe/Berlin
+
+      REDIS_URL: redis://redis:6379/0
+      LOAD_FIXTURES: "True"
+
+      ANALYTICS_NEW_VISITOR_EMAIL_ENABLED: "False"
+      ANALYTICS_NOTIFY_DIRECT_VISITORS: "False"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - portfolio_codespaces
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0 --port 3000"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules_codespaces:/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: ""
+      VITE_DEV_PROXY_TARGET: http://web:8000
+      VITE_TURNSTILE_SITEKEY: 1x00000000000000000000AA
+      VITE_SNOW: auto
+    depends_on:
+      - web
+    networks:
+      - portfolio_codespaces
+
+volumes:
+  pgdata_codespaces:
+  frontend_node_modules_codespaces:
+
+networks:
+  portfolio_codespaces:

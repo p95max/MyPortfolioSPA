@@ -27,7 +27,7 @@ The backend provides a read-only portfolio API, a contact form API, Django Admin
 
 - Read-only API for portfolio projects.
 - Project and screenshot management through Django Admin.
-- Drag-and-drop project ordering through `sort_order`.
+- Drag-and-drop project and screenshot ordering through `sort_order`.
 - Screenshot preview in Django Admin.
 - Contact message API.
 - Cloudflare Turnstile server-side verification.
@@ -160,7 +160,7 @@ If the username is missing, no superuser is created automatically.
 
 | Variable | Required | Description |
 |---|---:|---|
-| `FRONTEND_BASE_URL` | recommended | Used by admin screenshot preview for relative `/screenshots/...` paths. |
+| `FRONTEND_BASE_URL` | optional | Used only when admin screenshot preview must resolve legacy relative `/screenshots/...` paths. Absolute Cloudinary URLs do not need it. |
 | `BACKEND_BASE_URL` | recommended | Public backend base URL used for Django Admin links in notification emails. |
 
 ### Email
@@ -399,12 +399,17 @@ Fields:
 - `project`
 - `image_url`
 - `caption`
+- `sort_order`
 
 `image_url` accepts:
 
-- relative paths like `/screenshots/example.png`
+- absolute `https://` URLs, recommended for current Cloudinary media
 - absolute `http://` URLs
-- absolute `https://` URLs
+- legacy relative paths like `/screenshots/example.png`
+
+New screenshots automatically receive the next `sort_order` value if no explicit
+order is provided. The Django Admin screenshots list supports drag-and-drop
+ordering and inline editing for captions and URLs.
 
 ### ContactMessage
 
@@ -478,6 +483,10 @@ Load fixtures:
 ```bash
 docker compose exec web poetry run python manage.py loaddata api/fixtures/backup_db.json
 ```
+
+The checked-in project fixture uses the current `Project` and
+`ProjectScreenshot` schema, including `sort_order`, and points screenshots to
+Cloudinary delivery URLs.
 
 Dump project data:
 

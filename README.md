@@ -18,7 +18,7 @@ The project is designed as a practical full-stack portfolio service: projects ar
 - Gunicorn
 - WhiteNoise for Django static files
 - Jazzmin admin theme
-- django-admin-sortable2 for drag-and-drop project ordering
+- django-admin-sortable2 for drag-and-drop project and screenshot ordering
 - drf-yasg for Swagger / ReDoc API documentation
 - Cloudflare Turnstile server-side verification
 - SMTP email notifications
@@ -125,8 +125,7 @@ https://p95max.dev
 │   └── pyproject.toml
 │
 ├── frontend/                    # React + Vite frontend
-│   ├── public/
-│   │   └── screenshots/         # Project screenshots
+│   ├── public/                  # Static public assets copied by Vite
 │   ├── src/
 │   │   ├── components/          # Shared UI components
 │   │   ├── data/                # Static frontend data
@@ -246,12 +245,18 @@ GET /api/projects/
 
 Returns portfolio projects ordered by `sort_order`, then `pk`.
 
-Screenshot URLs are normalized by the backend serializer:
+Each project includes a `screenshots` array. Current production data uses
+absolute Cloudinary delivery URLs stored in `ProjectScreenshot.image_url`.
+
+Absolute URLs are returned unchanged:
+
+- `https://res.cloudinary.com/.../image/upload/.../example.png`
+
+The serializer also keeps legacy local path support:
 
 - `img/screenshots/example.png` -> `/screenshots/example.png`
 - `screenshots/example.png` -> `/screenshots/example.png`
 - `example.png` -> `/screenshots/example.png`
-- absolute `http://` or `https://` URLs stay unchanged
 
 ### Contact form
 
@@ -309,7 +314,9 @@ DJANGO_ADMIN_URL=your-random-admin-path/
 Admin capabilities:
 
 - create, edit, delete, and reorder projects
-- manage project screenshots inline
+- manage project screenshots
+- reorder project screenshots from the screenshots admin list
+- edit screenshot captions and URLs from the screenshots admin list
 - preview screenshots from the admin panel
 - review contact messages
 - set message status
@@ -474,27 +481,33 @@ No external analytics provider such as Google Analytics is used.
 
 ## Screenshots Storage
 
-Project screenshots are currently served from the frontend public assets path:
+Project screenshots are stored as URL strings in `ProjectScreenshot.image_url`.
+
+Current production data uses Cloudinary delivery URLs:
 
 ```text
-frontend/public/screenshots/
+https://res.cloudinary.com/<cloud-name>/image/upload/.../example.png
 ```
 
-The backend stores screenshot paths as strings in `ProjectScreenshot.image_url`.
-
-Recommended format:
+Recommended format for new screenshots:
 
 ```text
-/screenshots/example.png
+https://res.cloudinary.com/<cloud-name>/image/upload/f_auto,q_auto,c_limit,w_1400/.../example.png
 ```
 
-The admin preview resolves relative `/screenshots/...` paths using:
+Absolute `http://` and `https://` values are rendered directly by the frontend
+and the Django Admin preview.
+
+Legacy relative paths such as `/screenshots/example.png` are still supported by
+the backend serializer. If relative paths are used, the admin preview resolves
+them using:
 
 ```env
 FRONTEND_BASE_URL=http://localhost:3000
 ```
 
-This is simple and acceptable for a portfolio project. For a larger production system, move screenshots to dedicated media storage such as S3, Cloudinary, MinIO, or another object storage provider.
+The current `api/fixtures/backup_db.json` fixture mirrors the Cloudinary-based
+project data and does not require local files under `frontend/public/screenshots`.
 
 ---
 
@@ -600,7 +613,7 @@ nginx/default.conf
 It serves:
 
 - React build from `/usr/share/nginx/html`
-- screenshots from `/screenshots/`
+- legacy `/screenshots/` assets if local files are present
 - backend API proxy under `/api/`
 
 Current Compose service layout:

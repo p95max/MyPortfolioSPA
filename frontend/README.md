@@ -85,6 +85,9 @@ The projects page fetches:
 <VITE_API_URL>/api/projects/
 ```
 
+Project screenshots are consumed from the `screenshots` array returned by the
+API. Current production data uses absolute Cloudinary delivery URLs.
+
 If `VITE_API_URL` is not defined, the code falls back to:
 
 ```text
@@ -323,24 +326,29 @@ const USE_TEST_DATA = false;
 
 ## Screenshots
 
-The backend returns screenshot URLs as strings.
+The backend returns screenshot URLs as strings in each project's `screenshots`
+array.
 
-Recommended public path format:
+Current production data uses absolute Cloudinary delivery URLs:
+
+```text
+https://res.cloudinary.com/<cloud-name>/image/upload/.../example.png
+```
+
+The frontend renders absolute `http://` and `https://` URLs directly, so no
+local screenshot files are required in `frontend/public`.
+
+Legacy relative paths are still supported if the backend returns them:
 
 ```text
 /screenshots/example.png
 ```
 
-Screenshots are expected to be available in:
+In that legacy case, files must exist in the Vite public directory and are copied
+to `dist` during build:
 
 ```text
 frontend/public/screenshots/
-```
-
-During Vite build, files from `public` are copied to `dist`, so they become available under:
-
-```text
-/screenshots/...
 ```
 
 The project card normalizes image paths and falls back to an inline SVG placeholder if a screenshot is missing.

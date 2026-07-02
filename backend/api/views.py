@@ -21,6 +21,7 @@ from .throttles import (
     ContactGlobalThrottle,
     ContactMessageFingerprintThrottle,
     AnalyticsThrottle,
+    AnalyticsGlobalThrottle,
 )
 from .utils.admin_links import _build_admin_change_url
 
@@ -164,7 +165,7 @@ def _check_turnstile(token: str | None, ip: str | None) -> bool:
                 "response": token,
                 "remoteip": ip,
             },
-            timeout=3,
+            timeout=2,
         )
         response.raise_for_status()
         return bool(response.json().get("success"))
@@ -175,7 +176,7 @@ def _check_turnstile(token: str | None, ip: str | None) -> bool:
     
 
 @api_view(["POST"])
-@throttle_classes([AnalyticsThrottle])
+@throttle_classes([AnalyticsThrottle, AnalyticsGlobalThrottle])
 def analytics_event(request):
     serializer = AnalyticsEventSerializer(data=request.data)
 

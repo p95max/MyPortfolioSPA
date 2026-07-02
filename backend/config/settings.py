@@ -4,6 +4,7 @@ Django settings for config project.
 
 import os
 from pathlib import Path
+from datetime import timedelta
 
 import dj_database_url
 from dotenv import load_dotenv
@@ -31,6 +32,16 @@ def split_env_list(name: str) -> list[str]:
         if value.strip()
     ]
 
+def int_env(name: str, default: int) -> int:
+    raw = os.getenv(name)
+
+    if raw is None or raw == "":
+        return default
+
+    try:
+        return int(raw)
+    except ValueError:
+        return default
 
 # =============================================================================
 # Core Django settings
@@ -91,6 +102,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    "axes",
+
     # Third-party API/security apps
     "rest_framework",
     "corsheaders",
@@ -117,6 +130,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "axes.middleware.AxesMiddleware",
 ]
 
 
@@ -216,6 +230,14 @@ else:
         }
     }
 
+if not DEBUG and not REDIS_URL:
+    import warnings
+
+    warnings.warn(
+        "REDIS_URL is not configured in production. "
+        "DRF throttling uses LocMemCache and will not be shared across workers.",
+        RuntimeWarning,
+    )
 
 # =============================================================================
 # CORS
@@ -257,14 +279,21 @@ if not DEBUG:
 # Django REST Framework
 # =============================================================================
 
+DRF_NUM_PROXIES = int_env(
+    "DRF_NUM_PROXIES",
+    0 if DEBUG else 1,
+)
+
 REST_FRAMEWORK = {
+    "NUM_PROXIES": DRF_NUM_PROXIES,
     "DEFAULT_THROTTLE_RATES": {
-        "contact_email": "5/hour",
-        "contact_ip": "60/hour",
-        "contact_subnet": "200/hour",
-        "contact_global": "500/hour",
+        "contact_email": "3/hour",
+        "contact_ip": "20/hour",
+        "contact_subnet": "60/hour",
+        "contact_global": "100/hour",
         "contact_fingerprint": "3/hour",
         "analytics": "30/minute",
+        "analytics_global": "1000/hour",
     }
 }
 
@@ -415,3 +444,13 @@ JAZZMIN_UI_TWEAKS = {
     "body_small_text": False,
     "brand_small_text": False,
 }
+
+
+AUTHENTICATION_BACKENDS = [
+    "axes.backends.AxesStandaloneBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+AXES_FAILURE_LIMIT = int_env("AXES_FAILURE_LIMIT", 5)
+AXES_COOLOFF_TIME = timedelta(minutes=int_env("AXES_COOLOFF_MINUTES", 30))
+AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True

@@ -65,3 +65,13 @@ class AnalyticsThrottle(SimpleRateThrottle):
             "scope": self.scope,
             "ident": f"analytics:{ip}",
         }
+    
+
+class AnalyticsGlobalThrottle(SimpleRateThrottle):
+    scope = "analytics_global"
+
+    def get_cache_key(self, request, view):
+        return self.cache_format % {
+            "scope": self.scope,
+            "ident": "analytics_global",
+        }

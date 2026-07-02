@@ -1,359 +1,282 @@
 [
   {
     "model": "api.project",
-    "pk": 1,
+    "pk": 11,
     "fields": {
-      "title": "ChattyM",
-      "description": "ChattyM is a minimal social network built with Django 5, PostgreSQL, and Bootstrap 5 that demonstrates core web development features. It offers email-based authentication via django-allauth, editable user profiles with avatars and birthdays, and full CRUD for posts, comments, and likes. Users can follow/unfollow others, view a personalized feed, send direct messages, and administrators can moderate content; fixtures are provided to populate test data. The project includes a DRF-based REST API with Swagger docs, token/session auth, and a Dockerized setup for easy local development and testing.",
-      "tech_stack": "#Django5 #Python3.11 #PostgreSQL #Bootstrap5 #Docker #Docker-Compose #DjangoRESTFramework #django_allauth #Poetry #pytest",
-      "github_url": "https://github.com/p95max/ChattyM",
-      "demo_url": ""
+      "title": "InboxSignal",
+      "description": "InboxSignal — Django message monitoring and triage system for Telegram and Gmail: multi-channel ingestion, Telegram Bot API and Gmail read-only OAuth integration, shared event pipeline, rules-first classification with optional OpenAI enrichment, priority scoring, instant Telegram alerts, scheduled digests with Celery Beat, Redis-backed rate limits/deduplication/cooldowns, encrypted credentials, Cloudflare Turnstile contact form protection, ops visibility, health checks and Pytest coverage.",
+      "tech_stack": "#Python #Django #PostgreSQL #Redis #Celery #Docker #Nginx #Telegram-Bot-API #Gmail-API #Google-OAuth #OpenAI-API #Cloudflare-Turnstile #Bootstrap #Pytest #Full-stack-development",
+      "github_url": "https://github.com/p95max/InboxSignal",
+      "demo_url": "",
+      "sort_order": 1
     }
   },
   {
     "model": "api.project",
-    "pk": 2,
+    "pk": 10,
     "fields": {
-      "title": "What2Cook",
-      "description": "What2Cook — lightweight recipe finder: give it the ingredients you have and it will suggest recipes. Built with FastAPI, async SQLAlchemy, Postgres, Jinja2 templates and a small, responsive frontend.",
-      "tech_stack": "#FASTAPI #Python3.14 #PostgreSQL #Bootstrap5 #DockerCompose #jinja2 #SQLAlchemy #API",
-      "github_url": "https://github.com/p95max/What2Cook",
-      "demo_url": ""
+      "title": "DealerFinder",
+      "description": "DealerFinder — Django car dealer search app for Germany with a cache-first Google Places workflow: Google Places API integration, Redis/PostgreSQL caching to reduce external calls and costs, flexible filtering and ranking by rating, reviews, distance and availability, optional AI-generated review summaries via Celery, Google OAuth authentication, Cloudflare Turnstile anti-bot protection, quotas, lazy-loaded dealer details, structured logging and production-oriented Docker setup.",
+      "tech_stack": "#Python #Django #PostgreSQL #Redis #Celery #Docker #Nginx #Google-Places-API #Google-OAuth #OpenAI-API #Cloudflare-Turnstile #Bootstrap #Pytest #Full-stack-development",
+      "github_url": "https://github.com/p95max/dealerfinder",
+      "demo_url": "",
+      "sort_order": 2
     }
   },
   {
     "model": "api.project",
-    "pk": 3,
+    "pk": 7,
     "fields": {
-      "title": "AutoService Book",
-      "description": "AutoService Book is your reliable assistant for tracking and managing your car’s service history. This web application, built as a portfolio project, showcases skills in Django development, database management, and creating user-friendly interfaces.",
-      "tech_stack": "#Django #Python3 #PostgreSQL #Bootstrap5 #Docker #Docker-Compose #django_allauth #Poetry #pytest",
-      "github_url": "https://github.com/p95max/AutoService_Book",
-      "demo_url": ""
-    }
-  },
-    {
-    "model": "api.project",
-    "pk": 4,
-    "fields": {
-      "title": "Mini-Fleet Monitor",
-      "description": "This application is a lightweight fleet-management dashboard for simulated robots. It provides real-time robot status, coordinates, movement controls, and safe deletion with a hard limit of 10 units. The stack is minimal and production-oriented: Node.js API, PostgreSQL, Redis, and a React frontend with a clean, utility-driven UI. The project demonstrates handling live state, event-driven updates, and building a focused operational interface with modern full-stack practices.",
-      "tech_stack": "#Full-stack development #Node.js+Express #PostgreSQL #React #Docker #Redis #JWT_Auth #REST+WebSocket #OpenLayers-Map",
-      "github_url": "https://github.com/p95max/robot-fleet-monitor",
-      "demo_url": ""
+      "title": "JobApply",
+      "description": "JobApply — Django job application tracker with a Google-first workflow: Google OAuth only (no passwords), Gmail API integration that automatically syncs and classifies responses into rejections, interview invites, and auto-acks. Google Drive backups with rotation policy (latest + 2 files), background backup worker, Cloudflare Turnstile anti-bot gate, per-user data isolation, CSV/XLSX export and import, and interview planner.",
+      "tech_stack": "#Django #Python #GoogleAPI #Docker #Cloudflare-Turnstile #Full-stack-development",
+      "github_url": "https://github.com/p95max/JobApply",
+      "demo_url": "",
+      "sort_order": 3
     }
   },
   {
-  "model": "api.project",
-  "pk": 5,
-  "fields": {
-    "title": "Amazon Publisher",
-    "description": "Amazon Publisher — a compact FastAPI demo that reads product rows from Google Sheets, builds Amazon Listings-style JSON payloads (using local Product-Type schemas), validates them, and exposes preview + feeds endpoints. The service is designed as a reproducible, extendable demo for validating and preparing Listings payloads without touching the real SP-API.",
-    "tech_stack": "#FastAPI #Python3 #Pydantic #GoogleSheetsAPI #JSONSchemas #Docker #DataPipelines",
-    "github_url": "https://github.com/p95max/amazon_publisher",
-    "demo_url": ""
-  }
-},
-{
-  "model": "api.project",
-  "pk": 6,
-  "fields": {
-    "title": "Table Transformer",
-    "description": "Table Transformer — a data-processing service that reads tabular data (local CSV or Google Sheets), normalizes fields (coordinates, dates, values), and converts each row into one or more spatial point features with attributes and geometry. Outputs include JSON files, preview CSV, PostGIS inserts, and (optionally) batch submissions to ArcGIS Hosted Feature Layers via REST. A FastAPI layer can expose processed data as GeoJSON for map visualization.",
-    "tech_stack": "#FastAPI #Python #GeoJSON #PostGIS #GoogleSheetsAPI #ETL #Docker #ArcGISREST",
-    "github_url": "https://github.com/p95max/table_transformer",
-    "demo_url": ""
-  }
-},
-{
-  "model": "api.project",
-  "pk": 7,
-  "fields": {
-    "title": "JobApply",
-    "description": "JobApply - a Django-based job application tracker with a Google-first workflow. Google OAuth-only authentication (no passwords) Full CRUD for job applications with statuses, filters, notes, and search Interview scheduler (linked to applications) CSV/XLSX export/import Automatic Google Drive backups.",
-    "tech_stack": "#Django #Python #GoogleAPI #Docker #Cloudflare-Turnstile",
-    "github_url": "https://github.com/p95max/JobApply",
-    "demo_url": ""
-  }
-},
-{
-  "model": "api.project",
-  "pk": 8,
-  "fields": {
-    "title": "Azure IaC Project (Terraform + Ansible)",
-    "description": "Built an automated infrastructure and deployment pipeline on Azure: - Provisioned VM and networking via Terraform - Configured system using Ansible roles - Deployed OIDC-protected web app (Keycloak + oauth2-proxy + Nginx) - Implemented CI/CD with GitHub Actions Focus: IaC best practices, automation, reproducibility",
-    "tech_stack": "#Terraform #Ansible #Docker #Nginx #Keycloak(OIDC) #PostgreSQL #GitHub-Actions #Azure",
-    "github_url": "https://github.com/p95max/JobApply",
-    "demo_url": ""
-  }
-},
-{
-  "model": "api.project",
-  "pk": 9,
-  "fields": {
-    "title": "DealerFinder",
-    "description": "Built a Django-based web application for searching car dealers in Germany with cache-first architecture and optional AI enrichment: - Integrated Google Places API for dealer search and review-based data - Implemented Redis/PostgreSQL caching to reduce external API calls and costs - Added AI-generated dealer summaries with Celery background tasks, quotas, retry logic and fallback handling - Implemented filtering, ranking, distance calculation, favorites and search history - Added Google OAuth authentication, Cloudflare Turnstile protection, structured logging and health checks Focus: backend architecture, external API integration, async processing, cost control, production-oriented reliability",
-    "tech_stack": "#Python #Django #PostgreSQL #Redis #Celery #Docker #Nginx #Google-Places-API #Google-OAuth #OpenAI-API #Cloudflare-Turnstile #Bootstrap #Pytest",
-    "github_url": "https://github.com/p95max/dealerfinder",
-    "demo_url": ""
-  }
-},
-{
-  "model": "api.project",
-  "pk": 10,
-  "fields": {
-    "title": "InboxSignal",
-    "description": "Built a Django-based message monitoring and triage system for Telegram and Gmail communication streams with rules-first processing and optional AI enrichment: - Implemented multi-channel ingestion for Telegram Bot API and Gmail read-only OAuth integration - Normalized incoming Telegram messages and emails into a shared event-processing pipeline - Added rules-based classification, optional OpenAI analysis, priority scoring and structured event creation - Implemented instant Telegram alerts and scheduled digest notifications with Celery and Celery Beat - Added Redis-backed rate limiting, deduplication, alert cooldowns and anti-spam controls - Secured integrations with encrypted credential storage, Telegram webhook secrets, Google OAuth and Cloudflare Turnstile protection for public forms - Added internal ops visibility, structured logging, health checks and Pytest-based coverage for critical flows Focus: backend architecture, multi-channel integration, async processing, secure credential handling, event-driven triage and production-oriented reliability",
-    "tech_stack": "#Python #Django #PostgreSQL #Redis #Celery #Docker #Nginx #Telegram-Bot-API #Gmail-API #Google-OAuth #OpenAI-API #Cloudflare-Turnstile #Bootstrap #Pytest",
-    "github_url": "https://github.com/p95max/InboxSignal",
-    "demo_url": ""
-  }
-},
-
-
-
-    {
+    "model": "api.project",
+    "pk": 6,
+    "fields": {
+      "title": "Table Transformer",
+      "description": "table_transformer — FastAPI service that transforms tabular data (CSV / Google Sheets) into geospatial features. Normalizes coordinates, dates, and values, stores results in PostGIS, and uploads them in batches to an ArcGIS Hosted Feature Layer via REST.",
+      "tech_stack": "#FastAPI #Python #GeoJSON #PostGIS #GoogleSheetsAPI #ETL #Docker #ArcGISREST #Business-Process-Automation",
+      "github_url": "https://github.com/p95max/table_transformer",
+      "demo_url": "",
+      "sort_order": 4
+    }
+  },
+  {
+    "model": "api.project",
+    "pk": 5,
+    "fields": {
+      "title": "Amazon Publisher",
+      "description": "amazon_publisher — FastAPI service that reads product data from Google Sheets, builds and validates Amazon SP-API Listings payloads against local Product-Type JSON schemas, and exposes preview and feed endpoints.",
+      "tech_stack": "#FastAPI #Python3 #Pydantic #GoogleSheetsAPI #JSONSchemas #Docker #DataPipelines #Business-Process-Automation",
+      "github_url": "https://github.com/p95max/amazon_publisher",
+      "demo_url": "",
+      "sort_order": 5
+    }
+  },
+  {
     "model": "api.projectscreenshot",
     "pk": 1,
     "fields": {
-      "project": 1,
-      "image_url": "/screenshots/chattym2.png",
-      "caption": "ChattyM — screenshot 1"
+      "project": 11,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782980519/is_homepage_dzgues.png",
+      "caption": "Homepage",
+      "sort_order": 1
     }
   },
   {
     "model": "api.projectscreenshot",
     "pk": 2,
     "fields": {
-      "project": 1,
-      "image_url": "/screenshots/chattym1.png",
-      "caption": "ChattyM — screenshot 2"
+      "project": 11,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782980518/is_dashboard_azfgeu.png",
+      "caption": "Dashboard",
+      "sort_order": 2
     }
   },
   {
     "model": "api.projectscreenshot",
     "pk": 3,
     "fields": {
-      "project": 1,
-      "image_url": "/screenshots/chattym3.png",
-      "caption": "ChattyM — screenshot 3"
+      "project": 11,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782980515/dealer_userprofile_dropdown_lvvblz.png",
+      "caption": "User profile dropdown",
+      "sort_order": 3
     }
   },
-
-
   {
     "model": "api.projectscreenshot",
     "pk": 4,
     "fields": {
-      "project": 2,
-      "image_url": "/screenshots/what2cook1.png",
-      "caption": "What2Cook — screenshot 1"
+      "project": 11,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782980518/is_create_profile_oszu2z.png",
+      "caption": "Create profile",
+      "sort_order": 4
     }
   },
   {
     "model": "api.projectscreenshot",
     "pk": 5,
     "fields": {
-      "project": 2,
-      "image_url": "/screenshots/what2cook2.png",
-      "caption": "What2Cook — screenshot 2"
+      "project": 11,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782980519/is_login_ccrk6w.png",
+      "caption": "User login",
+      "sort_order": 5
     }
   },
   {
     "model": "api.projectscreenshot",
     "pk": 6,
     "fields": {
-      "project": 2,
-      "image_url": "/screenshots/what2cook3.png",
-      "caption": "What2Cook — screenshot 3"
+      "project": 11,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782980517/is_admin_reusee.png",
+      "caption": "Admin panel",
+      "sort_order": 6
     }
   },
-
-
-    {
+  {
     "model": "api.projectscreenshot",
     "pk": 7,
     "fields": {
-      "project": 3,
-      "image_url": "/screenshots/as_book1.png",
-      "caption": "AS Book — screenshot 1"
+      "project": 11,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782980517/is_celery_y3baag.png",
+      "caption": "Celery worker",
+      "sort_order": 7
     }
   },
-      {
+  {
     "model": "api.projectscreenshot",
     "pk": 8,
     "fields": {
-      "project": 3,
-      "image_url": "/screenshots/as_book2.png",
-      "caption": "AS Book — screenshot 2"
+      "project": 11,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782980520/is_polling_lquzl4.png",
+      "caption": "Polling",
+      "sort_order": 8
     }
   },
-      {
+  {
     "model": "api.projectscreenshot",
     "pk": 9,
     "fields": {
-      "project": 3,
-      "image_url": "/screenshots/as_book3.png",
-      "caption": "AS Book — screenshot 3"
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983421/dealer_1homepage_wo3naw.png",
+      "caption": "Homepage",
+      "sort_order": 9
     }
   },
-
-
-   {
+  {
     "model": "api.projectscreenshot",
     "pk": 10,
     "fields": {
-      "project": 4,
-      "image_url": "/screenshots/fleet1.png",
-      "caption": "Mini-Fleet Monitor — screenshot 1"
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983422/dealer_search_results_uqcw4m.png",
+      "caption": "Search results",
+      "sort_order": 10
     }
   },
-      {
+  {
     "model": "api.projectscreenshot",
     "pk": 11,
     "fields": {
-      "project": 4,
-      "image_url": "/screenshots/fleet2.png",
-      "caption": "Mini-Fleet Monitor — screenshot 2"
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983421/dealer_details_modal_jscmja.png",
+      "caption": "Details modal",
+      "sort_order": 11
     }
   },
-
   {
-  "model": "api.projectscreenshot",
-  "pk": 12,
-  "fields": {
-    "project": 5,
-    "image_url": "/screenshots/amazon_publisher_api.svg",
-    "caption": "Amazon Publisher — API placeholder"
-  }
-},
-{
-  "model": "api.projectscreenshot",
-  "pk": 13,
-  "fields": {
-    "project": 6,
-    "image_url": "/screenshots/table_transformer_api.svg",
-    "caption": "Table Transformer — API placeholder"
-  }
-},
-
-
-
-     {
+    "model": "api.projectscreenshot",
+    "pk": 12,
+    "fields": {
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983421/dealer_details_share_dropdown_rvtp5o.png",
+      "caption": "Share dropdown",
+      "sort_order": 12
+    }
+  },
+  {
+    "model": "api.projectscreenshot",
+    "pk": 13,
+    "fields": {
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983423/dealer_userprofile_mogcei.png",
+      "caption": "User profile",
+      "sort_order": 13
+    }
+  },
+  {
     "model": "api.projectscreenshot",
     "pk": 14,
     "fields": {
-      "project": 7,
-      "image_url": "/screenshots/job1.png",
-      "caption": "JobApply — screenshot 1"
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983423/dealer_userprofile_dropdown_dyz2ck.png",
+      "caption": "User profile dropdown",
+      "sort_order": 14
     }
   },
-     {
+  {
     "model": "api.projectscreenshot",
     "pk": 15,
     "fields": {
-      "project": 7,
-      "image_url": "/screenshots/job2.png",
-      "caption": "JobApply — screenshot 2"
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983422/dealer_userfavourites_wrquad.png",
+      "caption": "User favourites",
+      "sort_order": 15
     }
   },
-     {
+  {
     "model": "api.projectscreenshot",
     "pk": 16,
     "fields": {
-      "project": 7,
-      "image_url": "/screenshots/job3.png",
-      "caption": "JobApply — screenshot 3"
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983423/dealers_contacts_zj07mz.png",
+      "caption": "Contacts",
+      "sort_order": 16
     }
   },
   {
     "model": "api.projectscreenshot",
     "pk": 17,
     "fields": {
-      "project": 7,
-      "image_url": "/screenshots/job4.png",
-      "caption": "JobApply — screenshot 4"
+      "project": 10,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983424/dealers_google_signin_nrklfa.png",
+      "caption": "Google sign-in",
+      "sort_order": 17
     }
   },
-
-
-
-    {
+  {
     "model": "api.projectscreenshot",
     "pk": 18,
     "fields": {
-      "project": 8,
-      "image_url": "/screenshots/iac-demo-vm2.png",
-      "caption": "IaC DEMO - screenshot 1"
+      "project": 7,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983427/job1_kmi9hy.png",
+      "caption": "Dashboard",
+      "sort_order": 18
     }
   },
-      {
+  {
     "model": "api.projectscreenshot",
     "pk": 19,
     "fields": {
-      "project": 8,
-      "image_url": "/screenshots/iac-demo-vm1.png",
-      "caption": "IaC DEMO - screenshot 2"
+      "project": 7,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983427/job2_xleaf4.png",
+      "caption": "Applications list",
+      "sort_order": 19
     }
   },
-
-
-      {
+  {
     "model": "api.projectscreenshot",
     "pk": 20,
     "fields": {
-      "project": 9,
-      "image_url": "/screenshots/dealer_1homepage.png",
-      "caption": "DealerFinder - screenshot 1"
+      "project": 7,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983428/job4_lmsdft.png",
+      "caption": "Interview planner",
+      "sort_order": 20
     }
   },
-      {
+  {
     "model": "api.projectscreenshot",
     "pk": 21,
     "fields": {
-      "project": 8,
-      "image_url": "/screenshots/dealer_search_results.png",
-      "caption": "DealerFinder - screenshot 2"
+      "project": 6,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983428/table_transformer_api_red2uk.svg",
+      "caption": "API overview",
+      "sort_order": 21
     }
   },
-        {
+  {
     "model": "api.projectscreenshot",
     "pk": 22,
     "fields": {
-      "project": 8,
-      "image_url": "/screenshots/dealer_details_modal.png",
-      "caption": "DealerFinder - screenshot 2"
-    }
-  },
-
-
-
-
-  {
-    "model": "api.projectscreenshot",
-    "pk": 23,
-    "fields": {
-      "project": 10,
-      "image_url": "/screenshots/is_homepage.png",
-      "caption": "InboxSignal - screenshot 1"
-    }
-  },
-  {
-    "model": "api.projectscreenshot",
-    "pk": 24,
-    "fields": {
-      "project": 10,
-      "image_url": "/screenshots/is_login.png",
-      "caption": "InboxSignal - screenshot 2"
-    }
-  },
-    {
-    "model": "api.projectscreenshot",
-    "pk": 25,
-    "fields": {
-      "project": 10,
-      "image_url": "/screenshots/is_dashboard.png",
-      "caption": "InboxSignal - screenshot 3"
+      "project": 5,
+      "image_url": "https://res.cloudinary.com/dmqwnsbte/image/upload/v1782983420/amazon_publisher_api_l6hkqb.svg",
+      "caption": "API overview",
+      "sort_order": 22
     }
   }
 ]

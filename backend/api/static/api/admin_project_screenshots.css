@@ -8,3 +8,13 @@
   border: 1px solid #ddd;
   border-radius: 6px;
 }
+
+.model-projectscreenshot.change-list #result_list td.field-image_url input {
+  width: min(56vw, 720px);
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.model-projectscreenshot.change-list #result_list td.field-caption input {
+  width: 220px;
+}

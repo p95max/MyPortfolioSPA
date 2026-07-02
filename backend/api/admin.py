@@ -106,7 +106,8 @@ class ProjectScreenshotAdmin(SortableAdminMixin, admin.ModelAdmin):
     change_list_template = "adminsortable2/change_list.html"
 
     ordering = ("sort_order",)
-    list_display = ("project", "caption", "image_link", "preview")
+    list_display = ("project", "caption", "image_url", "preview")
+    list_editable = ("caption", "image_url")
     search_fields = ("project__title", "caption", "image_url")
     list_filter = ("project",)
     fields = ("project", "sort_order", "caption", "image_url", "preview")

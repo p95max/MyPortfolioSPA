@@ -53,7 +53,8 @@ class ProjectScreenshot(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Screenshot for {self.project.title} ({self.pk})"
+        label = self.caption.strip() if self.caption else "Screenshot"
+        return f"{label} ({self.pk})"
 
 
 

@@ -59,10 +59,16 @@ class ProjectScreenshotAdminForm(forms.ModelForm):
 class ProjectScreenshotInline(SortableTabularInline):
     model = ProjectScreenshot
     form = ProjectScreenshotAdminForm
+    classes = ("project-screenshots-inline",)
     extra = 0
     ordering = ("sort_order",)
     fields = ("sort_order", "caption", "image_url", "preview")
     readonly_fields = ("preview",)
+
+    class Media:
+        css = {
+            "all": ("api/admin_project_screenshots.css",),
+        }
 
     @admin.display(description="Preview")
     def preview(self, obj: ProjectScreenshot):
@@ -71,7 +77,7 @@ class ProjectScreenshotInline(SortableTabularInline):
             return "—"
         return format_html(
             '<a href="{0}" target="_blank" rel="noopener">'
-            '<img src="{0}" style="height:80px; width:auto; border-radius:6px; border:1px solid #ddd;" />'
+            '<img src="{0}" class="project-screenshot-preview-img" />'
             "</a>",
             public,
         )
@@ -105,6 +111,11 @@ class ProjectScreenshotAdmin(admin.ModelAdmin):
     fields = ("project", "sort_order", "caption", "image_url", "preview")
     readonly_fields = ("preview",)
 
+    class Media:
+        css = {
+            "all": ("api/admin_project_screenshots.css",),
+        }
+
     @admin.display(description="Image")
     def image_link(self, obj: ProjectScreenshot):
         public = build_public_image_url(obj.image_url)
@@ -119,7 +130,7 @@ class ProjectScreenshotAdmin(admin.ModelAdmin):
             return "—"
         return format_html(
             '<a href="{0}" target="_blank" rel="noopener">'
-            '<img src="{0}" style="height:80px; width:auto; border-radius:6px; border:1px solid #ddd;" />'
+            '<img src="{0}" class="project-screenshot-preview-img" />'
             "</a>",
             public,
         )

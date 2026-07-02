@@ -14,6 +14,25 @@ const API_URL =
 
 const ITEMS_PER_PAGE = 5;
 
+type ApiProjectScreenshot =
+  | string
+  | {
+      image_url?: unknown;
+    };
+
+type ApiProject = {
+  id: unknown;
+  title: string;
+  description: string;
+  tech_stack?: unknown;
+  techStack?: unknown;
+  github_url?: string;
+  githubUrl?: string;
+  demo_url?: string;
+  demoUrl?: string;
+  screenshots?: unknown;
+};
+
 function normalizeTechStack(value: unknown): string[] {
   if (typeof value === "string") {
     return value
@@ -46,7 +65,29 @@ function getTagAccentClass(tag: string): string {
   return ACCENT_TAGS.includes(normalizedTag) ? "pp-tag-btn--accent" : "";
 }
 
-function toCamelCase(project: any): Project {
+function isApiProject(value: unknown): value is ApiProject {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  const candidate = value as Partial<ApiProject>;
+
+  return (
+    "id" in candidate &&
+    typeof candidate.title === "string" &&
+    typeof candidate.description === "string"
+  );
+}
+
+function normalizeScreenshot(value: ApiProjectScreenshot): string {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  return typeof value.image_url === "string" ? value.image_url : "";
+}
+
+function toCamelCase(project: ApiProject): Project {
   return {
     id: String(project.id),
     title: project.title,
@@ -56,8 +97,8 @@ function toCamelCase(project: any): Project {
     demoUrl: project.demo_url ?? project.demoUrl,
     screenshots: Array.isArray(project.screenshots)
       ? project.screenshots
-          .map((s: any) => (typeof s === "string" ? s : s.image_url || ""))
-          .filter((u: string) => !!u)
+          .map((s: ApiProjectScreenshot) => normalizeScreenshot(s))
+          .filter((u) => !!u)
       : [],
   };
 }
@@ -85,9 +126,21 @@ function Projects() {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();
       })
-      .then((data: any) => {
-        const arr = Array.isArray(data) ? data : data.results || data.projects || [];
-        setProjects(arr.map(toCamelCase));
+      .then((data: unknown) => {
+        const arr =
+          typeof data === "object" && data !== null
+            ? Array.isArray(data)
+              ? data
+              : "results" in data && Array.isArray(data.results)
+                ? data.results
+                : "projects" in data && Array.isArray(data.projects)
+                  ? data.projects
+                  : []
+            : [];
+
+        const apiProjects = arr.filter(isApiProject);
+
+        setProjects(apiProjects.map(toCamelCase));
         setLoading(false);
       })
       .catch((err) => {

@@ -1,4 +1,4 @@
-import { getStoredCookieConsent } from "./components/CookieConsent";
+import { getStoredCookieConsent } from "./cookieConsent";
 import {
   ANALYTICS_SESSION_STORAGE_KEY,
   ANALYTICS_SOURCE_STORAGE_KEY,

@@ -273,7 +273,7 @@ export default function Contact() {
 
   const clientFieldErrors = useMemo(() => {
     return validateContactForm(form);
-  }, [form.name, form.email, form.message]);
+  }, [form]);
 
   const messageLength = form.message.length;
 

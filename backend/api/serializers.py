@@ -13,9 +13,10 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_screenshots(self, obj):
         """
-        Return a list of normalized relative URLs for screenshots.
-        We expect frontend static files to be served from /screenshots/<name>.
-        Handles legacy fixture values like "img/screenshots/..." and raw filenames.
+        Return normalized screenshot URLs.
+        Absolute Cloudinary/http(s) URLs stay unchanged, while legacy local
+        values such as "img/screenshots/..." or raw filenames are converted to
+        /screenshots/<name>.
         """
         urls = []
         qs = getattr(obj, "screenshots", None)

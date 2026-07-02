@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, FocusEvent, FormEvent } from "react";
 import "./Contact.css";
 import { trackContactSubmit, trackOutboundLinkClick } from "../analytics";
+import { getApiUrl } from "../apiBaseUrl";
 
 type Form = {
   name: string;
@@ -209,11 +210,7 @@ export default function Contact() {
   }, []);
 
   const apiUrl = useMemo(() => {
-    const baseUrl = import.meta.env.VITE_API_URL;
-
-    return baseUrl
-      ? `${baseUrl}/api/contact/`
-      : "http://localhost:8000/api/contact/";
+    return getApiUrl("/api/contact/");
   }, []);
 
   const siteKey = useMemo(() => {

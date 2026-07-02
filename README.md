@@ -664,7 +664,7 @@ Backend service:
   - `TURNSTILE_SECRET`
   - `FRONTEND_BASE_URL`
   - `REDIS_URL`, recommended for production throttling
-  - `DRF_NUM_PROXIES=1`
+  - `DRF_NUM_PROXIES=0`
   - `EMAIL_HOST_USER`
   - `EMAIL_HOST_PASSWORD`
   - `NOTIFY_EMAILS`
@@ -679,8 +679,8 @@ Frontend static service:
 - root directory: `frontend`
 - build command: `npm ci && npm run build`
 - publish path: `dist`
-- required frontend build-time environment variables:
-  - `VITE_API_URL`
+- frontend build-time environment variables:
+  - `VITE_API_URL`, optional when using same-origin `/api/*` rewrites
   - `VITE_TURNSTILE_SITEKEY`
   - `VITE_SNOW`, optional
 

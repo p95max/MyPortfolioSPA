@@ -61,7 +61,7 @@ backend/.env.*
 
 frontend/.env
 frontend/.env.*
-!frontend/env.example
+!frontend/.env.example
 !frontend/.env.docker.dev.example
 
 # Local runtime

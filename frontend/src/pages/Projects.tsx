@@ -4,13 +4,9 @@ import { ProjectCard } from "../components/ProjectCard";
 import type { Project } from "../types";
 import { testProjects } from "../data/test_data";
 import { getTechBadge } from "../data/techBadges";
+import { getApiUrl } from "../apiBaseUrl";
 
 const USE_TEST_DATA = false;
-
-const API_URL =
-  import.meta.env.VITE_API_URL === undefined
-    ? "http://localhost:8000"
-    : import.meta.env.VITE_API_URL;
 
 const ITEMS_PER_PAGE = 5;
 
@@ -121,7 +117,7 @@ function Projects() {
       return;
     }
 
-    fetch(`${API_URL}/api/projects/`)
+    fetch(getApiUrl("/api/projects/"))
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();

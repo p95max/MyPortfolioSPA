@@ -4,6 +4,7 @@ import {
   ANALYTICS_SOURCE_STORAGE_KEY,
   ANALYTICS_STORAGE_KEY,
 } from "./privacy";
+import { getApiUrl } from "./apiBaseUrl";
 
 type AnalyticsEventType =
   | "page_view"
@@ -40,11 +41,6 @@ type AnalyticsPayload = {
 
 function analyticsAllowed(): boolean {
   return getStoredCookieConsent()?.analytics === true;
-}
-
-function getApiBaseUrl(): string {
-  const baseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
-  return baseUrl.replace(/\/$/, "");
 }
 
 function createAnonymousId(): string {
@@ -330,7 +326,7 @@ export function trackAnalyticsEvent(
     metadata,
   };
 
-  fetch(`${getApiBaseUrl()}/api/analytics/`, {
+  fetch(getApiUrl("/api/analytics/"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

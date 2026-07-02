@@ -67,7 +67,7 @@ VITE_SNOW=auto
 
 | Variable | Required | Description |
 |---|---:|---|
-| `VITE_API_URL` | yes | Backend base URL. Example: `http://localhost:8000`. |
+| `VITE_API_URL` | optional | Backend base URL. If omitted, production uses same-origin `/api/*`; dev falls back to `http://localhost:8000`. |
 | `VITE_TURNSTILE_SITEKEY` | yes for contact form | Cloudflare Turnstile site key used by the browser widget. |
 | `VITE_SNOW` | optional | `on`, `off`, or `auto`. Default: `auto`. In `auto`, snow is shown from November to February. |
 
@@ -82,13 +82,16 @@ Important: Vite only exposes environment variables prefixed with `VITE_` to the 
 The projects page fetches:
 
 ```text
-<VITE_API_URL>/api/projects/
+/api/projects/
 ```
+
+If `VITE_API_URL` is set, it is used as the API base URL before `/api/projects/`.
 
 Project screenshots are consumed from the `screenshots` array returned by the
 API. Current production data uses absolute Cloudinary delivery URLs.
 
-If `VITE_API_URL` is not defined, the code falls back to:
+If `VITE_API_URL` is not defined, production uses same-origin `/api/*` routes.
+In local dev, the code falls back to:
 
 ```text
 http://localhost:8000
@@ -105,8 +108,10 @@ Project response fields are normalized from backend snake_case to frontend camel
 The contact page submits to:
 
 ```text
-<VITE_API_URL>/api/contact/
+/api/contact/
 ```
+
+If `VITE_API_URL` is set, it is used as the API base URL before `/api/contact/`.
 
 Request payload:
 
@@ -129,8 +134,10 @@ If `VITE_TURNSTILE_SITEKEY` is missing, the form shows a configuration error and
 The frontend sends optional self-hosted analytics events to:
 
 ```text
-<VITE_API_URL>/api/analytics/
+/api/analytics/
 ```
+
+If `VITE_API_URL` is set, it is used as the API base URL before `/api/analytics/`.
 
 Analytics events are only sent after analytics consent is saved in the cookie consent banner. If analytics consent is not available, no analytics request is sent and no analytics identifiers are created.
 

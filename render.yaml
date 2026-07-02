@@ -44,7 +44,7 @@ services:
         sync: false
 
       - key: DRF_NUM_PROXIES
-        value: "1"
+        value: "0"
 
       - key: TRUST_ANALYTICS_GEO_HEADERS
         sync: false

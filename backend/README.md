@@ -157,7 +157,7 @@ If the username is missing, no superuser is created automatically.
 |---|---:|---|
 | `TURNSTILE_SECRET` | yes | Cloudflare Turnstile secret key for server-side verification. |
 | `REDIS_URL` | recommended in production | Redis cache URL for DRF throttling. Falls back to local memory cache if empty. |
-| `DRF_NUM_PROXIES` | recommended in production | Number of trusted proxy hops used by DRF throttling. Defaults to `1` when `DJANGO_DEBUG=False`. |
+| `DRF_NUM_PROXIES` | recommended in production | Number of trusted proxy hops used by DRF throttling. Defaults to `0` so spoofed `X-Forwarded-For` is ignored. |
 | `TRUST_ANALYTICS_GEO_HEADERS` | optional | Set to `True` only when requests reach Django through trusted CDN/proxy headers. Defaults to `False`. |
 
 ### Frontend integration

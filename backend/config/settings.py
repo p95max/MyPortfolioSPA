@@ -281,7 +281,7 @@ if not DEBUG:
 
 DRF_NUM_PROXIES = int_env(
     "DRF_NUM_PROXIES",
-    int_env("NUM_PROXIES", 0 if DEBUG else 1),
+    int_env("NUM_PROXIES", 0),
 )
 
 REST_FRAMEWORK = {

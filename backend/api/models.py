@@ -36,17 +36,16 @@ class ProjectScreenshot(models.Model):
         default=0,
         db_index=True,
         verbose_name="Order",
-        help_text="Drag & drop rows in the admin to choose screenshot order.",
+        help_text="Drag & drop rows in the admin list to choose screenshot order.",
     )
 
     class Meta:
-        ordering = ("project", "sort_order", "id")
+        ordering = ("sort_order", "id")
 
     def save(self, *args, **kwargs):
         if not self.pk and (self.sort_order is None or self.sort_order == 0):
             max_order = (
-                ProjectScreenshot.objects.filter(project=self.project)
-                .aggregate(m=Max("sort_order"))["m"]
+                ProjectScreenshot.objects.aggregate(m=Max("sort_order"))["m"]
                 or 0
             )
             self.sort_order = max_order + 1

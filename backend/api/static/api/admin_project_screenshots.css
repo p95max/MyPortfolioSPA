@@ -1,48 +1,4 @@
-.project-screenshots-inline .tabular {
-  overflow-x: auto;
-}
-
-.project-screenshots-inline table {
-  min-width: 980px;
-  table-layout: fixed;
-}
-
-.project-screenshots-inline th.original,
-.project-screenshots-inline td.original {
-  width: 170px;
-  max-width: 170px;
-  white-space: normal;
-}
-
-.project-screenshots-inline td.field-caption {
-  width: 180px;
-}
-
-.project-screenshots-inline td.field-caption input {
-  width: 100%;
-}
-
-.project-screenshots-inline td.field-image_url {
-  width: 360px;
-}
-
-.project-screenshots-inline td.field-image_url input {
-  width: 100%;
-  font-family: monospace;
-  font-size: 12px;
-}
-
-.project-screenshots-inline td.field-preview {
-  width: 120px;
-  text-align: center;
-}
-
-.project-screenshots-inline td.delete {
-  width: 80px;
-  text-align: center;
-}
-
-.project-screenshots-inline .project-screenshot-preview-img {
+.project-screenshot-preview-img {
   display: block;
   max-width: 110px;
   max-height: 80px;

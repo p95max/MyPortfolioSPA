@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.core.validators import URLValidator
 from django.utils.html import format_html
-from adminsortable2.admin import SortableAdminMixin
+from adminsortable2.admin import SortableAdminMixin, SortableTabularInline
 
 from .utils.image_urls import build_public_image_url
 from .utils.admin_formatting import admin_badge
@@ -56,11 +56,12 @@ class ProjectScreenshotAdminForm(forms.ModelForm):
 
 
 
-class ProjectScreenshotInline(admin.TabularInline):
+class ProjectScreenshotInline(SortableTabularInline):
     model = ProjectScreenshot
     form = ProjectScreenshotAdminForm
     extra = 0
-    fields = ("caption", "image_url", "preview")
+    ordering = ("sort_order",)
+    fields = ("sort_order", "caption", "image_url", "preview")
     readonly_fields = ("preview",)
 
     @admin.display(description="Preview")
@@ -97,10 +98,11 @@ class ProjectAdmin(SortableAdminMixin, admin.ModelAdmin):
 @admin.register(ProjectScreenshot)
 class ProjectScreenshotAdmin(admin.ModelAdmin):
     form = ProjectScreenshotAdminForm
-    list_display = ("project", "caption", "image_link", "preview")
+    ordering = ("project", "sort_order", "id")
+    list_display = ("project", "sort_order", "caption", "image_link", "preview")
     search_fields = ("project__title", "caption", "image_url")
     list_filter = ("project",)
-    fields = ("project", "caption", "image_url", "preview")
+    fields = ("project", "sort_order", "caption", "image_url", "preview")
     readonly_fields = ("preview",)
 
     @admin.display(description="Image")

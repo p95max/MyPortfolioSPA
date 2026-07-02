@@ -32,6 +32,25 @@ class ProjectScreenshot(models.Model):
     project = models.ForeignKey(Project, related_name='screenshots', on_delete=models.CASCADE)
     image_url = models.CharField(max_length=500, blank=True)
     caption = models.CharField(max_length=200, blank=True)
+    sort_order = models.PositiveIntegerField(
+        default=0,
+        db_index=True,
+        verbose_name="Order",
+        help_text="Drag & drop rows in the admin to choose screenshot order.",
+    )
+
+    class Meta:
+        ordering = ("project", "sort_order", "id")
+
+    def save(self, *args, **kwargs):
+        if not self.pk and (self.sort_order is None or self.sort_order == 0):
+            max_order = (
+                ProjectScreenshot.objects.filter(project=self.project)
+                .aggregate(m=Max("sort_order"))["m"]
+                or 0
+            )
+            self.sort_order = max_order + 1
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Screenshot for {self.project.title} ({self.pk})"

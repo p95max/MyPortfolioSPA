@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:15
+    env_file:
+      - ./backend/.env.docker.dev
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    ports:
+      - "5440:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - mynetwork_dev
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - mynetwork_dev
+
+  web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: sh /app/entrypoint.dev.sh
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env.docker.dev
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - mynetwork_dev
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "3000:5173"
+    env_file:
+      - ./frontend/.env.docker.dev
+    depends_on:
+      - web
+    networks:
+      - mynetwork_dev
+
+volumes:
+  pgdata_dev:
+  frontend_node_modules:
+
+networks:
+  mynetwork_dev:

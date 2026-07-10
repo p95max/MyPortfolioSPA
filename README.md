@@ -1,4 +1,9 @@
-﻿# Portfolio SPA Project
+# Portfolio SPA Project
+
+[![CI](https://github.com/p95max/MyPortfolioSPA/actions/workflows/ci.yml/badge.svg?branch=prod)](https://github.com/p95max/MyPortfolioSPA/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/p95max/MyPortfolioSPA/actions/workflows/codeql-analysis.yml/badge.svg?branch=prod)](https://github.com/p95max/MyPortfolioSPA/actions/workflows/codeql-analysis.yml)
+[![Coverage](https://codecov.io/gh/p95max/MyPortfolioSPA/branch/prod/graph/badge.svg)](https://codecov.io/gh/p95max/MyPortfolioSPA)
+
 
 Single Page Application portfolio built with **React (Vite)** on the frontend and **Django REST Framework** on the backend.
 

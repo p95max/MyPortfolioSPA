@@ -6,11 +6,13 @@ from django.contrib.auth.models import Permission
 from django.core.cache import cache
 from django.test import Client, override_settings
 from django.urls import reverse
+from rest_framework.settings import api_settings
 from rest_framework.test import APIClient
 
 from api.analytics_notifications import notify_new_analytics_visitor
 from api.checks import production_security_checks
 from api.models import AnalyticsEvent, ContactMessage
+from api.throttles import AnalyticsThrottle, ContactEmailThrottle
 
 
 pytestmark = pytest.mark.django_db
@@ -33,25 +35,14 @@ def contact_payload(email="john@example.com", message="A valid contact message f
     }
 
 
-@override_settings(
-    REST_FRAMEWORK={
-        "NUM_PROXIES": 0,
-        "DEFAULT_THROTTLE_RATES": {
-            "contact_email": "1/hour",
-            "contact_ip": "100/hour",
-            "contact_subnet": "100/hour",
-            "contact_global": "100/hour",
-            "contact_fingerprint": "100/hour",
-            "analytics": "100/minute",
-            "analytics_global": "1000/hour",
-        },
-    },
-    NOTIFY_EMAILS=[],
-)
+@override_settings(NOTIFY_EMAILS=[])
 def test_contact_email_throttle_is_enforced_by_api():
     client = APIClient()
 
-    with patch("api.views._check_turnstile", return_value=True):
+    with (
+        patch.object(ContactEmailThrottle, "rate", "1/hour", create=True),
+        patch("api.views._check_turnstile", return_value=True),
+    ):
         first = client.post(
             "/api/contact/",
             contact_payload(email=" User@Example.com ", message="First valid message body."),
@@ -69,21 +60,7 @@ def test_contact_email_throttle_is_enforced_by_api():
     assert second.status_code == 429
 
 
-@override_settings(
-    REST_FRAMEWORK={
-        "NUM_PROXIES": 0,
-        "DEFAULT_THROTTLE_RATES": {
-            "contact_email": "100/hour",
-            "contact_ip": "100/hour",
-            "contact_subnet": "100/hour",
-            "contact_global": "100/hour",
-            "contact_fingerprint": "100/hour",
-            "analytics": "1/minute",
-            "analytics_global": "1000/hour",
-        },
-    },
-    ANALYTICS_NEW_VISITOR_EMAIL_ENABLED=False,
-)
+@override_settings(ANALYTICS_NEW_VISITOR_EMAIL_ENABLED=False)
 def test_spoofed_x_forwarded_for_does_not_bypass_analytics_throttle():
     client = APIClient()
     payload = {
@@ -92,20 +69,24 @@ def test_spoofed_x_forwarded_for_does_not_bypass_analytics_throttle():
         "anonymous_id": "visitor-throttle-test",
     }
 
-    first = client.post(
-        "/api/analytics/",
-        payload,
-        format="json",
-        REMOTE_ADDR="198.51.100.20",
-        HTTP_X_FORWARDED_FOR="1.1.1.1",
-    )
-    second = client.post(
-        "/api/analytics/",
-        payload,
-        format="json",
-        REMOTE_ADDR="198.51.100.20",
-        HTTP_X_FORWARDED_FOR="8.8.8.8",
-    )
+    with (
+        patch.object(AnalyticsThrottle, "rate", "1/minute", create=True),
+        patch.object(api_settings, "NUM_PROXIES", 0),
+    ):
+        first = client.post(
+            "/api/analytics/",
+            payload,
+            format="json",
+            REMOTE_ADDR="198.51.100.20",
+            HTTP_X_FORWARDED_FOR="1.1.1.1",
+        )
+        second = client.post(
+            "/api/analytics/",
+            payload,
+            format="json",
+            REMOTE_ADDR="198.51.100.20",
+            HTTP_X_FORWARDED_FOR="8.8.8.8",
+        )
 
     assert first.status_code == 201
     assert second.status_code == 429

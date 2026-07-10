@@ -28,7 +28,6 @@ from .utils.admin_links import _build_admin_change_url
 logger = logging.getLogger(__name__)
 
 
-
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Project.objects.all().order_by("sort_order", "pk")
     serializer_class = ProjectSerializer
@@ -45,7 +44,6 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
                 {"error": "Something went wrong while fetching projects"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-
 
 
 @api_view(['POST'])
@@ -98,7 +96,7 @@ def contact_message(request):
             created_dt = getattr(message_obj, "created_at", None) or timezone.now()
             created_local = timezone.localtime(created_dt, tz)
             created_human = created_local.strftime("%d %b %Y, %H:%M %Z")
-            
+
             admin_url = _build_admin_change_url(message_obj)
 
             text_body = (
@@ -129,7 +127,7 @@ def contact_message(request):
                 body=text_body,
                 from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
                 to=recipients,
-                reply_to=[message_obj.email] if message_obj.email else None,  # raw, не escaped — email headers не HTML
+                reply_to=[message_obj.email] if message_obj.email else None,
             )
             email_msg.attach_alternative(html_body, "text/html")
             email_msg.send(fail_silently=False)
@@ -169,11 +167,10 @@ def _check_turnstile(token: str | None, ip: str | None) -> bool:
         )
         response.raise_for_status()
         return bool(response.json().get("success"))
-    except requests.RequestException:
+    except (requests.RequestException, ValueError):
         logger.exception("Turnstile verification failed")
         return False
-    
-    
+
 
 @api_view(["POST"])
 @throttle_classes([AnalyticsThrottle, AnalyticsGlobalThrottle])

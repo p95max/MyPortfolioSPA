@@ -90,19 +90,19 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 6 — REST API
 
-- [ ] Add `CredentialSerializer` to `backend/api/serializers.py`.
-- [ ] Expose only fields required by the frontend.
-- [ ] Add `CredentialViewSet` as a read-only viewset.
-- [ ] Return only published credentials.
-- [ ] Order the queryset by `sort_order` and primary key.
-- [ ] Support `?featured=true` filtering.
-- [ ] Support `?type=certificate` filtering.
-- [ ] Support `?type=badge` filtering.
-- [ ] Reject or ignore unsupported type values consistently.
-- [ ] Register `/api/credentials/` in `backend/api/urls.py`.
-- [ ] Return an empty list when no credentials are published.
-- [ ] Keep the response shape consistent with the existing projects API.
-- [ ] Verify that unpublished credentials are never returned.
+- [x] Add `CredentialSerializer` to `backend/api/serializers.py`.
+- [x] Expose only fields required by the frontend.
+- [x] Add `CredentialViewSet` as a read-only viewset.
+- [x] Return only published credentials.
+- [x] Order the queryset by `sort_order` and primary key.
+- [x] Support `?featured=true` filtering.
+- [x] Support `?type=certificate` filtering.
+- [x] Support `?type=badge` filtering.
+- [x] Reject or ignore unsupported type values consistently.
+- [x] Register `/api/credentials/` in `backend/api/urls.py`.
+- [x] Return an empty list when no credentials are published.
+- [x] Keep the response shape consistent with the existing projects API.
+- [x] Verify that unpublished credentials are never returned.
 
 ## Step 7 — Frontend Types and API Client
 

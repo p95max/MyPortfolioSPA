@@ -24,13 +24,17 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
   min-width: 320px;
   min-height: 100vh;
-  padding-top: 40px;
-  flex-direction: column;
+  overflow-x: hidden;
+}
+
+#root,
+.app-wrapper,
+.main-content {
+  width: 100%;
+  min-width: 0;
 }
 
 h1 {
@@ -71,7 +75,7 @@ button:focus-visible {
 }
 
 .main-content {
-  padding-top: 60px;
+  padding-top: var(--nav-h, 64px);
 }
 
 

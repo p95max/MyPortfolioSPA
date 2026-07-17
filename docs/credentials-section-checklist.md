@@ -231,26 +231,26 @@ Track the source material and publication metadata in [Credential Content Invent
 - [ ] Generate thumbnails with a reasonable display resolution.
 - [ ] Do not hotlink an asset when its URL is temporary or unreliable.
 - [ ] Store or serve stable public asset URLs.
-- [ ] Add explicit `width` and `height` attributes.
-- [ ] Use `loading="lazy"` for below-the-fold images.
-- [ ] Use `decoding="async"` for preview images.
+- [x] Add explicit `width` and `height` attributes.
+- [x] Use `loading="lazy"` for below-the-fold images.
+- [x] Use `decoding="async"` for preview images.
 - [ ] Avoid loading full-size PDFs before user interaction.
 - [ ] Avoid downloading every full-resolution credential on the home page.
-- [ ] Add a stable aspect ratio to prevent layout shifts.
-- [ ] Provide a fallback state for failed images.
+- [x] Add a stable aspect ratio to prevent layout shifts.
+- [x] Provide a fallback state for failed images.
 - [ ] Verify image URLs in local, preview, and production environments.
 
 ## Step 16 — Accessibility
 
-- [ ] Use semantic headings in a logical order.
-- [ ] Render the credential collection as a list where appropriate.
-- [ ] Ensure every interactive element is reachable by keyboard.
-- [ ] Provide visible focus styles.
-- [ ] Give icon-only controls accessible names.
-- [ ] Ensure text and controls meet contrast requirements.
-- [ ] Do not rely on colour alone to identify certificates and badges.
-- [ ] Use meaningful alternative text for credential images.
-- [ ] Avoid duplicate links with unclear accessible names.
+- [x] Use semantic headings in a logical order.
+- [x] Render the credential collection as a list where appropriate.
+- [x] Ensure every interactive element is reachable by keyboard.
+- [x] Provide visible focus styles.
+- [x] Give icon-only controls accessible names.
+- [x] Ensure text and controls meet contrast requirements.
+- [x] Do not rely on colour alone to identify certificates and badges.
+- [x] Use meaningful alternative text for credential images.
+- [x] Avoid duplicate links with unclear accessible names.
 - [ ] Verify the modal with keyboard-only navigation.
 - [ ] Verify the mobile scroller with keyboard and touch input.
 - [ ] Test at 200% browser zoom.

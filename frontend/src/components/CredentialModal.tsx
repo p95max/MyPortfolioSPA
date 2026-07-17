@@ -48,6 +48,10 @@ export function CredentialModal({ credential, onClose }: CredentialModalProps) {
     return null;
   }
 
+  const imageDimensions = credential.credentialType === "badge"
+    ? { width: 104, height: 104 }
+    : { width: 1200, height: 750 };
+
   return createPortal(
     <div className="credential-modal" onClick={onClose}>
       <section
@@ -87,6 +91,9 @@ export function CredentialModal({ credential, onClose }: CredentialModalProps) {
               className="credential-modal__image"
               src={credential.imageUrl}
               alt={`${credential.title} issued by ${credential.issuer}`}
+              width={imageDimensions.width}
+              height={imageDimensions.height}
+              decoding="async"
               onError={() => setImageFailed(true)}
             />
           )}
@@ -99,6 +106,7 @@ export function CredentialModal({ credential, onClose }: CredentialModalProps) {
             href={credential.imageUrl}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Open original credential file: ${credential.title}`}
           >
             Open original
           </a>

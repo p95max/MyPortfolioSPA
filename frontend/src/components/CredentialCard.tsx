@@ -48,6 +48,9 @@ export function CredentialCard({
     ? "View certificate"
     : "View badge";
   const canPreview = credential.credentialType === "certificate" || !credential.credentialUrl;
+  const imageDimensions = credential.credentialType === "badge"
+    ? { width: 104, height: 104 }
+    : { width: 1200, height: 750 };
 
   useEffect(() => {
     setImageSrc(credential.imageUrl);
@@ -60,6 +63,8 @@ export function CredentialCard({
           className="credential-card__image"
           src={imageSrc}
           alt={`${credential.title} issued by ${credential.issuer}`}
+          width={imageDimensions.width}
+          height={imageDimensions.height}
           loading="lazy"
           decoding="async"
           onError={() => setImageSrc(FALLBACK_IMAGE)}
@@ -90,6 +95,7 @@ export function CredentialCard({
             <button
               className="credential-card__action"
               type="button"
+              aria-label={`${previewLabel}: ${credential.title}`}
               onClick={() => {
                 onPreview?.(credential);
                 setIsModalOpen(true);
@@ -105,6 +111,7 @@ export function CredentialCard({
               href={credential.credentialUrl}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`Verify credential: ${credential.title}`}
             >
               Verify credential
             </a>

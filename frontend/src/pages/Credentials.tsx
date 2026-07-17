@@ -7,16 +7,16 @@ export function Credentials() {
   const { credentials, error, isEmpty, loading } = useCredentials();
 
   useEffect(() => {
-    document.title = "M.Petrykin — Credentials";
+    document.title = "M.Petrykin — Certificates";
   }, []);
 
   return (
     <main className="page-credentials">
       <div className="credentials-container">
         <p className="credentials-eyebrow">Professional Development</p>
-        <h1 className="credentials-title">Credentials</h1>
+        <h1 className="credentials-title">Certificates</h1>
         <p className="credentials-description">
-          Certifications and course badges that reflect my continuing work in
+          Professional certificates that reflect my continuing work in
           backend development, infrastructure, and secure systems.
         </p>
 
@@ -30,8 +30,8 @@ export function Credentials() {
 
         {!loading && !error && isEmpty && (
           <div className="credentials-empty">
-            <strong>Credentials will be added soon.</strong>
-            <span>Check back for verified professional development records.</span>
+            <strong>Certificates will be added soon.</strong>
+            <span>Check back for verified professional certificates.</span>
           </div>
         )}
 

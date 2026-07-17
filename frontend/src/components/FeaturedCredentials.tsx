@@ -16,13 +16,13 @@ export function FeaturedCredentials() {
     <section className="featured-credentials" aria-labelledby="featured-credentials-title">
       <div className="featured-credentials__header">
         <div>
-          <p className="featured-credentials__eyebrow">Professional development</p>
+          <p className="featured-credentials__eyebrow">Professional certificates</p>
           <h2 id="featured-credentials-title" className="featured-credentials__title">
-            Featured credentials
+            Featured certificates
           </h2>
         </div>
         <Link className="featured-credentials__link" to="/credentials">
-          View all credentials
+          View all certificates
         </Link>
       </div>
 

@@ -11,6 +11,7 @@ export const Navbar = () => {
   const links = [
     { to: "/", label: "about" },
     { to: "/projects", label: "projects" },
+    { to: "/credentials", label: "credentials" },
     { to: "/contact", label: "contact" },
   ];
 

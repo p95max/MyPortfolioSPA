@@ -1,6 +1,7 @@
 import logging
 from django.conf import settings
 from rest_framework import viewsets, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 import requests
 from django.utils import timezone
@@ -8,8 +9,13 @@ from zoneinfo import ZoneInfo
 from django.template.loader import render_to_string
 
 from .analytics_notifications import notify_new_analytics_visitor
-from .models import Project, AnalyticsEvent
-from .serializers import ProjectSerializer, ContactMessageSerializer, AnalyticsEventSerializer
+from .models import AnalyticsEvent, Credential, CredentialType, Project
+from .serializers import (
+    AnalyticsEventSerializer,
+    ContactMessageSerializer,
+    CredentialSerializer,
+    ProjectSerializer,
+)
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import escape
 
@@ -44,6 +50,34 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
                 {"error": "Something went wrong while fetching projects"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+
+class CredentialViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CredentialSerializer
+    queryset = Credential.objects.filter(is_published=True).order_by("sort_order", "pk")
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        if self.request.query_params.get("featured", "").lower() == "true":
+            queryset = queryset.filter(is_featured=True)
+
+        credential_type = self.request.query_params.get("type", "").strip().lower()
+
+        if not credential_type:
+            return queryset
+
+        supported_types = {
+            CredentialType.CERTIFICATE,
+            CredentialType.BADGE,
+        }
+
+        if credential_type not in supported_types:
+            raise ValidationError(
+                {"type": "Unsupported type. Use 'certificate' or 'badge'."}
+            )
+
+        return queryset.filter(credential_type=credential_type)
 
 
 @api_view(['POST'])

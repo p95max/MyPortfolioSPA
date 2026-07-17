@@ -90,138 +90,138 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 6 — REST API
 
-- [ ] Add `CredentialSerializer` to `backend/api/serializers.py`.
-- [ ] Expose only fields required by the frontend.
-- [ ] Add `CredentialViewSet` as a read-only viewset.
-- [ ] Return only published credentials.
-- [ ] Order the queryset by `sort_order` and primary key.
-- [ ] Support `?featured=true` filtering.
-- [ ] Support `?type=certificate` filtering.
-- [ ] Support `?type=badge` filtering.
-- [ ] Reject or ignore unsupported type values consistently.
-- [ ] Register `/api/credentials/` in `backend/api/urls.py`.
-- [ ] Return an empty list when no credentials are published.
-- [ ] Keep the response shape consistent with the existing projects API.
-- [ ] Verify that unpublished credentials are never returned.
+- [x] Add `CredentialSerializer` to `backend/api/serializers.py`.
+- [x] Expose only fields required by the frontend.
+- [x] Add `CredentialViewSet` as a read-only viewset.
+- [x] Return only published credentials.
+- [x] Order the queryset by `sort_order` and primary key.
+- [x] Support `?featured=true` filtering.
+- [x] Support `?type=certificate` filtering.
+- [x] Support `?type=badge` filtering.
+- [x] Reject or ignore unsupported type values consistently.
+- [x] Register `/api/credentials/` in `backend/api/urls.py`.
+- [x] Return an empty list when no credentials are published.
+- [x] Keep the response shape consistent with the existing projects API.
+- [x] Verify that unpublished credentials are never returned.
 
 ## Step 7 — Frontend Types and API Client
 
-- [ ] Add a `CredentialType` TypeScript union: `"certificate" | "badge"`.
-- [ ] Add a reusable `Credential` TypeScript type.
-- [ ] Define a narrow API response type.
-- [ ] Validate or normalize the API response before rendering it.
-- [ ] Add a reusable `getCredentials()` API function.
-- [ ] Support fetching all credentials.
-- [ ] Support filtering by credential type.
-- [ ] Support fetching featured credentials.
-- [ ] Add loading, empty, and error states.
-- [ ] Avoid duplicating normalization logic between the home page and credentials page.
-- [ ] Abort or ignore stale requests when the component unmounts.
+- [x] Add a `CredentialType` TypeScript union: `"certificate" | "badge"`.
+- [x] Add a reusable `Credential` TypeScript type.
+- [x] Define a narrow API response type.
+- [x] Validate or normalize the API response before rendering it.
+- [x] Add a reusable `getCredentials()` API function.
+- [x] Support fetching all credentials.
+- [x] Support filtering by credential type.
+- [x] Support fetching featured credentials.
+- [x] Add loading, empty, and error states.
+- [x] Avoid duplicating normalization logic between the home page and credentials page.
+- [x] Abort or ignore stale requests when the component unmounts.
 
 ## Step 8 — Shared Credential Card
 
-- [ ] Create `frontend/src/components/CredentialCard.tsx`.
-- [ ] Create `frontend/src/components/CredentialCard.css`.
-- [ ] Use one shared card component for certificates and badges.
-- [ ] Add a visible type label: `Certificate` or `Badge`.
-- [ ] Display the credential title.
-- [ ] Display the issuer.
-- [ ] Display the issue month and year.
-- [ ] Display the category or a small set of relevant skill tags.
-- [ ] Add a `View certificate` action for certificate images.
-- [ ] Add a `Verify credential` action when an official URL exists.
-- [ ] Use `View badge` only when no official verification URL exists.
-- [ ] Open external verification links in a new tab.
-- [ ] Add `rel="noopener noreferrer"` to external links.
-- [ ] Keep card heights visually consistent.
-- [ ] Do not place long descriptions inside compact cards.
-- [ ] Provide meaningful image alternative text.
+- [x] Create `frontend/src/components/CredentialCard.tsx`.
+- [x] Create `frontend/src/components/CredentialCard.css`.
+- [x] Use one shared card component for certificates and badges.
+- [x] Add a visible type label: `Certificate` or `Badge`.
+- [x] Display the credential title.
+- [x] Display the issuer.
+- [x] Display the issue month and year.
+- [x] Display the category or a small set of relevant skill tags.
+- [x] Add a `View certificate` action for certificate images.
+- [x] Add a `Verify credential` action when an official URL exists.
+- [x] Use `View badge` only when no official verification URL exists.
+- [x] Open external verification links in a new tab.
+- [x] Add `rel="noopener noreferrer"` to external links.
+- [x] Keep card heights visually consistent.
+- [x] Do not place long descriptions inside compact cards.
+- [x] Provide meaningful image alternative text.
 
 ## Step 9 — Certificate Card Media
 
-- [ ] Use a landscape-oriented media area.
-- [ ] Render the complete certificate without cropping important content.
-- [ ] Use `object-fit: contain`.
-- [ ] Preserve a stable media aspect ratio.
-- [ ] Show the full certificate in a modal when activated.
-- [ ] Keep verification as a separate action when a verification URL exists.
+- [x] Use a landscape-oriented media area.
+- [x] Render the complete certificate without cropping important content.
+- [x] Use `object-fit: contain`.
+- [x] Preserve a stable media aspect ratio.
+- [x] Show the full certificate in a modal when activated.
+- [x] Keep verification as a separate action when a verification URL exists.
 
 ## Step 10 — Badge Card Media
 
-- [ ] Use a centred square badge image.
-- [ ] Keep the badge approximately 88–110 px wide inside a desktop card.
-- [ ] Use `object-fit: contain`.
-- [ ] Do not stretch a small badge across the card width.
-- [ ] Preserve the issuer's original badge colours.
-- [ ] Use a neutral media background that fits the portfolio theme.
-- [ ] Avoid decorative effects that reduce logo readability.
-- [ ] Prefer the official verification page over an image modal.
-- [ ] Open an image modal only when no official verification page exists.
+- [x] Use a centred square badge image.
+- [x] Keep the badge approximately 88–110 px wide inside a desktop card.
+- [x] Use `object-fit: contain`.
+- [x] Do not stretch a small badge across the card width.
+- [x] Preserve the issuer's original badge colours.
+- [x] Use a neutral media background that fits the portfolio theme.
+- [x] Avoid decorative effects that reduce logo readability.
+- [x] Prefer the official verification page over an image modal.
+- [x] Open an image modal only when no official verification page exists.
 
 ## Step 11 — Credential Preview Modal
 
-- [ ] Create `frontend/src/components/CredentialModal.tsx`.
-- [ ] Open the modal only for credentials that require image preview.
-- [ ] Add a visible close button.
-- [ ] Close the modal with the `Escape` key.
-- [ ] Close the modal when the backdrop is activated.
-- [ ] Do not close the modal when its content is activated.
-- [ ] Move keyboard focus into the modal when it opens.
-- [ ] Return focus to the triggering element when it closes.
-- [ ] Prevent background scrolling while the modal is open.
-- [ ] Add `role="dialog"` and `aria-modal="true"`.
-- [ ] Connect the dialog to an accessible title.
-- [ ] Keep the full credential readable without overflowing the viewport.
-- [ ] Provide a direct link to the original image or PDF.
+- [x] Create `frontend/src/components/CredentialModal.tsx`.
+- [x] Open the modal only for credentials that require image preview.
+- [x] Add a visible close button.
+- [x] Close the modal with the `Escape` key.
+- [x] Close the modal when the backdrop is activated.
+- [x] Do not close the modal when its content is activated.
+- [x] Move keyboard focus into the modal when it opens.
+- [x] Return focus to the triggering element when it closes.
+- [x] Prevent background scrolling while the modal is open.
+- [x] Add `role="dialog"` and `aria-modal="true"`.
+- [x] Connect the dialog to an accessible title.
+- [x] Keep the full credential readable without overflowing the viewport.
+- [x] Provide a direct link to the original image or PDF.
 
 ## Step 12 — Credentials Page
 
-- [ ] Create `frontend/src/pages/Credentials.tsx`.
-- [ ] Create `frontend/src/pages/Credentials.css`.
-- [ ] Set the document title to `M.Petrykin — Credentials`.
-- [ ] Use the same container width and spacing as the Projects page.
-- [ ] Add an eyebrow label such as `Professional Development`.
-- [ ] Add an `h1` heading: `Credentials`.
-- [ ] Add a short professional description.
-- [ ] Add `All`, `Certificates`, and `Badges` filters.
-- [ ] Keep the filters keyboard accessible.
-- [ ] Expose the selected filter with `aria-pressed` or equivalent semantics.
-- [ ] Render credentials as a desktop grid.
-- [ ] Use three columns on large screens.
-- [ ] Use two columns on tablet-sized screens.
-- [ ] Use horizontal scrolling or one column on small screens.
-- [ ] Show a useful empty state when no credential matches the selected filter.
-- [ ] Add the `/credentials` route to `frontend/src/App.tsx`.
-- [ ] Add the `credentials` navigation item to `frontend/src/components/Navbar.tsx`.
+- [x] Create `frontend/src/pages/Credentials.tsx`.
+- [x] Create `frontend/src/pages/Credentials.css`.
+- [x] Set the document title to `M.Petrykin — Credentials`.
+- [x] Use the same container width and spacing as the Projects page.
+- [x] Add an eyebrow label such as `Professional Development`.
+- [x] Add an `h1` heading: `Credentials`.
+- [x] Add a short professional description.
+- [x] Add `All`, `Certificates`, and `Badges` filters.
+- [x] Keep the filters keyboard accessible.
+- [x] Expose the selected filter with `aria-pressed` or equivalent semantics.
+- [x] Render credentials as a desktop grid.
+- [x] Use three columns on large screens.
+- [x] Use two columns on tablet-sized screens.
+- [x] Use horizontal scrolling or one column on small screens.
+- [x] Show a useful empty state when no credential matches the selected filter.
+- [x] Add the `/credentials` route to `frontend/src/App.tsx`.
+- [x] Add the `credentials` navigation item to `frontend/src/components/Navbar.tsx`.
 - [ ] Verify the mobile navigation after adding the fourth link.
 
 ## Step 13 — Home Page Section
 
-- [ ] Create a reusable `FeaturedCredentials` component.
-- [ ] Fetch only featured credentials.
-- [ ] Render a maximum of three cards.
-- [ ] Prefer the strongest professional credentials over introductory badges.
-- [ ] Place the section below the hero content and above the final divider.
-- [ ] Keep the section visually secondary to the main hero CTA.
-- [ ] Add a `View all credentials` link.
-- [ ] Hide the section if the API returns no featured credentials.
-- [ ] Ensure the section does not significantly increase initial page load time.
+- [x] Create a reusable `FeaturedCredentials` component.
+- [x] Fetch only featured credentials.
+- [x] Render a maximum of three cards.
+- [x] Prefer the strongest professional credentials over introductory badges.
+- [x] Place the section below the hero content and above the final divider.
+- [x] Keep the section visually secondary to the main hero CTA.
+- [x] Add a `View all credentials` link.
+- [x] Hide the section if the API returns no featured credentials.
+- [x] Ensure the section does not significantly increase initial page load time.
 
 ## Step 14 — Responsive Behaviour
 
-- [ ] Use a normal CSS grid on desktop and tablet where practical.
-- [ ] Enable horizontal overflow only on small screens.
-- [ ] Use `scroll-snap-type: x proximity` or `x mandatory` on mobile.
-- [ ] Use `scroll-snap-align: start` on each card.
-- [ ] Make one card occupy approximately 85–90% of the mobile viewport width.
-- [ ] Leave part of the next card visible as a swipe affordance.
-- [ ] Preserve native touch scrolling.
-- [ ] Add previous and next controls only if they materially improve usability.
-- [ ] Disable the previous control at the start.
-- [ ] Disable the next control at the end.
-- [ ] Make optional carousel controls keyboard accessible.
-- [ ] Do not implement autoplay or infinite looping.
-- [ ] Respect `prefers-reduced-motion`.
+- [x] Use a normal CSS grid on desktop and tablet where practical.
+- [x] Enable horizontal overflow only on small screens.
+- [x] Use `scroll-snap-type: x proximity` or `x mandatory` on mobile.
+- [x] Use `scroll-snap-align: start` on each card.
+- [x] Make one card occupy approximately 85–90% of the mobile viewport width.
+- [x] Leave part of the next card visible as a swipe affordance.
+- [x] Preserve native touch scrolling.
+- [x] Do not add previous and next controls; native scrolling is clearer for this short list.
+- [x] Previous control is not applicable because custom carousel controls are not used.
+- [x] Next control is not applicable because custom carousel controls are not used.
+- [x] Optional carousel controls are not applicable because native scrolling is used.
+- [x] Do not implement autoplay or infinite looping.
+- [x] Respect `prefers-reduced-motion`.
 
 ## Step 15 — Images and Performance
 
@@ -231,59 +231,59 @@ Track the source material and publication metadata in [Credential Content Invent
 - [ ] Generate thumbnails with a reasonable display resolution.
 - [ ] Do not hotlink an asset when its URL is temporary or unreliable.
 - [ ] Store or serve stable public asset URLs.
-- [ ] Add explicit `width` and `height` attributes.
-- [ ] Use `loading="lazy"` for below-the-fold images.
-- [ ] Use `decoding="async"` for preview images.
+- [x] Add explicit `width` and `height` attributes.
+- [x] Use `loading="lazy"` for below-the-fold images.
+- [x] Use `decoding="async"` for preview images.
 - [ ] Avoid loading full-size PDFs before user interaction.
 - [ ] Avoid downloading every full-resolution credential on the home page.
-- [ ] Add a stable aspect ratio to prevent layout shifts.
-- [ ] Provide a fallback state for failed images.
+- [x] Add a stable aspect ratio to prevent layout shifts.
+- [x] Provide a fallback state for failed images.
 - [ ] Verify image URLs in local, preview, and production environments.
 
 ## Step 16 — Accessibility
 
-- [ ] Use semantic headings in a logical order.
-- [ ] Render the credential collection as a list where appropriate.
-- [ ] Ensure every interactive element is reachable by keyboard.
-- [ ] Provide visible focus styles.
-- [ ] Give icon-only controls accessible names.
-- [ ] Ensure text and controls meet contrast requirements.
-- [ ] Do not rely on colour alone to identify certificates and badges.
-- [ ] Use meaningful alternative text for credential images.
-- [ ] Avoid duplicate links with unclear accessible names.
+- [x] Use semantic headings in a logical order.
+- [x] Render the credential collection as a list where appropriate.
+- [x] Ensure every interactive element is reachable by keyboard.
+- [x] Provide visible focus styles.
+- [x] Give icon-only controls accessible names.
+- [x] Ensure text and controls meet contrast requirements.
+- [x] Do not rely on colour alone to identify certificates and badges.
+- [x] Use meaningful alternative text for credential images.
+- [x] Avoid duplicate links with unclear accessible names.
 - [ ] Verify the modal with keyboard-only navigation.
 - [ ] Verify the mobile scroller with keyboard and touch input.
 - [ ] Test at 200% browser zoom.
 
 ## Step 17 — Analytics (Optional Second Phase)
 
-- [ ] Add `credential_view` to the supported analytics event types.
-- [ ] Add `credential_link_click` to the supported analytics event types.
-- [ ] Allow credential metadata keys in the analytics serializer.
-- [ ] Record `credential_id`.
-- [ ] Record `credential_title`.
-- [ ] Record `credential_type`.
-- [ ] Record `issuer`.
-- [ ] Record the target type: preview, original, or verification URL.
-- [ ] Update the Django admin analytics summary for credential events.
-- [ ] Send analytics only after consent.
-- [ ] Do not delay the initial release for optional analytics work.
+- [x] Add `credential_view` to the supported analytics event types.
+- [x] Add `credential_link_click` to the supported analytics event types.
+- [x] Allow credential metadata keys in the analytics serializer.
+- [x] Record `credential_id`.
+- [x] Record `credential_title`.
+- [x] Record `credential_type`.
+- [x] Record `issuer`.
+- [x] Record the target type: preview, original, or verification URL.
+- [x] Update the Django admin analytics summary for credential events.
+- [x] Send analytics only after consent.
+- [x] Do not delay the initial release for optional analytics work.
 
 ## Step 18 — Backend Tests
 
-- [ ] Test the credential model string representation.
-- [ ] Test credential type choices.
-- [ ] Test default ordering.
-- [ ] Test `sort_order` behaviour.
-- [ ] Test that the list endpoint is read-only.
-- [ ] Test that only published credentials are returned.
-- [ ] Test `featured=true` filtering.
-- [ ] Test `type=certificate` filtering.
-- [ ] Test `type=badge` filtering.
-- [ ] Test that API ordering is preserved.
-- [ ] Test credentials with and without verification URLs.
-- [ ] Test the empty list response.
-- [ ] Test image URL normalization or validation.
+- [x] Test the credential model string representation.
+- [x] Test credential type choices.
+- [x] Test default ordering.
+- [x] Test `sort_order` behaviour.
+- [x] Test that the list endpoint is read-only.
+- [x] Test that only published credentials are returned.
+- [x] Test `featured=true` filtering.
+- [x] Test `type=certificate` filtering.
+- [x] Test `type=badge` filtering.
+- [x] Test that API ordering is preserved.
+- [x] Test credentials with and without verification URLs.
+- [x] Test the empty list response.
+- [x] Test image URL normalization or validation.
 
 ## Step 19 — Frontend Tests
 

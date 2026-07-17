@@ -33,6 +33,7 @@ function installTurnstileMock(token = 'captcha-token'): void {
 describe('Contact', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_API_URL', 'https://api.example.test');
+    vi.stubEnv('VITE_TURNSTILE_SITEKEY', '');
   });
 
   it('shows client-side validation errors for empty required fields', async () => {

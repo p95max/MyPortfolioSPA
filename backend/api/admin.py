@@ -532,6 +532,8 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
             AnalyticsEvent.EVENT_PROJECT_GITHUB_CLICK: "#111827",
             AnalyticsEvent.EVENT_CONTACT_SUBMIT: "#16a34a",
             AnalyticsEvent.EVENT_OUTBOUND_LINK_CLICK: "#f59e0b",
+            AnalyticsEvent.EVENT_CREDENTIAL_VIEW: "#7c3aed",
+            AnalyticsEvent.EVENT_CREDENTIAL_LINK_CLICK: "#0f766e",
         }
 
         return format_html(
@@ -562,6 +564,18 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
             target = metadata.get("target") or "outbound"
             host = metadata.get("url_host") or ""
             return f"{target} → {host}" if host else target
+
+        if obj.event_type in {
+            AnalyticsEvent.EVENT_CREDENTIAL_VIEW,
+            AnalyticsEvent.EVENT_CREDENTIAL_LINK_CLICK,
+        }:
+            title = metadata.get("credential_title") or metadata.get("credential_id")
+            issuer = metadata.get("issuer") or ""
+
+            if title and issuer:
+                return f"{title} — {issuer}"
+
+            return title or "credential"
 
         if obj.event_type == AnalyticsEvent.EVENT_CONTACT_SUBMIT:
             return "contact form"

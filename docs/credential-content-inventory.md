@@ -30,6 +30,8 @@ Use one row per certificate or course badge before adding records to Django Admi
 
 ## Asset checklist
 
+The current placeholder URLs are for development only and do not satisfy the production requirements below.
+
 - Retain the original PDF or high-resolution image separately from the web preview.
 - Use a WebP or AVIF preview for certificates; use PNG, WebP, or AVIF for badges depending on whether transparency is needed.
 - Confirm that every public URL is stable, accessible over HTTPS, and is owned or approved for portfolio use.

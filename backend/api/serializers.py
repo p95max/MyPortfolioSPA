@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import AnalyticsEvent, ContactMessage, Project
+from .models import AnalyticsEvent, ContactMessage, Credential, Project
 from .utils.image_urls import normalize_screenshot_url
 
 
@@ -48,6 +48,27 @@ class ProjectSerializer(serializers.ModelSerializer):
             pass
 
         return urls
+
+
+class CredentialSerializer(serializers.ModelSerializer):
+    """Public credential fields consumed by the portfolio frontend."""
+
+    class Meta:
+        model = Credential
+        fields = (
+            "id",
+            "title",
+            "issuer",
+            "credential_type",
+            "description",
+            "issued_at",
+            "credential_id",
+            "credential_url",
+            "image_url",
+            "category",
+            "skills",
+            "is_featured",
+        )
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):
@@ -185,6 +206,10 @@ class AnalyticsEventSerializer(serializers.ModelSerializer):
         allowed_keys = {
             "project_id",
             "project_title",
+            "credential_id",
+            "credential_title",
+            "credential_type",
+            "issuer",
             "target",
             "url_host",
         }

@@ -5,13 +5,16 @@ import {
   ANALYTICS_STORAGE_KEY,
 } from "./privacy";
 import { getApiUrl } from "./apiBaseUrl";
+import type { Credential } from "./types";
 
 type AnalyticsEventType =
   | "page_view"
   | "project_view"
   | "project_github_click"
   | "contact_submit"
-  | "outbound_link_click";
+  | "outbound_link_click"
+  | "credential_view"
+  | "credential_link_click";
 
 type AnalyticsMetadata = Record<string, string | number | boolean | null>;
 
@@ -373,4 +376,39 @@ export function trackOutboundLinkClick(target: string, url: string): void {
     target,
     url_host: getUrlHost(url),
   });
+}
+
+function getCredentialMetadata(
+  credential: Credential,
+  target: "preview" | "original" | "verification_url",
+  url = "",
+): AnalyticsMetadata {
+  return {
+    credential_id: credential.id,
+    credential_title: credential.title,
+    credential_type: credential.credentialType,
+    issuer: credential.issuer,
+    target,
+    url_host: getUrlHost(url),
+  };
+}
+
+export function trackCredentialView(credential: Credential): void {
+  trackAnalyticsEvent(
+    "credential_view",
+    window.location.pathname,
+    getCredentialMetadata(credential, "preview", credential.imageUrl),
+  );
+}
+
+export function trackCredentialLinkClick(
+  credential: Credential,
+  target: "original" | "verification_url",
+  url: string,
+): void {
+  trackAnalyticsEvent(
+    "credential_link_click",
+    window.location.pathname,
+    getCredentialMetadata(credential, target, url),
+  );
 }

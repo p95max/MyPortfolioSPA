@@ -19,7 +19,7 @@ export interface CredentialCardProps {
   onPreview?: (credential: Credential) => void;
 }
 
-export function formatCredentialIssueDate(issuedAt: string): string {
+function formatCredentialIssueDate(issuedAt: string): string {
   const date = new Date(`${issuedAt}T12:00:00`);
 
   if (Number.isNaN(date.getTime())) {

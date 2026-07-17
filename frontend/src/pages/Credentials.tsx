@@ -1,22 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { CredentialCard } from "../components/CredentialCard";
 import { useCredentials } from "../hooks/useCredentials";
-import type { CredentialType } from "../types";
 import "./Credentials.css";
 
-type CredentialFilter = "all" | CredentialType;
-
-const FILTERS: Array<{ value: CredentialFilter; label: string }> = [
-  { value: "all", label: "All" },
-  { value: "certificate", label: "Certificates" },
-  { value: "badge", label: "Badges" },
-];
-
 export function Credentials() {
-  const [selectedFilter, setSelectedFilter] = useState<CredentialFilter>("all");
-  const { credentials, error, isEmpty, loading } = useCredentials({
-    type: selectedFilter === "all" ? undefined : selectedFilter,
-  });
+  const { credentials, error, isEmpty, loading } = useCredentials();
 
   useEffect(() => {
     document.title = "M.Petrykin — Credentials";
@@ -32,20 +20,6 @@ export function Credentials() {
           backend development, infrastructure, and secure systems.
         </p>
 
-        <div className="credentials-filters" aria-label="Filter credentials by type">
-          {FILTERS.map(({ label, value }) => (
-            <button
-              className={`credentials-filter ${selectedFilter === value ? "is-active" : ""}`}
-              type="button"
-              key={value}
-              aria-pressed={selectedFilter === value}
-              onClick={() => setSelectedFilter(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
         {loading && <p className="credentials-state">Loading credentials...</p>}
 
         {!loading && error && (
@@ -56,25 +30,8 @@ export function Credentials() {
 
         {!loading && !error && isEmpty && (
           <div className="credentials-empty">
-            <strong>
-              {selectedFilter === "all"
-                ? "Credentials will be added soon."
-                : `No ${selectedFilter === "certificate" ? "certificates" : "badges"} found.`}
-            </strong>
-            <span>
-              {selectedFilter === "all"
-                ? "Check back for verified professional development records."
-                : "Try viewing all credentials or select the other type."}
-            </span>
-            {selectedFilter !== "all" && (
-              <button
-                className="credentials-empty__button"
-                type="button"
-                onClick={() => setSelectedFilter("all")}
-              >
-                View all credentials
-              </button>
-            )}
+            <strong>Credentials will be added soon.</strong>
+            <span>Check back for verified professional development records.</span>
           </div>
         )}
 

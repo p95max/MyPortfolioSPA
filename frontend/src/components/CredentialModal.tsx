@@ -56,7 +56,7 @@ export function CredentialModal({ credential, onClose }: CredentialModalProps) {
   return createPortal(
     <div className="credential-modal" onClick={onClose}>
       <section
-        className="credential-modal__content"
+        className={`credential-modal__content credential-modal__content--${credential.credentialType}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="credential-modal-title"
@@ -82,14 +82,14 @@ export function CredentialModal({ credential, onClose }: CredentialModalProps) {
           </button>
         </div>
 
-        <div className="credential-modal__media">
+        <div className={`credential-modal__media credential-modal__media--${credential.credentialType}`}>
           {imageFailed ? (
             <p className="credential-modal__fallback">
               Preview unavailable. Use the original link below.
             </p>
           ) : (
             <img
-              className="credential-modal__image"
+              className={`credential-modal__image credential-modal__image--${credential.credentialType}`}
               src={credential.imageUrl}
               alt={`${credential.title} issued by ${credential.issuer}`}
               width={imageDimensions.width}

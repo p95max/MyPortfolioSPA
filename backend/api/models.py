@@ -17,6 +17,7 @@ class CredentialCategory(models.TextChoices):
     LINUX = "linux", "Linux"
     NETWORKING = "networking", "Networking"
     SECURITY = "security", "Security"
+    IT_FUNDAMENTALS = "it_fundamentals", "IT Fundamentals"
     OTHER = "other", "Other"
 
 

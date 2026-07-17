@@ -14,7 +14,7 @@ Use one row per certificate or course badge before adding records to Django Admi
 | `credential_url` | No | Official public verification URL. |
 | `source_asset` | Yes | Path to the original certificate PDF/image or the high-resolution badge asset. Keep this private until a public delivery URL is ready. |
 | `image_url` | Yes | Stable public HTTPS URL for the optimized preview image. |
-| `category` | Yes | One primary category: `backend`, `python`, `database`, `docker`, `cloud`, `linux`, `networking`, `security`, or `other`. |
+| `category` | Yes | One primary category: `backend`, `python`, `database`, `docker`, `cloud`, `linux`, `networking`, `security`, `it_fundamentals`, or `other`. |
 | `skills` | Yes | Comma-separated, concise tags in this inventory, for example `Python, Django, PostgreSQL`; store them in Django as a JSON list of strings. |
 | `description` | No | One short sentence only when it gives useful professional context. |
 | `is_featured` | Yes | `yes` only for the strongest professional credentials. |
@@ -26,7 +26,7 @@ Use one row per certificate or course badge before adding records to Django Admi
 | title | issuer | credential_type | issued_at | credential_id | credential_url | source_asset | image_url | category | skills | description | is_featured | sort_order | verification_status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Backend Development Certificate (placeholder) | Portfolio placeholder | `certificate` | `2026-01-01` |  |  | External media | `https://placehold.co/1200x850/0f172a/e2e8f0?text=Certificate+Preview` | `backend` | Python, Django, REST API | Temporary development record; replace with a verified credential. | `no` | 1 | `pending` |
-| Course Completion Badge (placeholder) | Portfolio placeholder | `badge` | `2026-01-01` |  |  | External media | `https://placehold.co/512x512/1e293b/e2e8f0?text=Course+Badge` | `other` | Professional development | Temporary development record; replace with a verified course badge. | `no` | 2 | `pending` |
+| Course Completion Badge (placeholder) | Portfolio placeholder | `badge` | `2026-01-01` |  |  | External media | `https://placehold.co/512x512/1e293b/e2e8f0?text=Course+Badge` | `it_fundamentals` | Professional development | Temporary development record; replace with a verified course badge. | `no` | 2 | `pending` |
 
 ## Asset checklist
 

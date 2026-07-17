@@ -101,7 +101,7 @@ def test_credentials_endpoint_filters_certificate_and_badge_types(api_client):
     badge = create_credential(
         title="Badge",
         credential_type=CredentialType.BADGE,
-        category=CredentialCategory.OTHER,
+        category=CredentialCategory.IT_FUNDAMENTALS,
         sort_order=2,
     )
 

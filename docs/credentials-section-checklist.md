@@ -2,24 +2,28 @@
 
 This checklist covers the implementation of a unified credentials section for certificates and course badges.
 
-## Product Decisions
+## Step 1 — Product Decisions
 
-- [ ] Use `Credentials` as the user-facing section name.
-- [ ] Use `/credentials` as the frontend route.
-- [ ] Add `credentials` to the primary navigation.
-- [ ] Use one `Credential` domain model for certificates and badges.
-- [ ] Keep `Certificate` and `Badge` as explicit credential types.
-- [ ] Label course badges honestly as `Course badge` or `Course completion`.
-- [ ] Do not present a course badge as a professional certification.
-- [ ] Add a featured credentials section to the home page.
-- [ ] Show no more than three featured credentials on the home page.
-- [ ] Add a `View all credentials` link below the featured section.
-- [ ] Use a scan-friendly grid on desktop and tablet.
-- [ ] Use horizontal scrolling with CSS Scroll Snap on mobile.
-- [ ] Do not use autoplay or infinite looping.
-- [ ] Do not add a third-party carousel dependency.
+The following decisions define the feature scope; their implementation is covered by the relevant later steps.
 
-## Content Preparation
+- [x] Use `Credentials` as the user-facing section name.
+- [x] Use `/credentials` as the frontend route.
+- [x] Add `credentials` to the primary navigation.
+- [x] Use one `Credential` domain model for certificates and badges.
+- [x] Keep `Certificate` and `Badge` as explicit credential types.
+- [x] Label course badges honestly as `Course badge` or `Course completion`.
+- [x] Do not present a course badge as a professional certification.
+- [x] Add a featured credentials section to the home page.
+- [x] Show no more than three featured credentials on the home page.
+- [x] Add a `View all credentials` link below the featured section.
+- [x] Use a scan-friendly grid on desktop and tablet.
+- [x] Use horizontal scrolling with CSS Scroll Snap on mobile.
+- [x] Do not use autoplay or infinite looping.
+- [x] Do not add a third-party carousel dependency.
+
+## Step 2 — Content Preparation
+
+Track the source material and publication metadata in [Credential Content Inventory](credential-content-inventory.md). Keep the checklist items below open until the inventory contains verified real credentials.
 
 - [ ] Collect the original certificate images or PDF files.
 - [ ] Collect the original badge images at the highest available resolution.
@@ -38,7 +42,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Keep introductory digital-literacy and basic course badges lower in the list.
 - [ ] Verify the exact official title and issuer before publishing.
 
-## Django Choices
+## Step 3 — Django Choices
 
 - [x] Add a `CredentialType` class based on `models.TextChoices`.
 - [ ] Add `CERTIFICATE = "certificate", "Certificate"`.
@@ -47,7 +51,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Do not create separate `Certificate` and `Badge` models.
 - [ ] Do not create a separate image model unless multiple images per credential become a real requirement.
 
-## Credential Model
+## Step 4 — Credential Model
 
 - [ ] Add a required `title` field.
 - [ ] Add a required `issuer` field.
@@ -69,7 +73,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Review the generated migration before applying it.
 - [ ] Apply the migration locally.
 
-## Django Admin
+## Step 5 — Django Admin
 
 - [ ] Register `Credential` in `backend/api/admin.py`.
 - [ ] Use `SortableAdminMixin` for manual ordering.
@@ -84,7 +88,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Confirm that credential ordering can be changed by drag and drop.
 - [ ] Confirm that unpublished credentials remain manageable in the admin.
 
-## REST API
+## Step 6 — REST API
 
 - [ ] Add `CredentialSerializer` to `backend/api/serializers.py`.
 - [ ] Expose only fields required by the frontend.
@@ -100,7 +104,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Keep the response shape consistent with the existing projects API.
 - [ ] Verify that unpublished credentials are never returned.
 
-## Frontend Types and API Client
+## Step 7 — Frontend Types and API Client
 
 - [ ] Add a `CredentialType` TypeScript union: `"certificate" | "badge"`.
 - [ ] Add a reusable `Credential` TypeScript type.
@@ -114,7 +118,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Avoid duplicating normalization logic between the home page and credentials page.
 - [ ] Abort or ignore stale requests when the component unmounts.
 
-## Shared Credential Card
+## Step 8 — Shared Credential Card
 
 - [ ] Create `frontend/src/components/CredentialCard.tsx`.
 - [ ] Create `frontend/src/components/CredentialCard.css`.
@@ -133,7 +137,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Do not place long descriptions inside compact cards.
 - [ ] Provide meaningful image alternative text.
 
-## Certificate Card Media
+## Step 9 — Certificate Card Media
 
 - [ ] Use a landscape-oriented media area.
 - [ ] Render the complete certificate without cropping important content.
@@ -142,7 +146,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Show the full certificate in a modal when activated.
 - [ ] Keep verification as a separate action when a verification URL exists.
 
-## Badge Card Media
+## Step 10 — Badge Card Media
 
 - [ ] Use a centred square badge image.
 - [ ] Keep the badge approximately 88–110 px wide inside a desktop card.
@@ -154,7 +158,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Prefer the official verification page over an image modal.
 - [ ] Open an image modal only when no official verification page exists.
 
-## Credential Preview Modal
+## Step 11 — Credential Preview Modal
 
 - [ ] Create `frontend/src/components/CredentialModal.tsx`.
 - [ ] Open the modal only for credentials that require image preview.
@@ -170,7 +174,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Keep the full credential readable without overflowing the viewport.
 - [ ] Provide a direct link to the original image or PDF.
 
-## Credentials Page
+## Step 12 — Credentials Page
 
 - [ ] Create `frontend/src/pages/Credentials.tsx`.
 - [ ] Create `frontend/src/pages/Credentials.css`.
@@ -191,7 +195,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Add the `credentials` navigation item to `frontend/src/components/Navbar.tsx`.
 - [ ] Verify the mobile navigation after adding the fourth link.
 
-## Home Page Section
+## Step 13 — Home Page Section
 
 - [ ] Create a reusable `FeaturedCredentials` component.
 - [ ] Fetch only featured credentials.
@@ -203,7 +207,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Hide the section if the API returns no featured credentials.
 - [ ] Ensure the section does not significantly increase initial page load time.
 
-## Responsive Behaviour
+## Step 14 — Responsive Behaviour
 
 - [ ] Use a normal CSS grid on desktop and tablet where practical.
 - [ ] Enable horizontal overflow only on small screens.
@@ -219,7 +223,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Do not implement autoplay or infinite looping.
 - [ ] Respect `prefers-reduced-motion`.
 
-## Images and Performance
+## Step 15 — Images and Performance
 
 - [ ] Convert certificate previews to WebP or AVIF.
 - [ ] Use PNG, WebP, or AVIF for badge assets depending on transparency requirements.
@@ -236,7 +240,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Provide a fallback state for failed images.
 - [ ] Verify image URLs in local, preview, and production environments.
 
-## Accessibility
+## Step 16 — Accessibility
 
 - [ ] Use semantic headings in a logical order.
 - [ ] Render the credential collection as a list where appropriate.
@@ -251,7 +255,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Verify the mobile scroller with keyboard and touch input.
 - [ ] Test at 200% browser zoom.
 
-## Analytics — Optional Second Phase
+## Step 17 — Analytics (Optional Second Phase)
 
 - [ ] Add `credential_view` to the supported analytics event types.
 - [ ] Add `credential_link_click` to the supported analytics event types.
@@ -265,7 +269,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Send analytics only after consent.
 - [ ] Do not delay the initial release for optional analytics work.
 
-## Backend Tests
+## Step 18 — Backend Tests
 
 - [ ] Test the credential model string representation.
 - [ ] Test credential type choices.
@@ -281,7 +285,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Test the empty list response.
 - [ ] Test image URL normalization or validation.
 
-## Frontend Tests
+## Step 19 — Frontend Tests
 
 - [ ] Test the credentials loading state.
 - [ ] Test the API error state.
@@ -297,7 +301,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Test navigation to `/credentials`.
 - [ ] Test the active navigation state.
 
-## Manual QA
+## Step 20 — Manual QA
 
 - [ ] Check the home page on desktop.
 - [ ] Check the home page on a narrow mobile viewport.
@@ -319,7 +323,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Run the backend test suite.
 - [ ] Run Django system checks.
 
-## Deployment
+## Step 21 — Deployment
 
 - [ ] Add credential records in the production Django Admin.
 - [ ] Upload optimized certificate previews and badge images.
@@ -334,7 +338,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] Check browser console and network errors.
 - [ ] Confirm that analytics and cookie consent behaviour remain unchanged.
 
-## Recommended Delivery Order
+## Step 22 — Recommended Delivery Order
 
 - [ ] **Phase 1:** Model, migration, admin, serializer, filtering, and read-only endpoint.
 - [ ] **Phase 2:** Credentials page, shared card, route, navigation, and responsive grid.
@@ -343,7 +347,7 @@ This checklist covers the implementation of a unified credentials section for ce
 - [ ] **Phase 5:** Tests, accessibility review, performance checks, and production QA.
 - [ ] **Phase 6:** Optional credential analytics.
 
-## Definition of Done
+## Step 23 — Definition of Done
 
 - [ ] Certificates and badges share one maintainable `Credential` model.
 - [ ] Credentials can be created, edited, published, featured, and reordered in Django Admin.

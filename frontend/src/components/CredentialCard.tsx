@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { trackCredentialLinkClick, trackCredentialView } from "../analytics";
 import type { Credential } from "../types";
 import "./CredentialCard.css";
 import { CredentialModal } from "./CredentialModal";
@@ -97,6 +98,7 @@ export function CredentialCard({
               type="button"
               aria-label={`${previewLabel}: ${credential.title}`}
               onClick={() => {
+                trackCredentialView(credential);
                 onPreview?.(credential);
                 setIsModalOpen(true);
               }}
@@ -112,6 +114,13 @@ export function CredentialCard({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Verify credential: ${credential.title}`}
+              onClick={() =>
+                trackCredentialLinkClick(
+                  credential,
+                  "verification_url",
+                  credential.credentialUrl ?? "",
+                )
+              }
             >
               Verify credential
             </a>

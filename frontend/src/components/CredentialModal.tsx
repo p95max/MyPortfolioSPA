@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { trackCredentialLinkClick } from "../analytics";
 import type { Credential } from "../types";
 import "./CredentialModal.css";
 
@@ -107,6 +108,9 @@ export function CredentialModal({ credential, onClose }: CredentialModalProps) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Open original credential file: ${credential.title}`}
+            onClick={() =>
+              trackCredentialLinkClick(credential, "original", credential.imageUrl)
+            }
           >
             Open original
           </a>

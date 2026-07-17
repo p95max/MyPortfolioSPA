@@ -206,6 +206,10 @@ class AnalyticsEventSerializer(serializers.ModelSerializer):
         allowed_keys = {
             "project_id",
             "project_title",
+            "credential_id",
+            "credential_title",
+            "credential_type",
+            "issuer",
             "target",
             "url_host",
         }

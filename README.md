@@ -422,6 +422,8 @@ Supported event types:
 * `project_github_click`
 * `contact_submit`
 * `outbound_link_click`
+* `credential_view`
+* `credential_link_click`
 
 Tracked event examples:
 
@@ -430,6 +432,8 @@ Tracked event examples:
 * `project_github_click` — when a project GitHub link is clicked
 * `contact_submit` — when the contact form is successfully submitted
 * `outbound_link_click` — when an external link is clicked, for example GitHub, LinkedIn, Telegram, email or live demo
+* `credential_view` — when a credential preview is opened.
+* `credential_link_click` — when an original credential file or verification URL is opened.
 
 Stored backend fields:
 

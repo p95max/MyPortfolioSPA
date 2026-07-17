@@ -171,6 +171,8 @@ class AnalyticsEvent(models.Model):
     EVENT_PROJECT_GITHUB_CLICK = "project_github_click"
     EVENT_CONTACT_SUBMIT = "contact_submit"
     EVENT_OUTBOUND_LINK_CLICK = "outbound_link_click"
+    EVENT_CREDENTIAL_VIEW = "credential_view"
+    EVENT_CREDENTIAL_LINK_CLICK = "credential_link_click"
 
     EVENT_TYPES = (
         (EVENT_PAGE_VIEW, "Page view"),
@@ -178,6 +180,8 @@ class AnalyticsEvent(models.Model):
         (EVENT_PROJECT_GITHUB_CLICK, "Project GitHub click"),
         (EVENT_CONTACT_SUBMIT, "Contact form submit"),
         (EVENT_OUTBOUND_LINK_CLICK, "Outbound link click"),
+        (EVENT_CREDENTIAL_VIEW, "Credential view"),
+        (EVENT_CREDENTIAL_LINK_CLICK, "Credential link click"),
     )
 
     event_type = models.CharField(

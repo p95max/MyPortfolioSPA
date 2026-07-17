@@ -257,33 +257,33 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 17 — Analytics (Optional Second Phase)
 
-- [ ] Add `credential_view` to the supported analytics event types.
-- [ ] Add `credential_link_click` to the supported analytics event types.
-- [ ] Allow credential metadata keys in the analytics serializer.
-- [ ] Record `credential_id`.
-- [ ] Record `credential_title`.
-- [ ] Record `credential_type`.
-- [ ] Record `issuer`.
-- [ ] Record the target type: preview, original, or verification URL.
-- [ ] Update the Django admin analytics summary for credential events.
-- [ ] Send analytics only after consent.
-- [ ] Do not delay the initial release for optional analytics work.
+- [x] Add `credential_view` to the supported analytics event types.
+- [x] Add `credential_link_click` to the supported analytics event types.
+- [x] Allow credential metadata keys in the analytics serializer.
+- [x] Record `credential_id`.
+- [x] Record `credential_title`.
+- [x] Record `credential_type`.
+- [x] Record `issuer`.
+- [x] Record the target type: preview, original, or verification URL.
+- [x] Update the Django admin analytics summary for credential events.
+- [x] Send analytics only after consent.
+- [x] Do not delay the initial release for optional analytics work.
 
 ## Step 18 — Backend Tests
 
-- [ ] Test the credential model string representation.
-- [ ] Test credential type choices.
-- [ ] Test default ordering.
-- [ ] Test `sort_order` behaviour.
-- [ ] Test that the list endpoint is read-only.
-- [ ] Test that only published credentials are returned.
-- [ ] Test `featured=true` filtering.
-- [ ] Test `type=certificate` filtering.
-- [ ] Test `type=badge` filtering.
-- [ ] Test that API ordering is preserved.
-- [ ] Test credentials with and without verification URLs.
-- [ ] Test the empty list response.
-- [ ] Test image URL normalization or validation.
+- [x] Test the credential model string representation.
+- [x] Test credential type choices.
+- [x] Test default ordering.
+- [x] Test `sort_order` behaviour.
+- [x] Test that the list endpoint is read-only.
+- [x] Test that only published credentials are returned.
+- [x] Test `featured=true` filtering.
+- [x] Test `type=certificate` filtering.
+- [x] Test `type=badge` filtering.
+- [x] Test that API ordering is preserved.
+- [x] Test credentials with and without verification URLs.
+- [x] Test the empty list response.
+- [x] Test image URL normalization or validation.
 
 ## Step 19 — Frontend Tests
 

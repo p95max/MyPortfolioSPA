@@ -46,8 +46,8 @@ export function CredentialCard({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const typeLabel = credential.credentialType === "certificate" ? "Certificate" : "Badge";
   const previewLabel = credential.credentialType === "certificate"
-    ? "View certificate"
-    : "View badge";
+    ? "Open certificate preview"
+    : "Open badge preview";
   const canPreview = credential.credentialType === "certificate" || !credential.credentialUrl;
   const imageDimensions = credential.credentialType === "badge"
     ? { width: 104, height: 104 }
@@ -57,20 +57,40 @@ export function CredentialCard({
     setImageSrc(credential.imageUrl);
   }, [credential.imageUrl]);
 
+  const openPreview = () => {
+    trackCredentialView(credential);
+    onPreview?.(credential);
+    setIsModalOpen(true);
+  };
+
+  const previewImage = (
+    <img
+      className="credential-card__image"
+      src={imageSrc}
+      alt={`${credential.title} issued by ${credential.issuer}`}
+      width={imageDimensions.width}
+      height={imageDimensions.height}
+      loading="lazy"
+      decoding="async"
+      onError={() => setImageSrc(FALLBACK_IMAGE)}
+    />
+  );
+
   return (
     <article className={`credential-card credential-card--${credential.credentialType}`}>
-      <div className="credential-card__media">
-        <img
-          className="credential-card__image"
-          src={imageSrc}
-          alt={`${credential.title} issued by ${credential.issuer}`}
-          width={imageDimensions.width}
-          height={imageDimensions.height}
-          loading="lazy"
-          decoding="async"
-          onError={() => setImageSrc(FALLBACK_IMAGE)}
-        />
-      </div>
+      {canPreview ? (
+        <button
+          className="credential-card__media credential-card__media--interactive"
+          type="button"
+          aria-label={`${previewLabel}: ${credential.title}`}
+          title={previewLabel}
+          onClick={openPreview}
+        >
+          {previewImage}
+        </button>
+      ) : (
+        <div className="credential-card__media">{previewImage}</div>
+      )}
 
       <div className="credential-card__body">
         <p className="credential-card__type">{typeLabel}</p>
@@ -91,23 +111,8 @@ export function CredentialCard({
           ))}
         </div>
 
-        <div className="credential-card__actions">
-          {canPreview && (
-            <button
-              className="credential-card__action"
-              type="button"
-              aria-label={`${previewLabel}: ${credential.title}`}
-              onClick={() => {
-                trackCredentialView(credential);
-                onPreview?.(credential);
-                setIsModalOpen(true);
-              }}
-            >
-              {previewLabel}
-            </button>
-          )}
-
-          {credential.credentialUrl && (
+        {credential.credentialUrl && (
+          <div className="credential-card__actions">
             <a
               className="credential-card__action credential-card__action--primary"
               href={credential.credentialUrl}
@@ -124,8 +129,8 @@ export function CredentialCard({
             >
               Verify credential
             </a>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {isModalOpen && (

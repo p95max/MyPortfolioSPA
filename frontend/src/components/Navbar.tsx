@@ -6,7 +6,10 @@ export const Navbar = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
-  useEffect(() => setOpen(false), [location.pathname]);
+  useEffect(() => {
+    setOpen(false);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
 
   const links = [
     { to: "/", label: "about" },

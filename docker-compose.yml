@@ -10,6 +10,14 @@ services:
     networks:
       - mynetwork
 
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redisdata:/data
+    networks:
+      - mynetwork
+
   web:
     build:
       context: ./backend
@@ -24,6 +32,7 @@ services:
       - ./backend/.env.dev
     depends_on:
       - db
+      - redis
     networks:
       - mynetwork
 
@@ -41,6 +50,7 @@ services:
 
 volumes:
   pgdata:
+  redisdata:
 
 networks:
   mynetwork:

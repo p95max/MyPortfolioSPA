@@ -3,6 +3,11 @@ from django.db import models
 from django.db.models import Max
 
 
+class CredentialType(models.TextChoices):
+    CERTIFICATE = "certificate", "Certificate"
+    BADGE = "badge", "Badge"
+
+
 
 class Project(models.Model):
     title = models.CharField(max_length=200)

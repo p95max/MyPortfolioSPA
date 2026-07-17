@@ -40,7 +40,7 @@ This checklist covers the implementation of a unified credentials section for ce
 
 ## Django Choices
 
-- [ ] Add a `CredentialType` class based on `models.TextChoices`.
+- [x] Add a `CredentialType` class based on `models.TextChoices`.
 - [ ] Add `CERTIFICATE = "certificate", "Certificate"`.
 - [ ] Add `BADGE = "badge", "Badge"`.
 - [ ] Add a single `Credential` model to `backend/api/models.py`.

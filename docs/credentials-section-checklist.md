@@ -120,22 +120,22 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 8 — Shared Credential Card
 
-- [ ] Create `frontend/src/components/CredentialCard.tsx`.
-- [ ] Create `frontend/src/components/CredentialCard.css`.
-- [ ] Use one shared card component for certificates and badges.
-- [ ] Add a visible type label: `Certificate` or `Badge`.
-- [ ] Display the credential title.
-- [ ] Display the issuer.
-- [ ] Display the issue month and year.
-- [ ] Display the category or a small set of relevant skill tags.
-- [ ] Add a `View certificate` action for certificate images.
-- [ ] Add a `Verify credential` action when an official URL exists.
-- [ ] Use `View badge` only when no official verification URL exists.
-- [ ] Open external verification links in a new tab.
-- [ ] Add `rel="noopener noreferrer"` to external links.
-- [ ] Keep card heights visually consistent.
-- [ ] Do not place long descriptions inside compact cards.
-- [ ] Provide meaningful image alternative text.
+- [x] Create `frontend/src/components/CredentialCard.tsx`.
+- [x] Create `frontend/src/components/CredentialCard.css`.
+- [x] Use one shared card component for certificates and badges.
+- [x] Add a visible type label: `Certificate` or `Badge`.
+- [x] Display the credential title.
+- [x] Display the issuer.
+- [x] Display the issue month and year.
+- [x] Display the category or a small set of relevant skill tags.
+- [x] Add a `View certificate` action for certificate images.
+- [x] Add a `Verify credential` action when an official URL exists.
+- [x] Use `View badge` only when no official verification URL exists.
+- [x] Open external verification links in a new tab.
+- [x] Add `rel="noopener noreferrer"` to external links.
+- [x] Keep card heights visually consistent.
+- [x] Do not place long descriptions inside compact cards.
+- [x] Provide meaningful image alternative text.
 
 ## Step 9 — Certificate Card Media
 

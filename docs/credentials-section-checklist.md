@@ -176,23 +176,23 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 12 — Credentials Page
 
-- [ ] Create `frontend/src/pages/Credentials.tsx`.
-- [ ] Create `frontend/src/pages/Credentials.css`.
-- [ ] Set the document title to `M.Petrykin — Credentials`.
-- [ ] Use the same container width and spacing as the Projects page.
-- [ ] Add an eyebrow label such as `Professional Development`.
-- [ ] Add an `h1` heading: `Credentials`.
-- [ ] Add a short professional description.
-- [ ] Add `All`, `Certificates`, and `Badges` filters.
-- [ ] Keep the filters keyboard accessible.
-- [ ] Expose the selected filter with `aria-pressed` or equivalent semantics.
-- [ ] Render credentials as a desktop grid.
-- [ ] Use three columns on large screens.
-- [ ] Use two columns on tablet-sized screens.
-- [ ] Use horizontal scrolling or one column on small screens.
-- [ ] Show a useful empty state when no credential matches the selected filter.
-- [ ] Add the `/credentials` route to `frontend/src/App.tsx`.
-- [ ] Add the `credentials` navigation item to `frontend/src/components/Navbar.tsx`.
+- [x] Create `frontend/src/pages/Credentials.tsx`.
+- [x] Create `frontend/src/pages/Credentials.css`.
+- [x] Set the document title to `M.Petrykin — Credentials`.
+- [x] Use the same container width and spacing as the Projects page.
+- [x] Add an eyebrow label such as `Professional Development`.
+- [x] Add an `h1` heading: `Credentials`.
+- [x] Add a short professional description.
+- [x] Add `All`, `Certificates`, and `Badges` filters.
+- [x] Keep the filters keyboard accessible.
+- [x] Expose the selected filter with `aria-pressed` or equivalent semantics.
+- [x] Render credentials as a desktop grid.
+- [x] Use three columns on large screens.
+- [x] Use two columns on tablet-sized screens.
+- [x] Use horizontal scrolling or one column on small screens.
+- [x] Show a useful empty state when no credential matches the selected filter.
+- [x] Add the `/credentials` route to `frontend/src/App.tsx`.
+- [x] Add the `credentials` navigation item to `frontend/src/components/Navbar.tsx`.
 - [ ] Verify the mobile navigation after adding the fourth link.
 
 ## Step 13 — Home Page Section

@@ -4,6 +4,7 @@ import { Navbar } from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Home } from "./pages/Home";
 import { Projects } from "./pages/Projects";
+import { Credentials } from "./pages/Credentials";
 import Contact from "./pages/Contact";
 import Snowfall from "./components/Snowfall";
 import Impressum from "./pages/Impressum";
@@ -23,6 +24,7 @@ function AppRoutes() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/credentials" element={<Credentials />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />

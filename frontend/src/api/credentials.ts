@@ -40,6 +40,7 @@ const CREDENTIAL_CATEGORIES: ReadonlySet<CredentialCategory> = new Set<Credentia
   "linux",
   "networking",
   "security",
+  "it_fundamentals",
   "other",
 ]);
 

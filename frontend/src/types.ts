@@ -19,6 +19,7 @@ export type CredentialCategory =
   | "linux"
   | "networking"
   | "security"
+  | "it_fundamentals"
   | "other";
 
 export interface Credential {

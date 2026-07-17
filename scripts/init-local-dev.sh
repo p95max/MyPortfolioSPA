@@ -154,6 +154,11 @@ load_local_fixtures() {
     sleep 2
   done
 
+  log "Resetting local project fixture data"
+  docker compose exec -T web \
+    poetry run python manage.py shell -c \
+    "from api.models import ProjectScreenshot, Project; ProjectScreenshot.objects.all().delete(); Project.objects.all().delete()"
+
   log "Loading local project fixtures"
   docker compose exec -T web \
     poetry run python manage.py loaddata api/fixtures/backup_db.json

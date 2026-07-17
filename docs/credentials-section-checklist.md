@@ -139,12 +139,12 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 9 — Certificate Card Media
 
-- [ ] Use a landscape-oriented media area.
-- [ ] Render the complete certificate without cropping important content.
-- [ ] Use `object-fit: contain`.
-- [ ] Preserve a stable media aspect ratio.
+- [x] Use a landscape-oriented media area.
+- [x] Render the complete certificate without cropping important content.
+- [x] Use `object-fit: contain`.
+- [x] Preserve a stable media aspect ratio.
 - [ ] Show the full certificate in a modal when activated.
-- [ ] Keep verification as a separate action when a verification URL exists.
+- [x] Keep verification as a separate action when a verification URL exists.
 
 ## Step 10 — Badge Card Media
 

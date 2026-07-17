@@ -3,6 +3,7 @@ from django.utils import timezone
 from django import forms
 from django.conf import settings
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.utils.html import format_html
 from adminsortable2.admin import SortableAdminMixin
@@ -10,12 +11,36 @@ from adminsortable2.admin import SortableAdminMixin
 from .utils.image_urls import build_public_image_url
 from .utils.admin_formatting import admin_badge
 from .models import (
+    Credential,
     Project,
     ProjectScreenshot,
     ContactMessage,
     ContactMessageStatus,
     AnalyticsEvent,
 )
+
+
+def _is_valid_http_url(value: str) -> bool:
+    url = (value or "").strip()
+
+    if not url:
+        return False
+
+    try:
+        URLValidator(schemes=("http", "https"))(url)
+    except ValidationError:
+        return False
+
+    return True
+
+
+def _is_valid_credential_image_url(value: str) -> bool:
+    url = (value or "").strip()
+
+    if url.startswith("/") and not url.startswith("//"):
+        return True
+
+    return _is_valid_http_url(url)
 
 
 def _public_image_url(value: str) -> str:
@@ -137,6 +162,129 @@ class ProjectScreenshotAdmin(SortableAdminMixin, admin.ModelAdmin):
             public,
         )
 
+
+
+class CredentialAdminForm(forms.ModelForm):
+    image_url = forms.CharField(required=True)
+
+    class Meta:
+        model = Credential
+        fields = "__all__"
+
+    def clean_image_url(self):
+        url = (self.cleaned_data.get("image_url") or "").strip()
+
+        if not _is_valid_credential_image_url(url):
+            raise ValidationError(
+                "Enter an absolute HTTP(S) URL or a relative path starting with '/'."
+            )
+
+        return url
+
+
+@admin.register(Credential)
+class CredentialAdmin(SortableAdminMixin, admin.ModelAdmin):
+    form = CredentialAdminForm
+    change_list_template = "adminsortable2/change_list.html"
+
+    ordering = ("sort_order",)
+    list_display = (
+        "title",
+        "credential_type_display",
+        "issuer",
+        "issued_at",
+        "category_display",
+        "is_featured",
+        "is_published",
+    )
+    list_filter = (
+        "credential_type",
+        "category",
+        "issuer",
+        "is_featured",
+        "is_published",
+        "issued_at",
+    )
+    search_fields = ("title", "issuer", "credential_id", "category", "skills")
+    date_hierarchy = "issued_at"
+    readonly_fields = ("image_preview", "verification_link")
+    fieldsets = (
+        (
+            "Credential",
+            {
+                "fields": (
+                    "title",
+                    "issuer",
+                    "credential_type",
+                    "category",
+                    "issued_at",
+                    "credential_id",
+                    "description",
+                    "skills",
+                )
+            },
+        ),
+        (
+            "Media and verification",
+            {
+                "fields": (
+                    "image_url",
+                    "image_preview",
+                    "credential_url",
+                    "verification_link",
+                )
+            },
+        ),
+        (
+            "Publication and ordering",
+            {"fields": ("is_published", "is_featured", "sort_order")},
+        ),
+    )
+
+    class Media:
+        css = {
+            "all": ("api/admin_credentials.css",),
+        }
+
+    @admin.display(description="Type", ordering="credential_type")
+    def credential_type_display(self, obj: Credential):
+        return obj.get_credential_type_display()
+
+    @admin.display(description="Category", ordering="category")
+    def category_display(self, obj: Credential):
+        return obj.get_category_display()
+
+    @admin.display(description="Image preview")
+    def image_preview(self, obj: Credential | None):
+        if not obj or not _is_valid_credential_image_url(obj.image_url):
+            return "No valid image URL available."
+
+        public_url = _public_image_url(obj.image_url)
+        preview_class = "credential-preview credential-preview--certificate"
+
+        if obj.credential_type == "badge":
+            preview_class = "credential-preview credential-preview--badge"
+
+        return format_html(
+            '<a href="{}" target="_blank" rel="noopener noreferrer">'
+            '<img src="{}" alt="{}" class="{}" />'
+            "</a>",
+            public_url,
+            public_url,
+            f"{obj.title} preview",
+            preview_class,
+        )
+
+    @admin.display(description="Verification")
+    def verification_link(self, obj: Credential | None):
+        if not obj or not _is_valid_http_url(obj.credential_url):
+            return "—"
+
+        return format_html(
+            '<a href="{}" target="_blank" rel="noopener noreferrer">'
+            "Verify credential</a>",
+            obj.credential_url,
+        )
 
 
 @admin.action(description="Mark selected messages as in progress")

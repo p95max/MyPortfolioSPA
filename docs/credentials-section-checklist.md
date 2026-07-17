@@ -75,16 +75,16 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 5 — Django Admin
 
-- [ ] Register `Credential` in `backend/api/admin.py`.
-- [ ] Use `SortableAdminMixin` for manual ordering.
-- [ ] Show title, type, issuer, issue date, category, featured status, and published status in `list_display`.
-- [ ] Add filters for credential type, category, issuer, featured status, published status, and issue date.
-- [ ] Add search by title, issuer, credential ID, category, and skills.
-- [ ] Add an image preview to the change form.
-- [ ] Render badge images with `object-fit: contain` in the admin preview.
-- [ ] Add a clickable verification link to the change form.
-- [ ] Validate that `image_url` is either an allowed relative path or an HTTP(S) URL.
-- [ ] Prevent broken admin previews when the image URL is empty or invalid.
+- [x] Register `Credential` in `backend/api/admin.py`.
+- [x] Use `SortableAdminMixin` for manual ordering.
+- [x] Show title, type, issuer, issue date, category, featured status, and published status in `list_display`.
+- [x] Add filters for credential type, category, issuer, featured status, published status, and issue date.
+- [x] Add search by title, issuer, credential ID, category, and skills.
+- [x] Add an image preview to the change form.
+- [x] Render badge images with `object-fit: contain` in the admin preview.
+- [x] Add a clickable verification link to the change form.
+- [x] Validate that `image_url` is either an allowed relative path or an HTTP(S) URL.
+- [x] Prevent broken admin previews when the image URL is empty or invalid.
 - [ ] Confirm that credential ordering can be changed by drag and drop.
 - [ ] Confirm that unpublished credentials remain manageable in the admin.
 

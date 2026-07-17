@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Credential } from "../types";
 import "./CredentialCard.css";
+import { CredentialModal } from "./CredentialModal";
 
 const FALLBACK_IMAGE =
   'data:image/svg+xml;utf8,' +
@@ -41,6 +42,7 @@ export function CredentialCard({
   onPreview,
 }: CredentialCardProps) {
   const [imageSrc, setImageSrc] = useState(credential.imageUrl);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const typeLabel = credential.credentialType === "certificate" ? "Certificate" : "Badge";
   const previewLabel = credential.credentialType === "certificate"
     ? "View certificate"
@@ -84,25 +86,17 @@ export function CredentialCard({
         </div>
 
         <div className="credential-card__actions">
-          {canPreview && onPreview && (
+          {canPreview && (
             <button
               className="credential-card__action"
               type="button"
-              onClick={() => onPreview(credential)}
+              onClick={() => {
+                onPreview?.(credential);
+                setIsModalOpen(true);
+              }}
             >
               {previewLabel}
             </button>
-          )}
-
-          {canPreview && !onPreview && (
-            <a
-              className="credential-card__action"
-              href={credential.imageUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {previewLabel}
-            </a>
           )}
 
           {credential.credentialUrl && (
@@ -117,6 +111,13 @@ export function CredentialCard({
           )}
         </div>
       </div>
+
+      {isModalOpen && (
+        <CredentialModal
+          credential={credential}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </article>
   );
 }

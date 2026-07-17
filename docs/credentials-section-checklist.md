@@ -143,36 +143,36 @@ Track the source material and publication metadata in [Credential Content Invent
 - [x] Render the complete certificate without cropping important content.
 - [x] Use `object-fit: contain`.
 - [x] Preserve a stable media aspect ratio.
-- [ ] Show the full certificate in a modal when activated.
+- [x] Show the full certificate in a modal when activated.
 - [x] Keep verification as a separate action when a verification URL exists.
 
 ## Step 10 — Badge Card Media
 
-- [ ] Use a centred square badge image.
-- [ ] Keep the badge approximately 88–110 px wide inside a desktop card.
-- [ ] Use `object-fit: contain`.
-- [ ] Do not stretch a small badge across the card width.
-- [ ] Preserve the issuer's original badge colours.
-- [ ] Use a neutral media background that fits the portfolio theme.
-- [ ] Avoid decorative effects that reduce logo readability.
-- [ ] Prefer the official verification page over an image modal.
-- [ ] Open an image modal only when no official verification page exists.
+- [x] Use a centred square badge image.
+- [x] Keep the badge approximately 88–110 px wide inside a desktop card.
+- [x] Use `object-fit: contain`.
+- [x] Do not stretch a small badge across the card width.
+- [x] Preserve the issuer's original badge colours.
+- [x] Use a neutral media background that fits the portfolio theme.
+- [x] Avoid decorative effects that reduce logo readability.
+- [x] Prefer the official verification page over an image modal.
+- [x] Open an image modal only when no official verification page exists.
 
 ## Step 11 — Credential Preview Modal
 
-- [ ] Create `frontend/src/components/CredentialModal.tsx`.
-- [ ] Open the modal only for credentials that require image preview.
-- [ ] Add a visible close button.
-- [ ] Close the modal with the `Escape` key.
-- [ ] Close the modal when the backdrop is activated.
-- [ ] Do not close the modal when its content is activated.
-- [ ] Move keyboard focus into the modal when it opens.
-- [ ] Return focus to the triggering element when it closes.
-- [ ] Prevent background scrolling while the modal is open.
-- [ ] Add `role="dialog"` and `aria-modal="true"`.
-- [ ] Connect the dialog to an accessible title.
-- [ ] Keep the full credential readable without overflowing the viewport.
-- [ ] Provide a direct link to the original image or PDF.
+- [x] Create `frontend/src/components/CredentialModal.tsx`.
+- [x] Open the modal only for credentials that require image preview.
+- [x] Add a visible close button.
+- [x] Close the modal with the `Escape` key.
+- [x] Close the modal when the backdrop is activated.
+- [x] Do not close the modal when its content is activated.
+- [x] Move keyboard focus into the modal when it opens.
+- [x] Return focus to the triggering element when it closes.
+- [x] Prevent background scrolling while the modal is open.
+- [x] Add `role="dialog"` and `aria-modal="true"`.
+- [x] Connect the dialog to an accessible title.
+- [x] Keep the full credential readable without overflowing the viewport.
+- [x] Provide a direct link to the original image or PDF.
 
 ## Step 12 — Credentials Page
 

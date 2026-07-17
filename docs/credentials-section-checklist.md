@@ -106,17 +106,17 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 7 — Frontend Types and API Client
 
-- [ ] Add a `CredentialType` TypeScript union: `"certificate" | "badge"`.
-- [ ] Add a reusable `Credential` TypeScript type.
-- [ ] Define a narrow API response type.
-- [ ] Validate or normalize the API response before rendering it.
-- [ ] Add a reusable `getCredentials()` API function.
-- [ ] Support fetching all credentials.
-- [ ] Support filtering by credential type.
-- [ ] Support fetching featured credentials.
-- [ ] Add loading, empty, and error states.
-- [ ] Avoid duplicating normalization logic between the home page and credentials page.
-- [ ] Abort or ignore stale requests when the component unmounts.
+- [x] Add a `CredentialType` TypeScript union: `"certificate" | "badge"`.
+- [x] Add a reusable `Credential` TypeScript type.
+- [x] Define a narrow API response type.
+- [x] Validate or normalize the API response before rendering it.
+- [x] Add a reusable `getCredentials()` API function.
+- [x] Support fetching all credentials.
+- [x] Support filtering by credential type.
+- [x] Support fetching featured credentials.
+- [x] Add loading, empty, and error states.
+- [x] Avoid duplicating normalization logic between the home page and credentials page.
+- [x] Abort or ignore stale requests when the component unmounts.
 
 ## Step 8 — Shared Credential Card
 

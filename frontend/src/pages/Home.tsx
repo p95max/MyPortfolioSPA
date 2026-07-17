@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { FeaturedCredentials } from "../components/FeaturedCredentials";
 import "./Home.css";
 
 const STACK = [
@@ -57,6 +58,8 @@ export const Home = () => {
           </div>
 
         </section>
+
+        <FeaturedCredentials />
 
         {/* Divider */}
         <div className="ph-divider" />

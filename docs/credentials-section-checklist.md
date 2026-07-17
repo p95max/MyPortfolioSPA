@@ -197,31 +197,31 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 13 — Home Page Section
 
-- [ ] Create a reusable `FeaturedCredentials` component.
-- [ ] Fetch only featured credentials.
-- [ ] Render a maximum of three cards.
-- [ ] Prefer the strongest professional credentials over introductory badges.
-- [ ] Place the section below the hero content and above the final divider.
-- [ ] Keep the section visually secondary to the main hero CTA.
-- [ ] Add a `View all credentials` link.
-- [ ] Hide the section if the API returns no featured credentials.
-- [ ] Ensure the section does not significantly increase initial page load time.
+- [x] Create a reusable `FeaturedCredentials` component.
+- [x] Fetch only featured credentials.
+- [x] Render a maximum of three cards.
+- [x] Prefer the strongest professional credentials over introductory badges.
+- [x] Place the section below the hero content and above the final divider.
+- [x] Keep the section visually secondary to the main hero CTA.
+- [x] Add a `View all credentials` link.
+- [x] Hide the section if the API returns no featured credentials.
+- [x] Ensure the section does not significantly increase initial page load time.
 
 ## Step 14 — Responsive Behaviour
 
-- [ ] Use a normal CSS grid on desktop and tablet where practical.
-- [ ] Enable horizontal overflow only on small screens.
-- [ ] Use `scroll-snap-type: x proximity` or `x mandatory` on mobile.
-- [ ] Use `scroll-snap-align: start` on each card.
-- [ ] Make one card occupy approximately 85–90% of the mobile viewport width.
-- [ ] Leave part of the next card visible as a swipe affordance.
-- [ ] Preserve native touch scrolling.
-- [ ] Add previous and next controls only if they materially improve usability.
-- [ ] Disable the previous control at the start.
-- [ ] Disable the next control at the end.
-- [ ] Make optional carousel controls keyboard accessible.
-- [ ] Do not implement autoplay or infinite looping.
-- [ ] Respect `prefers-reduced-motion`.
+- [x] Use a normal CSS grid on desktop and tablet where practical.
+- [x] Enable horizontal overflow only on small screens.
+- [x] Use `scroll-snap-type: x proximity` or `x mandatory` on mobile.
+- [x] Use `scroll-snap-align: start` on each card.
+- [x] Make one card occupy approximately 85–90% of the mobile viewport width.
+- [x] Leave part of the next card visible as a swipe affordance.
+- [x] Preserve native touch scrolling.
+- [x] Do not add previous and next controls; native scrolling is clearer for this short list.
+- [x] Previous control is not applicable because custom carousel controls are not used.
+- [x] Next control is not applicable because custom carousel controls are not used.
+- [x] Optional carousel controls are not applicable because native scrolling is used.
+- [x] Do not implement autoplay or infinite looping.
+- [x] Respect `prefers-reduced-motion`.
 
 ## Step 15 — Images and Performance
 

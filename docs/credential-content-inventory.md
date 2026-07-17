@@ -15,7 +15,7 @@ Use one row per certificate or course badge before adding records to Django Admi
 | `source_asset` | Yes | Path to the original certificate PDF/image or the high-resolution badge asset. Keep this private until a public delivery URL is ready. |
 | `image_url` | Yes | Stable public HTTPS URL for the optimized preview image. |
 | `category` | Yes | One primary category: `backend`, `python`, `database`, `docker`, `cloud`, `linux`, `networking`, `security`, or `other`. |
-| `skills` | Yes | Comma-separated, concise tags, for example `Python, Django, PostgreSQL`. |
+| `skills` | Yes | Comma-separated, concise tags in this inventory, for example `Python, Django, PostgreSQL`; store them in Django as a JSON list of strings. |
 | `description` | No | One short sentence only when it gives useful professional context. |
 | `is_featured` | Yes | `yes` only for the strongest professional credentials. |
 | `sort_order` | Yes | Positive integer. Rank backend, Python, database, Docker, cloud, Linux, networking, and security credentials before introductory badges; use issue date as the tie-breaker. |

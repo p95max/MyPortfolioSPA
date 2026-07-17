@@ -8,17 +8,68 @@ class CredentialType(models.TextChoices):
     BADGE = "badge", "Badge"
 
 
+class CredentialCategory(models.TextChoices):
+    BACKEND = "backend", "Backend"
+    PYTHON = "python", "Python"
+    DATABASE = "database", "Database"
+    DOCKER = "docker", "Docker"
+    CLOUD = "cloud", "Cloud"
+    LINUX = "linux", "Linux"
+    NETWORKING = "networking", "Networking"
+    SECURITY = "security", "Security"
+    OTHER = "other", "Other"
+
+
 class Credential(models.Model):
     """Shared domain model for certificates and course badges.
 
-    Content fields are introduced in the next implementation step. Keeping one
-    model prevents the two credential types from drifting into separate APIs
-    and admin workflows.
+    Skills are stored as a JSON list of short strings, for example
+    ["Python", "Django", "PostgreSQL"].
     """
+
+    title = models.CharField(max_length=200)
+    issuer = models.CharField(max_length=200)
+    credential_type = models.CharField(
+        max_length=20,
+        choices=CredentialType.choices,
+    )
+    description = models.TextField(blank=True)
+    issued_at = models.DateField()
+    credential_id = models.CharField(max_length=200, blank=True)
+    credential_url = models.URLField(blank=True)
+    image_url = models.CharField(max_length=500)
+    category = models.CharField(
+        max_length=20,
+        choices=CredentialCategory.choices,
+        default=CredentialCategory.OTHER,
+    )
+    skills = models.JSONField(
+        default=list,
+        blank=True,
+        help_text='List of short tags, for example ["Python", "Django"].',
+    )
+    is_featured = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
+    sort_order = models.PositiveIntegerField(
+        default=0,
+        db_index=True,
+        verbose_name="Order",
+        help_text="Drag & drop rows in the admin list to reorder credentials.",
+    )
 
     class Meta:
         verbose_name = "Credential"
         verbose_name_plural = "Credentials"
+        ordering = ("sort_order", "id")
+
+    def save(self, *args, **kwargs):
+        if not self.pk and (self.sort_order is None or self.sort_order == 0):
+            max_order = Credential.objects.aggregate(m=Max("sort_order"))["m"] or 0
+            self.sort_order = max_order + 1
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.title} ({self.get_credential_type_display()})"
 
 
 

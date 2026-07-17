@@ -53,24 +53,24 @@ Track the source material and publication metadata in [Credential Content Invent
 
 ## Step 4 — Credential Model
 
-- [ ] Add a required `title` field.
-- [ ] Add a required `issuer` field.
-- [ ] Add a required `credential_type` field with explicit choices.
-- [ ] Add an optional `description` field.
-- [ ] Add a required `issued_at` date field.
-- [ ] Add an optional `credential_id` field.
-- [ ] Add an optional `credential_url` field.
-- [ ] Add a required `image_url` field.
-- [ ] Add a `category` field with explicit choices.
-- [ ] Add a `skills` field using a documented storage format.
-- [ ] Add an `is_featured` boolean field.
-- [ ] Add an `is_published` boolean field.
-- [ ] Add an indexed `sort_order` field.
-- [ ] Add default ordering by `sort_order` and primary key.
-- [ ] Add a readable `__str__` method.
-- [ ] Follow the existing project ordering behaviour where appropriate.
-- [ ] Generate the Django migration.
-- [ ] Review the generated migration before applying it.
+- [x] Add a required `title` field.
+- [x] Add a required `issuer` field.
+- [x] Add a required `credential_type` field with explicit choices.
+- [x] Add an optional `description` field.
+- [x] Add a required `issued_at` date field.
+- [x] Add an optional `credential_id` field.
+- [x] Add an optional `credential_url` field.
+- [x] Add a required `image_url` field.
+- [x] Add a `category` field with explicit choices.
+- [x] Add a `skills` field using a documented storage format.
+- [x] Add an `is_featured` boolean field.
+- [x] Add an `is_published` boolean field.
+- [x] Add an indexed `sort_order` field.
+- [x] Add default ordering by `sort_order` and primary key.
+- [x] Add a readable `__str__` method.
+- [x] Follow the existing project ordering behaviour where appropriate.
+- [x] Generate the Django migration.
+- [x] Review the generated migration before applying it.
 - [ ] Apply the migration locally.
 
 ## Step 5 — Django Admin

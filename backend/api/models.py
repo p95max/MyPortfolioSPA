@@ -8,6 +8,19 @@ class CredentialType(models.TextChoices):
     BADGE = "badge", "Badge"
 
 
+class Credential(models.Model):
+    """Shared domain model for certificates and course badges.
+
+    Content fields are introduced in the next implementation step. Keeping one
+    model prevents the two credential types from drifting into separate APIs
+    and admin workflows.
+    """
+
+    class Meta:
+        verbose_name = "Credential"
+        verbose_name_plural = "Credentials"
+
+
 
 class Project(models.Model):
     title = models.CharField(max_length=200)

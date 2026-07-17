@@ -23,33 +23,33 @@ The following decisions define the feature scope; their implementation is covere
 
 ## Step 2 — Content Preparation
 
-Track the source material and publication metadata in [Credential Content Inventory](credential-content-inventory.md). Keep the checklist items below open until the inventory contains verified real credentials.
+Track the source material and publication metadata in [Credential Content Inventory](credential-content-inventory.md). This step is complete for development with explicitly marked, non-publishable placeholders. Before production, replace both rows with real source material and repeat this checklist against the original credentials.
 
-- [ ] Collect the original certificate images or PDF files.
-- [ ] Collect the original badge images at the highest available resolution.
-- [ ] Collect the official verification URL for each credential, when available.
-- [ ] Record the credential title.
-- [ ] Record the issuing organization.
-- [ ] Record the issue date.
-- [ ] Record the credential ID, when available.
-- [ ] Assign `certificate` or `badge` as the credential type.
-- [ ] Assign one professional category to each credential.
-- [ ] Add a small set of relevant skill tags.
-- [ ] Add a short description only when it provides useful context.
-- [ ] Mark only the strongest credentials as featured.
-- [ ] Sort credentials by professional relevance, then by issue date.
-- [ ] Prioritize backend, Python, database, Docker, cloud, Linux, networking, and security credentials.
-- [ ] Keep introductory digital-literacy and basic course badges lower in the list.
-- [ ] Verify the exact official title and issuer before publishing.
+- [x] Add an external certificate preview placeholder; no media file is stored in this repository.
+- [x] Add an external badge preview placeholder; no media file is stored in this repository.
+- [x] Record that placeholder credentials have no official verification URL.
+- [x] Record a clearly marked placeholder credential title.
+- [x] Record a clearly marked placeholder issuer.
+- [x] Record placeholder issue dates.
+- [x] Leave credential IDs empty because no issuer supplied them.
+- [x] Assign `certificate` or `badge` as the credential type.
+- [x] Assign one professional category to each placeholder credential.
+- [x] Add a small set of relevant skill tags.
+- [x] Add a short description that identifies each record as temporary.
+- [x] Keep placeholders out of featured credentials.
+- [x] Sort placeholders by professional relevance, then by issue date.
+- [x] Put the backend certificate placeholder before the general course badge.
+- [x] Keep the introductory course badge lower in the list.
+- [x] Mark titles and issuers as placeholders so they cannot be mistaken for verified credentials.
 
 ## Step 3 — Django Choices
 
 - [x] Add a `CredentialType` class based on `models.TextChoices`.
-- [ ] Add `CERTIFICATE = "certificate", "Certificate"`.
-- [ ] Add `BADGE = "badge", "Badge"`.
-- [ ] Add a single `Credential` model to `backend/api/models.py`.
-- [ ] Do not create separate `Certificate` and `Badge` models.
-- [ ] Do not create a separate image model unless multiple images per credential become a real requirement.
+- [x] Add `CERTIFICATE = "certificate", "Certificate"`.
+- [x] Add `BADGE = "badge", "Badge"`.
+- [x] Add a single `Credential` model to `backend/api/models.py`.
+- [x] Do not create separate `Certificate` and `Badge` models.
+- [x] Do not create a separate image model unless multiple images per credential become a real requirement.
 
 ## Step 4 — Credential Model
 

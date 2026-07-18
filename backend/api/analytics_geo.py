@@ -18,6 +18,16 @@ def _valid_country_code(value: object) -> str:
 
 
 def _get_public_client_ip(request) -> str:
+    cloudflare_client_ip = request.META.get("HTTP_CF_CONNECTING_IP", "").strip()
+    if cloudflare_client_ip:
+        try:
+            address = ipaddress.ip_address(cloudflare_client_ip)
+        except ValueError:
+            pass
+        else:
+            if address.is_global:
+                return str(address)
+
     forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
     forwarded_candidates = [
         part.strip() for part in forwarded_for.split(",") if part.strip()

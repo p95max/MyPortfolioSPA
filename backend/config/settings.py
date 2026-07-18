@@ -354,6 +354,15 @@ TRUST_ANALYTICS_GEO_HEADERS = (
     os.getenv("TRUST_ANALYTICS_GEO_HEADERS", "False").lower()
     in ("1", "true", "yes", "on")
 )
+ANALYTICS_GEOIP_LOOKUP_ENABLED = (
+    os.getenv("ANALYTICS_GEOIP_LOOKUP_ENABLED", "False").lower()
+    in ("1", "true", "yes", "on")
+)
+ANALYTICS_GEOIP_LOOKUP_URL = os.getenv(
+    "ANALYTICS_GEOIP_LOOKUP_URL",
+    "https://api.country.is/{ip}",
+)
+ANALYTICS_GEOIP_TIMEOUT_SECONDS = 1.5
 
 
 # =============================================================================

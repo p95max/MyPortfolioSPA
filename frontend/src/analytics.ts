@@ -37,6 +37,8 @@ type AnalyticsPayload = {
   os: string;
   browser: string;
   device_type: string;
+  client_timezone: string;
+  utc_offset_minutes: number;
   anonymous_id: string;
   session_id: string;
   metadata: AnalyticsMetadata;
@@ -161,6 +163,14 @@ function getDeviceType(): string {
   }
 
   return "desktop";
+}
+
+function getClientTimezone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+  } catch {
+    return "";
+  }
 }
 
 function getQueryParam(name: string): string {
@@ -324,6 +334,8 @@ export function trackAnalyticsEvent(
     os: getOperatingSystem(),
     browser: getBrowser(),
     device_type: getDeviceType(),
+    client_timezone: getClientTimezone(),
+    utc_offset_minutes: -new Date().getTimezoneOffset(),
     anonymous_id: getAnonymousId(),
     session_id: getSessionId(),
     metadata,

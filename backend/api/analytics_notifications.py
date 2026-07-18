@@ -1,4 +1,6 @@
 import logging
+from datetime import timedelta, timezone as datetime_timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from django.conf import settings
 from django.core.cache import cache
@@ -15,6 +17,34 @@ logger = logging.getLogger(__name__)
 
 LOCK_TIMEOUT_SECONDS = 5 * 60
 DEDUP_TIMEOUT_SECONDS = 60 * 60 * 24 * 30
+
+
+def _format_visitor_time(event: AnalyticsEvent) -> str:
+    if event.client_timezone:
+        try:
+            visitor_timezone = ZoneInfo(event.client_timezone)
+            visitor_time = event.created_at.astimezone(visitor_timezone)
+            return (
+                visitor_time.strftime("%d.%m.%Y %H:%M")
+                + f" ({event.client_timezone})"
+            )
+        except (ValueError, ZoneInfoNotFoundError):
+            pass
+
+    if event.utc_offset_minutes is not None:
+        visitor_timezone = datetime_timezone(
+            timedelta(minutes=event.utc_offset_minutes)
+        )
+        visitor_time = event.created_at.astimezone(visitor_timezone)
+        sign = "+" if event.utc_offset_minutes >= 0 else "-"
+        absolute_minutes = abs(event.utc_offset_minutes)
+        hours, minutes = divmod(absolute_minutes, 60)
+        return (
+            visitor_time.strftime("%d.%m.%Y %H:%M")
+            + f" (UTC{sign}{hours:02d}:{minutes:02d})"
+        )
+
+    return timezone.localtime(event.created_at).strftime("%d.%m.%Y %H:%M")
 
 
 def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
@@ -52,7 +82,7 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
             cache.delete(cache_key)
             return
 
-        created_at = timezone.localtime(event.created_at).strftime("%d.%m.%Y %H:%M")
+        created_at = _format_visitor_time(event)
         source = event.source_type or "unknown"
         path = event.path or "—"
         country = event.country or "—"
@@ -79,6 +109,7 @@ def notify_new_analytics_visitor(event: AnalyticsEvent) -> None:
             "browser": browser,
             "os_name": os_name,
             "language": language,
+            "client_timezone": event.client_timezone or "—",
             "created_at": created_at,
             "anonymous_id": event.anonymous_id,
             "session_id": session_id,

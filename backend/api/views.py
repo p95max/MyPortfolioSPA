@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 from django.template.loader import render_to_string
 
 from .analytics_notifications import notify_new_analytics_visitor
+from .analytics_geo import lookup_analytics_country
 from .models import AnalyticsEvent, Credential, CredentialType, Project
 from .serializers import (
     AnalyticsEventSerializer,
@@ -215,7 +216,12 @@ def analytics_event(request):
         logger.warning("Invalid analytics event: %s", serializer.errors)
         return Response({"detail": "invalid_event"}, status=status.HTTP_400_BAD_REQUEST)
 
-    event = serializer.save(country=_get_analytics_country(request))
+    country = _get_analytics_country(request)
+
+    if not country and _should_lookup_analytics_country(serializer.validated_data):
+        country = lookup_analytics_country(request)
+
+    event = serializer.save(country=country)
     notify_new_analytics_visitor(event)
 
     return Response({"detail": "ok"}, status=status.HTTP_201_CREATED)
@@ -236,3 +242,14 @@ def _get_analytics_country(request) -> str:
             return country
 
     return ""
+
+
+def _should_lookup_analytics_country(validated_data: dict) -> bool:
+    if validated_data.get("event_type") != AnalyticsEvent.EVENT_PAGE_VIEW:
+        return False
+
+    anonymous_id = validated_data.get("anonymous_id")
+    if not anonymous_id:
+        return False
+
+    return not AnalyticsEvent.objects.filter(anonymous_id=anonymous_id).exists()

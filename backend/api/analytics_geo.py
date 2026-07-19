@@ -51,10 +51,12 @@ def _get_public_client_ip(request) -> str:
 
 def lookup_analytics_country(request) -> str:
     if not getattr(settings, "ANALYTICS_GEOIP_LOOKUP_ENABLED", False):
+        logger.info("Analytics country lookup is disabled")
         return ""
 
     client_ip = _get_public_client_ip(request)
     if not client_ip:
+        logger.warning("Analytics country lookup skipped: no public client IP")
         return ""
 
     url_template = getattr(

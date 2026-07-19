@@ -16,6 +16,7 @@ PASSWORD_HASHERS = [
 TURNSTILE_SECRET = "test-turnstile-secret"
 BACKEND_BASE_URL = "http://testserver"
 NOTIFY_EMAILS = ["owner@example.com"]
+ANALYTICS_GEOIP_LOOKUP_ENABLED = False
 
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False

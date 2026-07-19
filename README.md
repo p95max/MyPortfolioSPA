@@ -460,8 +460,9 @@ Trusted-header country detection is disabled by default. Set
 `TRUST_ANALYTICS_GEO_HEADERS=True` only when the request reaches Django through a
 trusted CDN/proxy path that prevents clients from spoofing geo headers.
 
-When trusted geo headers are unavailable, `ANALYTICS_GEOIP_LOOKUP_ENABLED=True`
-enables a country-only lookup for the first page view of a new anonymous visitor.
+When trusted geo headers are unavailable, the production default enables a
+country-only lookup for the first page view of a new anonymous visitor.
+Set `ANALYTICS_GEOIP_LOOKUP_ENABLED=False` to disable it explicitly.
 The default provider is `api.country.is`; the client IP is not stored in the
 portfolio database and lookup failures do not reject analytics events.
 

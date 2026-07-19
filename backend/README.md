@@ -160,7 +160,7 @@ If the username is missing, no superuser is created automatically.
 | `REDIS_URL` | recommended in production | Redis cache URL for DRF throttling. Falls back to local memory cache if empty. |
 | `DRF_NUM_PROXIES` | recommended in production | Number of trusted proxy hops used by DRF throttling. Defaults to `0` so spoofed `X-Forwarded-For` is ignored. |
 | `TRUST_ANALYTICS_GEO_HEADERS` | optional | Set to `True` only when requests reach Django through trusted CDN/proxy headers. Defaults to `False`. |
-| `ANALYTICS_GEOIP_LOOKUP_ENABLED` | optional | Resolve a new visitor's country through `api.country.is` when trusted geo headers are unavailable. The IP is not stored. Defaults to `False`. |
+| `ANALYTICS_GEOIP_LOOKUP_ENABLED` | optional | Resolve a new visitor's country through `api.country.is` when trusted geo headers are unavailable. The IP is not stored. Defaults to `True` in production and `False` with `DJANGO_DEBUG=True`. |
 
 ### Frontend integration
 
@@ -196,7 +196,7 @@ EMAIL_SUBJECT_PREFIX=[Portfolio]
 |---|---:|---|
 | `ANALYTICS_NEW_VISITOR_EMAIL_ENABLED` | optional | Enables first-time analytics visitor email notifications. Defaults to `False`. |
 | `ANALYTICS_NOTIFY_DIRECT_VISITORS` | optional | Allows email notifications for direct visitors. Defaults to `False`. |
-| `ANALYTICS_GEOIP_LOOKUP_ENABLED` | optional | Enables country-only fallback enrichment for the first page view. Defaults to `False`. |
+| `ANALYTICS_GEOIP_LOOKUP_ENABLED` | optional | Enables country-only fallback enrichment for the first page view. Defaults to `True` in production and `False` with `DJANGO_DEBUG=True`. |
 
 ---
 

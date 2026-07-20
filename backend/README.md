@@ -92,6 +92,7 @@ DISPLAY_TZ=Europe/Berlin
 REDIS_URL=
 DRF_NUM_PROXIES=0
 TRUST_ANALYTICS_GEO_HEADERS=False
+ANALYTICS_GEOIP_LOOKUP_ENABLED=False
 ```
 
 ---
@@ -159,6 +160,7 @@ If the username is missing, no superuser is created automatically.
 | `REDIS_URL` | recommended in production | Redis cache URL for DRF throttling. Falls back to local memory cache if empty. |
 | `DRF_NUM_PROXIES` | recommended in production | Number of trusted proxy hops used by DRF throttling. Defaults to `0` so spoofed `X-Forwarded-For` is ignored. |
 | `TRUST_ANALYTICS_GEO_HEADERS` | optional | Set to `True` only when requests reach Django through trusted CDN/proxy headers. Defaults to `False`. |
+| `ANALYTICS_GEOIP_LOOKUP_ENABLED` | optional | Resolve a new visitor's country through `api.country.is` when trusted geo headers are unavailable. The IP is not stored. Defaults to `True` in production and `False` with `DJANGO_DEBUG=True`. |
 
 ### Frontend integration
 
@@ -194,6 +196,7 @@ EMAIL_SUBJECT_PREFIX=[Portfolio]
 |---|---:|---|
 | `ANALYTICS_NEW_VISITOR_EMAIL_ENABLED` | optional | Enables first-time analytics visitor email notifications. Defaults to `False`. |
 | `ANALYTICS_NOTIFY_DIRECT_VISITORS` | optional | Allows email notifications for direct visitors. Defaults to `False`. |
+| `ANALYTICS_GEOIP_LOOKUP_ENABLED` | optional | Enables country-only fallback enrichment for the first page view. Defaults to `True` in production and `False` with `DJANGO_DEBUG=True`. |
 
 ---
 
@@ -335,6 +338,7 @@ Stored backend fields:
   * `tablet`
   * `desktop`
   * `unknown`
+* browser timezone and UTC offset
 * client-side anonymous ID
 * session-level anonymous ID
 * event metadata
@@ -342,9 +346,11 @@ Stored backend fields:
 
 The `path` field is stored without query parameters. UTM values are stored separately in dedicated fields.
 
-Country detection is handled server-side from request headers only when
-`TRUST_ANALYTICS_GEO_HEADERS=True`. Keep it disabled unless the origin only
-receives trusted CDN/proxy headers.
+Country detection first uses trusted server-side request headers when
+`TRUST_ANALYTICS_GEO_HEADERS=True`. If the current hosting path does not provide
+them, `ANALYTICS_GEOIP_LOOKUP_ENABLED=True` performs one country-only lookup for
+the first page view through `api.country.is`. The IP address is not persisted,
+and lookup failures degrade to an empty country without rejecting the event.
 
 The analytics endpoint is throttled through DRF throttling:
 

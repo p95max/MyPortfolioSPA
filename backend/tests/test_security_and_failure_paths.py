@@ -59,6 +59,8 @@ def make_event(**overrides):
         "browser": "Chrome",
         "os": "Linux",
         "language": "de-DE",
+        "client_timezone": "Europe/Berlin",
+        "utc_offset_minutes": 120,
     }
     values.update(overrides)
     return AnalyticsEvent.objects.create(**values)
@@ -201,6 +203,8 @@ def test_first_analytics_visitor_sends_one_email_only():
     assert mail.outbox[0].to == ["owner@example.com"]
     assert "New visitor" in mail.outbox[0].subject
     assert "visitor-123" in mail.outbox[0].body
+    assert "Europe/Berlin" in mail.outbox[0].body
+    assert "Visitor time:" in mail.outbox[0].body
 
 
 @override_settings(
@@ -295,6 +299,53 @@ def test_analytics_rejects_invalid_country_header(api_client):
 
     assert response.status_code == 201
     assert AnalyticsEvent.objects.get(anonymous_id="invalid-geo-visitor").country == ""
+
+
+@override_settings(
+    TRUST_ANALYTICS_GEO_HEADERS=False,
+    ANALYTICS_GEOIP_LOOKUP_ENABLED=True,
+)
+def test_first_page_view_uses_geoip_country_fallback(api_client):
+    with patch("api.views.lookup_analytics_country", return_value="DE") as lookup_mock:
+        response = api_client.post(
+            "/api/analytics/",
+            {
+                "event_type": "page_view",
+                "path": "/",
+                "anonymous_id": "geoip-visitor",
+            },
+            format="json",
+        )
+
+    assert response.status_code == 201
+    assert AnalyticsEvent.objects.get(anonymous_id="geoip-visitor").country == "DE"
+    lookup_mock.assert_called_once()
+
+
+@override_settings(
+    TRUST_ANALYTICS_GEO_HEADERS=False,
+    ANALYTICS_GEOIP_LOOKUP_ENABLED=True,
+)
+def test_geoip_lookup_runs_only_for_first_page_view(api_client):
+    AnalyticsEvent.objects.create(
+        event_type=AnalyticsEvent.EVENT_PAGE_VIEW,
+        path="/",
+        anonymous_id="returning-visitor",
+    )
+
+    with patch("api.views.lookup_analytics_country") as lookup_mock:
+        response = api_client.post(
+            "/api/analytics/",
+            {
+                "event_type": "page_view",
+                "path": "/projects",
+                "anonymous_id": "returning-visitor",
+            },
+            format="json",
+        )
+
+    assert response.status_code == 201
+    lookup_mock.assert_not_called()
 
 
 def test_contact_email_throttle_normalizes_email_identity():

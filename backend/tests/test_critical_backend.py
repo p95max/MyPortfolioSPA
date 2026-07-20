@@ -194,6 +194,8 @@ def analytics_payload(**overrides):
         "os": "Windows",
         "browser": "Chrome",
         "device_type": "desktop",
+        "client_timezone": "Europe/Berlin",
+        "utc_offset_minutes": 120,
         "anonymous_id": "visitor-123",
         "session_id": "session-123",
         "metadata": {
@@ -228,6 +230,8 @@ def test_analytics_event_is_saved_with_country_from_header(api_client):
     assert event.country == "DE"
     assert event.source_type == "linkedin"
     assert event.device_type == "desktop"
+    assert event.client_timezone == "Europe/Berlin"
+    assert event.utc_offset_minutes == 120
     assert event.metadata == {
         "project_id": "jobapply",
         "project_title": "JobApply",
@@ -304,6 +308,25 @@ def test_analytics_unknown_device_type_is_normalized_to_unknown(api_client):
 
     event = AnalyticsEvent.objects.get()
     assert event.device_type == "unknown"
+
+
+def test_analytics_invalid_timezone_and_offset_are_discarded(api_client):
+    response = api_client.post(
+        "/api/analytics/",
+        {
+            "event_type": "page_view",
+            "path": "/",
+            "anonymous_id": "visitor-timezone",
+            "client_timezone": "not/a-real-timezone",
+            "utc_offset_minutes": 900,
+        },
+        format="json",
+    )
+
+    assert response.status_code == 201
+    event = AnalyticsEvent.objects.get()
+    assert event.client_timezone == ""
+    assert event.utc_offset_minutes is None
 
 
 # -------------------------

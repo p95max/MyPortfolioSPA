@@ -125,16 +125,23 @@ export default function Datenschutz() {
           <li>Betriebssystem</li>
           <li>Gerätetyp, z. B. mobile, tablet oder desktop</li>
           <li>Browser</li>
+          <li>Zeitzone und UTC-Abweichung des Browsers</li>
           <li>Traffic-Quelle, z. B. direct, search, LinkedIn, GitHub oder referral</li>
           <li>UTM-Parameter, sofern in der URL vorhanden</li>
           <li>Sitzungskennung</li>
           <li>
             ungefähres Land, sofern über technische Header des Hosting- oder
-            Proxy-Anbieters verfügbar
+            Proxy-Anbieters oder durch eine einmalige IP-Länderzuordnung verfügbar
           </li>
           <li>eine clientseitig erzeugte anonyme Kennung</li>
           <li>Zeitpunkt des Ereignisses</li>
         </ul>
+        <p>
+          Wenn der Hosting- oder Proxy-Anbieter keinen Ländercode übermittelt,
+          kann die IP-Adresse einmalig an <code>api.country.is</code> übertragen
+          werden, um ausschließlich den zweistelligen Ländercode zu bestimmen.
+          Die IP-Adresse wird nicht in der Portfolio-Datenbank gespeichert.
+        </p>
         <p>
           Die anonyme Kennung wird im lokalen Speicher Ihres Browsers unter{" "}
           <code>analytics-anonymous-id-v1</code> gespeichert. Die Cookie- bzw.

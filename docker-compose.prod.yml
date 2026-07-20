@@ -1,0 +1,82 @@
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    env_file:
+      - ${PORTFOLIO_ENV_FILE:-/etc/portfolio/portfolio.env}
+    volumes:
+      - portfolio_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - portfolio_internal
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - portfolio_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - portfolio_internal
+
+  web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    env_file:
+      - ${PORTFOLIO_ENV_FILE:-/etc/portfolio/portfolio.env}
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      REDIS_URL: redis://redis:6379/0
+      PORT: "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health/', timeout=5)\""]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - portfolio_internal
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_URL: ${VITE_API_URL:-}
+        VITE_USE_API_PROXY: "true"
+        VITE_TURNSTILE_SITEKEY: ${VITE_TURNSTILE_SITEKEY:-}
+        VITE_SNOW: ${VITE_SNOW:-auto}
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:80"
+    networks:
+      - portfolio_internal
+
+volumes:
+  portfolio_postgres_data:
+  portfolio_redis_data:
+
+networks:
+  portfolio_internal:

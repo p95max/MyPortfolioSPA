@@ -1,0 +1,10 @@
+[Unit]
+Description=Check Portfolio production branch for updates
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=portfolio-auto-deploy.service
+
+[Install]
+WantedBy=timers.target

@@ -64,6 +64,21 @@ def make_event(**overrides):
     return AnalyticsEvent.objects.create(**values)
 
 
+def test_health_endpoint_reports_database_readiness(api_client):
+    response = api_client.get("/api/health/")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+
+
+def test_health_endpoint_returns_service_unavailable_when_database_fails(api_client):
+    with patch("api.views.connection.cursor", side_effect=DatabaseError("database down")):
+        response = api_client.get("/api/health/")
+
+    assert response.status_code == 503
+    assert response.json() == {"status": "error"}
+
+
 # Turnstile verification
 
 

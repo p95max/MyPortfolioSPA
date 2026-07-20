@@ -1,0 +1,10 @@
+[Unit]
+Description=Back up Portfolio PostgreSQL database
+After=docker.service
+
+[Service]
+Type=oneshot
+User=portfolio
+Group=portfolio
+Environment=PORTFOLIO_ENV_FILE=/etc/portfolio/portfolio.env
+ExecStart=/usr/local/bin/portfolio-backup-db.sh

@@ -1,0 +1,2 @@
+# The Telegram bot may queue only the fixed deploy service. It cannot execute shell commands.
+portfolio ALL=(root) NOPASSWD: /usr/bin/systemctl --no-block start portfolio-auto-deploy.service

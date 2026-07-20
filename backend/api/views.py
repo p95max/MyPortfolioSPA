@@ -1,5 +1,6 @@
 import logging
 from django.conf import settings
+from django.db import DatabaseError, connection
 from rest_framework import viewsets, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -78,6 +79,19 @@ class CredentialViewSet(viewsets.ReadOnlyModelViewSet):
             )
 
         return queryset.filter(credential_type=credential_type)
+
+
+@api_view(["GET"])
+def health(request):
+    """Minimal unauthenticated readiness probe for the reverse proxy and VPS monitor."""
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+    except DatabaseError:
+        logger.exception("Health probe failed: database is unavailable")
+        return Response({"status": "error"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+    return Response({"status": "ok"})
 
 
 @api_view(['POST'])

@@ -77,6 +77,7 @@ class Credential(models.Model):
 class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
+    description_de = models.TextField(blank=True, help_text="German project description.")
     tech_stack = models.CharField(max_length=200)
     github_url = models.URLField(blank=True)
     demo_url = models.URLField(blank=True)

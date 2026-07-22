@@ -38,10 +38,19 @@ export const Navbar = () => {
         </div>
 
         <div className="nav-right">
-          <select className="nav-language" value={language} onChange={(event) => setLanguage(event.target.value as "en" | "de")} aria-label={t("nav.language")}>
-            <option value="en">EN</option>
-            <option value="de">DE</option>
-          </select>
+          <div className="nav-language" role="group" aria-label={t("nav.language")}>
+            {(["en", "de"] as const).map((locale) => (
+              <button
+                key={locale}
+                type="button"
+                className={language === locale ? "active" : ""}
+                onClick={() => setLanguage(locale)}
+                aria-pressed={language === locale}
+              >
+                {locale.toUpperCase()}
+              </button>
+            ))}
+          </div>
           <button
             className={`hamburger ${open ? "is-open" : ""}`}
             aria-label={t("nav.toggle")}

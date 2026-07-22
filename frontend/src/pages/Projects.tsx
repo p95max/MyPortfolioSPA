@@ -5,6 +5,7 @@ import type { Project } from "../types";
 import { testProjects } from "../data/test_data";
 import { getTechBadge } from "../data/techBadges";
 import { getApiUrl } from "../apiBaseUrl";
+import { useTranslation } from "../i18n";
 
 const USE_TEST_DATA = false;
 
@@ -20,6 +21,8 @@ type ApiProject = {
   id: unknown;
   title: string;
   description: string;
+  description_de?: string;
+  descriptionDe?: string;
   tech_stack?: unknown;
   techStack?: unknown;
   github_url?: string;
@@ -88,6 +91,7 @@ function toCamelCase(project: ApiProject): Project {
     id: String(project.id),
     title: project.title,
     description: project.description,
+    descriptionDe: project.description_de ?? project.descriptionDe,
     techStack: normalizeTechStack(project.tech_stack ?? project.techStack),
     githubUrl: project.github_url ?? project.githubUrl,
     demoUrl: project.demo_url ?? project.demoUrl,
@@ -100,6 +104,7 @@ function toCamelCase(project: ApiProject): Project {
 }
 
 function Projects() {
+  const { language, t } = useTranslation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -203,7 +208,7 @@ function Projects() {
   if (loading) {
     return (
       <div className="page-projects">
-        <p className="pp-state">Loading projects...</p>
+        <p className="pp-state">{t("projects.loading")}</p>
       </div>
     );
   }
@@ -225,13 +230,13 @@ function Projects() {
   return (
     <div className="page-projects">
       <div className="container">
-        <p className="pp-eyebrow">Portfolio</p>
-        <h1 className="title">Projects</h1>
+        <p className="pp-eyebrow">{t("projects.eyebrow")}</p>
+        <h1 className="title">{t("projects.title")}</h1>
 
         {availableTags.length > 0 && (
           <details className="pp-filters">
             <summary className="pp-filters__summary">
-              <span className="pp-filters__title">Filter Projects by technologies</span>
+              <span className="pp-filters__title">{t("projects.filter")}</span>
 
               <svg
                 className="pp-filters__icon"
@@ -251,7 +256,7 @@ function Projects() {
               </svg>
             </summary>
 
-            <div className="pp-tags" aria-label="Filter projects by technology tags">
+            <div className="pp-tags" aria-label={t("projects.filterLabel")}>
               <button
                 type="button"
                 className={`pp-tag-btn pp-tag-btn--all ${
@@ -259,7 +264,7 @@ function Projects() {
                 }`}
                 onClick={clearSelectedTags}
               >
-                <span>All</span>
+                <span>{t("projects.all")}</span>
                 <span className="pp-tag-count">{projects.length}</span>
               </button>
 
@@ -269,7 +274,7 @@ function Projects() {
                   className="pp-tag-btn pp-tag-btn--clear"
                   onClick={clearSelectedTags}
                 >
-                  <span>Clear</span>
+                  <span>{t("projects.clear")}</span>
                   <span className="pp-tag-count">{selectedTags.length}</span>
                 </button>
               )}
@@ -311,22 +316,27 @@ function Projects() {
 
         {filteredProjects.length === 0 ? (
           <div className="pp-filter-alert" role="alert">
-            <strong>No matching projects found.</strong>
-            <span>Try removing one or more technology filters.</span>
+            <strong>{t("projects.noMatches")}</strong>
+            <span>{t("projects.hint")}</span>
 
             <button
               type="button"
               className="pp-filter-alert__btn"
               onClick={clearSelectedTags}
             >
-              Clear filters
+              {t("projects.clearFilters")}
             </button>
           </div>
         ) : (
           <>
             <div className="pp-list">
               {current.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard key={project.id} project={{
+                  ...project,
+                  description: language === "de" && project.descriptionDe
+                    ? project.descriptionDe
+                    : project.description,
+                }} />
               ))}
             </div>
 

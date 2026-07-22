@@ -403,6 +403,7 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
         "country",
         "device_type",
         "browser",
+        "client_timezone",
         "details_summary",
     )
     list_filter = (
@@ -410,6 +411,8 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
         "source_type",
         "country",
         "device_type",
+        "client_timezone",
+        "utc_offset_minutes",
         "browser",
         "os",
         "created_at",
@@ -438,6 +441,8 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
         "os",
         "browser",
         "device_type",
+        "client_timezone",
+        "utc_offset_minutes",
         "screen_width",
         "screen_height",
         "anonymous_id",
@@ -465,6 +470,8 @@ class AnalyticsEventAdmin(admin.ModelAdmin):
                     "browser",
                     "os",
                     "language",
+                    "client_timezone",
+                    "utc_offset_minutes",
                 )
             },
         ),

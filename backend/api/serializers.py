@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from .models import AnalyticsEvent, ContactMessage, Credential, Project
 from .utils.image_urls import normalize_screenshot_url
@@ -145,6 +146,8 @@ class AnalyticsEventSerializer(serializers.ModelSerializer):
             "os",
             "browser",
             "device_type",
+            "client_timezone",
+            "utc_offset_minutes",
             "anonymous_id",
             "session_id",
             "metadata",
@@ -187,6 +190,28 @@ class AnalyticsEventSerializer(serializers.ModelSerializer):
 
         if value not in {"mobile", "tablet", "desktop", "unknown", ""}:
             return "unknown"
+
+        return value
+
+    def validate_client_timezone(self, value):
+        value = (value or "").strip()[:64]
+
+        if not value:
+            return ""
+
+        try:
+            ZoneInfo(value)
+        except (ValueError, ZoneInfoNotFoundError):
+            return ""
+
+        return value
+
+    def validate_utc_offset_minutes(self, value):
+        if value is None:
+            return None
+
+        if not -840 <= value <= 840:
+            return None
 
         return value
 

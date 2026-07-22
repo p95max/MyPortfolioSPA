@@ -1,0 +1,20 @@
+[Unit]
+Description=Portfolio Telegram operations bot
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=portfolio
+Group=portfolio
+Environment=PORTFOLIO_ENV_FILE=/etc/portfolio/portfolio.env
+ExecStart=/usr/local/bin/portfolio-telegram.py bot
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target

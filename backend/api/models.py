@@ -219,6 +219,17 @@ class AnalyticsEvent(models.Model):
         db_index=True,
         help_text="mobile, tablet, desktop or unknown.",
     )
+    client_timezone = models.CharField(
+        max_length=64,
+        blank=True,
+        default="",
+        help_text="IANA timezone reported by the browser, for example Europe/Berlin.",
+    )
+    utc_offset_minutes = models.SmallIntegerField(
+        null=True,
+        blank=True,
+        help_text="Browser UTC offset in minutes at the time of the event.",
+    )
 
     # Legacy fields. Kept for backward compatibility, no longer sent by frontend.
     screen_width = models.PositiveIntegerField(null=True, blank=True)

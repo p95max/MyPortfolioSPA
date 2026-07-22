@@ -18,6 +18,10 @@ export const Navbar = () => {
     { to: "/projects", label: t("nav.projects") },
     { to: "/credentials", label: t("nav.certificates") },
     { to: "/contact", label: t("nav.contact") },
+    { to: "/", label: "about" },
+    { to: "/projects", label: "projects" },
+    { to: "/credentials", label: "certificates" },
+    { to: "/contact", label: "contact" },
   ];
 
   return (

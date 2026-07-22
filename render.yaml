@@ -49,6 +49,9 @@ services:
       - key: TRUST_ANALYTICS_GEO_HEADERS
         sync: false
 
+      - key: ANALYTICS_GEOIP_LOOKUP_ENABLED
+        value: "True"
+
       - key: EMAIL_HOST
         value: "smtp.gmail.com"
 

@@ -1,0 +1,13 @@
+[Unit]
+Description=Portfolio auto deploy from GitHub
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=portfolio
+Group=portfolio
+WorkingDirectory=/opt/myportfoliospa
+Environment=PORTFOLIO_ENV_FILE=/etc/portfolio/portfolio.env
+TimeoutStartSec=30min
+ExecStart=/usr/local/bin/portfolio-auto-deploy.sh

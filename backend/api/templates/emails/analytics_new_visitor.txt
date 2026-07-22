@@ -11,8 +11,9 @@ Device: {{ device }}
 Browser: {{ browser }}
 OS: {{ os_name }}
 Language: {{ language }}
+Timezone: {{ client_timezone }}
 
-Time:
+Visitor time:
 {{ created_at }}
 
 Tracking:

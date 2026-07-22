@@ -33,14 +33,14 @@ export default function Footer() {
             href="/impressum"
             style={{ color: '#6b7280', textDecoration: 'none' }}
           >
-            Impressum
+            {t("footer.legalNotice")}
           </a>
 
           <a
             href="/datenschutz"
             style={{ color: '#6b7280', textDecoration: 'none' }}
           >
-            Datenschutz
+            {t("footer.privacyPolicy")}
           </a>
 
           <button

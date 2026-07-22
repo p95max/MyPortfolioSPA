@@ -3,7 +3,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("api", "0013_alter_credential_category"),
+        ("api", "0014_analyticsevent_client_timezone_and_utc_offset"),
     ]
 
     operations = [

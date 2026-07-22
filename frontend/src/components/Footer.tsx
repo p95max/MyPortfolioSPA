@@ -1,7 +1,9 @@
 import { resetPrivacyPreferences } from '../privacy';
 import './Footer.css';
+import { useTranslation } from '../i18n';
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <footer
       style={{
@@ -46,7 +48,7 @@ export default function Footer() {
             className="footer-link-button"
             onClick={resetPrivacyPreferences}
           >
-            Privacy settings
+            {t("footer.privacy")}
           </button>
 
           {/* GitHub */}
@@ -55,8 +57,8 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="github-link github-link--tooltip"
-            data-tooltip="View source on GitHub"
-            aria-label="View source on GitHub"
+            data-tooltip={t("footer.source")}
+            aria-label={t("footer.source")}
           >
             <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true">
               <path

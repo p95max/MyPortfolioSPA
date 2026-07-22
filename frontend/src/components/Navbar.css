@@ -103,6 +103,16 @@
 /* Right slot */
 .nav-right { display: flex; align-items: center; gap: 10px; }
 
+.nav-language {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font: 700 .75rem var(--mono);
+  padding: 6px 8px;
+}
+
 /* Hamburger */
 .hamburger {
   display: none;

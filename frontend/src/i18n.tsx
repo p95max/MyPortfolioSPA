@@ -37,7 +37,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>(getInitialLanguage);
   useEffect(() => { localStorage.setItem(STORAGE_KEY, language); document.documentElement.lang = language; }, [language]);
   const value = useMemo(() => ({ language, setLanguage, t: (key: string, values: Record<string, string | number> = {}) => {
-    const translated = key.split(".").reduce<unknown>((part, item) => item && typeof item === "object" ? (item as Record<string, unknown>)[part] : undefined, messages[language]);
+    const translated = key.split(".").reduce<unknown>(
+      (value, part) => value && typeof value === "object"
+        ? (value as Record<string, unknown>)[part]
+        : undefined,
+      messages[language],
+    );
     return typeof translated === "string" ? translated.replace(/{{(\w+)}}/g, (_, name: string) => String(values[name] ?? "")) : key;
   } }), [language]);
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;

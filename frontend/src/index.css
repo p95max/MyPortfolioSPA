@@ -13,6 +13,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -25,15 +37,17 @@ a:hover {
 body {
   margin: 0;
   width: 100%;
-  min-width: 320px;
+  min-width: 0;
+  max-width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 #root,
 .app-wrapper,
 .main-content {
   width: 100%;
+  max-width: 100%;
   min-width: 0;
 }
 

@@ -8,7 +8,10 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { language, setLanguage, t } = useTranslation();
 
-  useEffect(() => setOpen(false), [location.pathname]);
+  useEffect(() => {
+    setOpen(false);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
 
   const links = [
     { to: "/", label: t("nav.about") },

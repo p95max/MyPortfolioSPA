@@ -10,6 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { useCredentials } from "../hooks/useCredentials";
 import { CredentialCard } from "./CredentialCard";
+import { useTranslation } from "../i18n";
 import "./FeaturedCredentials.css";
 
 const AUTOPLAY_DELAY_MS = 5200;
@@ -31,6 +32,7 @@ function prefersReducedMotion(): boolean {
 
 export function FeaturedCredentials() {
   const { credentials, error, loading } = useCredentials({ featured: true });
+  const { t } = useTranslation();
   const trackRef = useRef<HTMLUListElement>(null);
   const scrollTimerRef = useRef<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -147,19 +149,19 @@ export function FeaturedCredentials() {
     >
       <div className="featured-credentials__header">
         <div>
-          <p className="featured-credentials__eyebrow">Professional certificates</p>
+          <p className="featured-credentials__eyebrow">{t("credentials.featuredEyebrow")}</p>
           <h2 id="featured-credentials-title" className="featured-credentials__title">
-            Featured certificates
+            {t("credentials.featuredTitle")}
           </h2>
         </div>
 
         <div className="featured-credentials__header-actions">
           {maxIndex > 0 && (
-            <div className="featured-credentials__controls" aria-label="Certificate carousel controls">
+            <div className="featured-credentials__controls" aria-label={t("credentials.carouselControls")}>
               <button
                 className="featured-credentials__control"
                 type="button"
-                aria-label="Previous certificates"
+                aria-label={t("credentials.previous")}
                 onClick={() => goTo(currentIndex > 0 ? currentIndex - 1 : maxIndex)}
               >
                 <span aria-hidden="true">←</span>
@@ -167,7 +169,7 @@ export function FeaturedCredentials() {
               <button
                 className="featured-credentials__control"
                 type="button"
-                aria-label="Next certificates"
+                aria-label={t("credentials.next")}
                 onClick={() => goTo(currentIndex >= maxIndex ? 0 : currentIndex + 1)}
               >
                 <span aria-hidden="true">→</span>
@@ -176,7 +178,7 @@ export function FeaturedCredentials() {
           )}
 
           <Link className="featured-credentials__link" to="/credentials">
-            View all certificates
+            {t("credentials.viewAll")}
           </Link>
         </div>
       </div>
@@ -185,7 +187,7 @@ export function FeaturedCredentials() {
         <ul
           ref={trackRef}
           className="featured-credentials__track"
-          aria-label="Featured certificates carousel"
+          aria-label={t("credentials.carousel")}
           aria-roledescription="carousel"
           tabIndex={0}
           onKeyDown={handleKeyboardNavigation}
@@ -195,7 +197,7 @@ export function FeaturedCredentials() {
             <li
               key={credential.id}
               className="featured-credentials__slide"
-              aria-label={`${index + 1} of ${credentials.length}`}
+              aria-label={t("credentials.slide", { current: index + 1, total: credentials.length })}
             >
               <CredentialCard credential={credential} />
             </li>
@@ -205,13 +207,13 @@ export function FeaturedCredentials() {
 
       {maxIndex > 0 && (
         <div className="featured-credentials__footer">
-          <div className="featured-credentials__dots" aria-label="Choose certificate group">
+          <div className="featured-credentials__dots" aria-label={t("credentials.chooseGroup")}>
             {navigationItems.map((index) => (
               <button
                 key={index}
                 className="featured-credentials__dot"
                 type="button"
-                aria-label={`Show certificate group ${index + 1}`}
+                aria-label={t("credentials.showGroup", { number: index + 1 })}
                 aria-current={currentIndex === index ? "true" : undefined}
                 onClick={() => goTo(index)}
               />
@@ -220,7 +222,7 @@ export function FeaturedCredentials() {
 
           <p
             className="featured-credentials__status"
-            aria-label={`Certificate group ${currentIndex + 1} of ${maxIndex + 1}`}
+            aria-label={t("credentials.group", { current: currentIndex + 1, total: maxIndex + 1 })}
             aria-live="polite"
           >
             <span aria-hidden="true">

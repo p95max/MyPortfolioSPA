@@ -115,6 +115,32 @@
   margin-left: auto;
 }
 
+.nav-language {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.nav-language button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: 700 .75rem var(--mono);
+  padding: 7px 8px;
+}
+
+.nav-language button.active {
+  background: rgba(0, 212, 255, .14);
+  color: var(--cyan);
+}
+
+.nav-language button:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: -2px;
+}
+
 /* Hamburger */
 .hamburger {
   display: none;

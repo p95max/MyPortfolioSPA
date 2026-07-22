@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
+import { useTranslation } from "../i18n";
 
 export const Navbar = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const { language, setLanguage, t } = useTranslation();
 
   useEffect(() => {
     setOpen(false);
@@ -12,6 +14,10 @@ export const Navbar = () => {
   }, [location.pathname]);
 
   const links = [
+    { to: "/", label: t("nav.about") },
+    { to: "/projects", label: t("nav.projects") },
+    { to: "/credentials", label: t("nav.certificates") },
+    { to: "/contact", label: t("nav.contact") },
     { to: "/", label: "about" },
     { to: "/projects", label: "projects" },
     { to: "/credentials", label: "certificates" },
@@ -20,7 +26,7 @@ export const Navbar = () => {
 
   return (
     <div className="nav-root">
-      <nav className="nav-wrap" role="navigation" aria-label="Primary">
+      <nav className="nav-wrap" role="navigation" aria-label={t("nav.menu")}>
         <Link to="/" className="brand">~/p95max</Link>
 
         <div className={`nav-center ${open ? "open" : ""}`} id="primary-menu">
@@ -36,9 +42,22 @@ export const Navbar = () => {
         </div>
 
         <div className="nav-right">
+          <div className="nav-language" role="group" aria-label={t("nav.language")}>
+            {(["en", "de"] as const).map((locale) => (
+              <button
+                key={locale}
+                type="button"
+                className={language === locale ? "active" : ""}
+                onClick={() => setLanguage(locale)}
+                aria-pressed={language === locale}
+              >
+                {locale.toUpperCase()}
+              </button>
+            ))}
+          </div>
           <button
             className={`hamburger ${open ? "is-open" : ""}`}
-            aria-label="Toggle menu"
+            aria-label={t("nav.toggle")}
             aria-controls="primary-menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}

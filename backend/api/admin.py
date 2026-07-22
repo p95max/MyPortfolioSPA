@@ -114,7 +114,7 @@ class ProjectAdmin(SortableAdminMixin, admin.ModelAdmin):
 
     ordering = ("sort_order",)
     list_display = ("title", "tech_stack", "github_url", "demo_url", "screenshots_count")
-    search_fields = ("title", "description", "tech_stack")
+    search_fields = ("title", "description", "description_de", "tech_stack")
     inlines = (ProjectScreenshotInline,)
 
     @admin.display(description="Screenshots")

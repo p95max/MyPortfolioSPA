@@ -3,6 +3,7 @@ import type { ChangeEvent, FocusEvent, FormEvent } from "react";
 import "./Contact.css";
 import { trackContactSubmit, trackOutboundLinkClick } from "../analytics";
 import { getApiUrl } from "../apiBaseUrl";
+import { useTranslation } from "../i18n";
 
 type Form = {
   name: string;
@@ -99,7 +100,7 @@ function isContactFieldName(value: string): value is ContactFieldName {
   return value === "name" || value === "email" || value === "message";
 }
 
-function validateContactForm(form: Form): FieldErrors {
+function validateContactForm(form: Form, t: (key: string) => string): FieldErrors {
   const errors: FieldErrors = {};
 
   const name = form.name.trim();
@@ -107,25 +108,25 @@ function validateContactForm(form: Form): FieldErrors {
   const message = form.message.trim();
 
   if (!name) {
-    errors.name = "Name is required.";
+    errors.name = t("contact.nameRequired");
   } else if (name.length < CONTACT_LIMITS.nameMin) {
-    errors.name = "Name must be at least 2 characters.";
+    errors.name = t("contact.nameMin");
   } else if (name.length > CONTACT_LIMITS.nameMax) {
-    errors.name = "Name must be at most 80 characters.";
+    errors.name = t("contact.nameMax");
   }
 
   if (!email) {
-    errors.email = "Email is required.";
+    errors.email = t("contact.emailRequired");
   } else if (!/\S+@\S+\.\S+/.test(email)) {
-    errors.email = "Please provide a valid email address.";
+    errors.email = t("contact.emailInvalid");
   }
 
   if (!message) {
-    errors.message = "Message is required.";
+    errors.message = t("contact.messageRequired");
   } else if (message.length < CONTACT_LIMITS.messageMin) {
-    errors.message = "Message must be at least 10 characters.";
+    errors.message = t("contact.messageMin");
   } else if (message.length > CONTACT_LIMITS.messageMax) {
-    errors.message = "Message must be at most 1000 characters.";
+    errors.message = t("contact.messageMax");
   }
 
   return errors;
@@ -182,6 +183,7 @@ function extractApiDetail(data: unknown): string | null {
 }
 
 export default function Contact() {
+  const { t } = useTranslation();
   const [form, setForm] = useState<Form>({
     name: "",
     email: "",
@@ -255,7 +257,7 @@ export default function Contact() {
       })
       .catch(() => {
         setCaptchaToken(null);
-        setErr("Captcha failed to load. Please refresh the page.");
+        setErr(t("contact.captchaFailed"));
       });
 
     return () => {
@@ -266,11 +268,11 @@ export default function Contact() {
         widgetIdRef.current = null;
       }
     };
-  }, [siteKey]);
+  }, [siteKey, t]);
 
   const clientFieldErrors = useMemo(() => {
-    return validateContactForm(form);
-  }, [form]);
+    return validateContactForm(form, t);
+  }, [form, t]);
 
   const messageLength = form.message.length;
 
@@ -376,17 +378,17 @@ export default function Contact() {
     });
 
     if (hasValidationErrors(clientFieldErrors)) {
-      setErr("Please fix the highlighted fields.");
+      setErr(t("contact.fixFields"));
       return;
     }
 
     if (!siteKey) {
-      setErr("Captcha is not configured.");
+      setErr(t("contact.captchaMissing"));
       return;
     }
 
     if (!captchaToken) {
-      setErr("Please complete the captcha.");
+      setErr(t("contact.captchaRequired"));
       return;
     }
 
@@ -422,7 +424,7 @@ export default function Contact() {
               email: true,
               message: true,
             });
-            detail = "Please fix the highlighted fields.";
+            detail = t("contact.fixFields");
           } else {
             detail = extractApiDetail(data) ?? detail;
           }
@@ -432,11 +434,11 @@ export default function Contact() {
 
         if (resp.status === 400 && /captcha/i.test(detail)) {
           resetCaptcha();
-          detail = "Captcha verification failed. Please try again.";
+          detail = t("contact.captchaInvalid");
         }
 
         if (resp.status === 429) {
-          detail = "Too many attempts. Please try again later.";
+          detail = t("contact.tooMany");
         }
 
         throw new Error(detail);
@@ -448,7 +450,7 @@ export default function Contact() {
       setErr(
         isErrorLike(error) && typeof error.message === "string"
           ? error.message
-          : "Something went wrong"
+          : t("contact.fallback")
       );
     } finally {
       setLoading(false);
@@ -471,10 +473,10 @@ export default function Contact() {
           <div className="success-icon" aria-hidden>
             ✅
           </div>
-          <h2>Message sent.</h2>
-          <p>I'll get back to you soon.</p>
+          <h2>{t("contact.successTitle")}</h2>
+          <p>{t("contact.successText")}</p>
           <a className="btn btn-primary" href="/">
-            Back to Home
+            {t("contact.home")}
           </a>
         </div>
       </div>
@@ -484,9 +486,9 @@ export default function Contact() {
   return (
     <div className="contact-page">
       <section className="contact-hero">
-        <p className="cp-eyebrow">Get in touch</p>
-        <h1>Let's talk</h1>
-        <p>Have a project, role, or question? Drop me a message.</p>
+        <p className="cp-eyebrow">{t("contact.eyebrow")}</p>
+        <h1>{t("contact.title")}</h1>
+        <p>{t("contact.intro")}</p>
       </section>
 
       <div className="contact-grid">
@@ -497,8 +499,8 @@ export default function Contact() {
           aria-describedby="form-help"
         >
           <div className="card-header">
-            <h2>Send a message</h2>
-            <p id="form-help">All fields are required.</p>
+            <h2>{t("contact.sendTitle")}</h2>
+            <p id="form-help">{t("contact.required")}</p>
           </div>
 
           {err && (
@@ -528,11 +530,11 @@ export default function Contact() {
               maxLength={CONTACT_LIMITS.nameMax}
               required
               placeholder=" "
-              aria-label="Your name"
+              aria-label={t("contact.name")}
               aria-invalid={!!nameError}
               aria-describedby={nameError ? "name-error" : undefined}
             />
-            <label className="label">Your name</label>
+            <label className="label">{t("contact.name")}</label>
 
             {nameError && (
               <p className="field-error" id="name-error">
@@ -551,11 +553,11 @@ export default function Contact() {
               onBlur={onBlur}
               required
               placeholder=" "
-              aria-label="Email address"
+              aria-label={t("contact.email")}
               aria-invalid={!!emailError}
               aria-describedby={emailError ? "email-error" : undefined}
             />
-            <label className="label">Email address</label>
+            <label className="label">{t("contact.email")}</label>
 
             {emailError && (
               <p className="field-error" id="email-error">
@@ -575,11 +577,11 @@ export default function Contact() {
               maxLength={CONTACT_LIMITS.messageMax}
               required
               placeholder=" "
-              aria-label="Message"
+              aria-label={t("contact.message")}
               aria-invalid={!!messageError}
               aria-describedby={messageDescribedBy}
             />
-            <label className="label">Message</label>
+            <label className="label">{t("contact.message")}</label>
 
             <div className="field-meta">
               {messageError ? (
@@ -613,24 +615,24 @@ export default function Contact() {
             {loading ? (
               <>
                 <span className="spinner" aria-hidden />
-                <span>Sending…</span>
+                <span>{t("contact.sending")}</span>
               </>
             ) : (
-              <span>Send message</span>
+              <span>{t("contact.send")}</span>
             )}
           </button>
 
           <p className="fine-print">
             Protected by Cloudflare Turnstile ·{" "}
-            <a href="/datenschutz">Privacy Policy</a>
+            <a href="/datenschutz">{t("contact.privacy")}</a>
           </p>
         </form>
 
         <aside
           className="contact-card contact-aside"
-          aria-label="Other ways to contact"
+          aria-label={t("contact.contactWays")}
         >
-          <h2>Also reachable</h2>
+          <h2>{t("contact.other")}</h2>
 
           <ul className="link-list">
             <li>

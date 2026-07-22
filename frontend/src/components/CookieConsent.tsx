@@ -1,134 +1,23 @@
 import { useEffect, useState } from "react";
-import {
-  ANALYTICS_SESSION_STORAGE_KEY,
-  ANALYTICS_SOURCE_STORAGE_KEY,
-  ANALYTICS_STORAGE_KEY,
-} from "../privacy";
-import {
-  createCookieConsentPreferences,
-  getStoredCookieConsent,
-  saveCookieConsent,
-} from "../cookieConsent";
+import { ANALYTICS_SESSION_STORAGE_KEY, ANALYTICS_SOURCE_STORAGE_KEY, ANALYTICS_STORAGE_KEY } from "../privacy";
+import { createCookieConsentPreferences, getStoredCookieConsent, saveCookieConsent } from "../cookieConsent";
+import { useTranslation } from "../i18n";
 import "./CookieConsent.css";
 
-function removeAnalyticsStorage(): void {
-  localStorage.removeItem(ANALYTICS_STORAGE_KEY);
-
-  sessionStorage.removeItem(ANALYTICS_SESSION_STORAGE_KEY);
-  sessionStorage.removeItem(ANALYTICS_SOURCE_STORAGE_KEY);
-}
+function removeAnalyticsStorage(): void { localStorage.removeItem(ANALYTICS_STORAGE_KEY); sessionStorage.removeItem(ANALYTICS_SESSION_STORAGE_KEY); sessionStorage.removeItem(ANALYTICS_SOURCE_STORAGE_KEY); }
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
   const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
-
-  useEffect(() => {
-    const storedConsent = getStoredCookieConsent();
-
-    if (!storedConsent) {
-      setIsVisible(true);
-      return;
-    }
-
-    setAnalyticsEnabled(storedConsent.analytics);
-  }, []);
-
-  function handleRejectOptional() {
-    const preferences = createCookieConsentPreferences(false);
-
-    removeAnalyticsStorage();
-    saveCookieConsent(preferences);
-    setAnalyticsEnabled(false);
-    setIsVisible(false);
-  }
-
-  function handleAcceptAll() {
-    const preferences = createCookieConsentPreferences(true);
-
-    saveCookieConsent(preferences);
-    setAnalyticsEnabled(true);
-    setIsVisible(false);
-  }
-
-  function handleSaveSettings() {
-    const preferences = createCookieConsentPreferences(analyticsEnabled);
-
-    if (!analyticsEnabled) {
-      removeAnalyticsStorage();
-    }
-
-    saveCookieConsent(preferences);
-    setIsVisible(false);
-  }
-
-  if (!isVisible) {
-    return null;
-  }
-
-  return (
-    <div className="cookie-consent" role="dialog" aria-modal="true">
-      <div className="cookie-consent__panel">
-        <div className="cookie-consent__content">
-          <p className="cookie-consent__eyebrow">Privacy settings</p>
-
-          <h2 className="cookie-consent__title">Cookie preferences</h2>
-
-          <p className="cookie-consent__text">
-            This website uses necessary storage to remember your cookie choice.
-            Optional analytics are only enabled if you actively accept them.
-          </p>
-
-          <div className="cookie-consent__options">
-            <label className="cookie-consent__option cookie-consent__option--disabled">
-              <input type="checkbox" checked disabled />
-              <span>
-                <strong>Necessary</strong>
-                <small>Required for basic website functionality.</small>
-              </span>
-            </label>
-
-            <label className="cookie-consent__option">
-              <input
-                type="checkbox"
-                checked={analyticsEnabled}
-                onChange={(event) => setAnalyticsEnabled(event.target.checked)}
-              />
-              <span>
-                <strong>Analytics</strong>
-              <small>
-                Helps understand website usage. You can disable it before saving.
-              </small>
-              </span>
-            </label>
-          </div>
-        </div>
-
-        <div className="cookie-consent__actions">
-          <button
-            type="button"
-            className="cookie-consent__btn cookie-consent__btn--ghost"
-            onClick={handleRejectOptional}
-          >
-            Reject optional
-          </button>
-
-          <button
-            type="button"
-            className="cookie-consent__btn cookie-consent__btn--outline"
-            onClick={handleSaveSettings}
-          >
-            Save settings
-          </button>
-
-          <button
-            type="button"
-            className="cookie-consent__btn cookie-consent__btn--primary"
-            onClick={handleAcceptAll}
-          >
-            Accept all
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  const { t } = useTranslation();
+  useEffect(() => { const storedConsent = getStoredCookieConsent(); if (!storedConsent) { setIsVisible(true); return; } setAnalyticsEnabled(storedConsent.analytics); }, []);
+  const save = (analytics: boolean) => { if (!analytics) removeAnalyticsStorage(); saveCookieConsent(createCookieConsentPreferences(analytics)); setAnalyticsEnabled(analytics); setIsVisible(false); };
+  if (!isVisible) return null;
+  return <div className="cookie-consent" role="dialog" aria-modal="true"><div className="cookie-consent__panel">
+    <div className="cookie-consent__content"><p className="cookie-consent__eyebrow">{t("cookie.eyebrow")}</p><h2 className="cookie-consent__title">{t("cookie.title")}</h2><p className="cookie-consent__text">{t("cookie.text")}</p>
+      <div className="cookie-consent__options"><label className="cookie-consent__option cookie-consent__option--disabled"><input type="checkbox" checked disabled /><span><strong>{t("cookie.necessary")}</strong><small>{t("cookie.necessaryText")}</small></span></label>
+        <label className="cookie-consent__option"><input type="checkbox" checked={analyticsEnabled} onChange={(event) => setAnalyticsEnabled(event.target.checked)} /><span><strong>{t("cookie.analytics")}</strong><small>{t("cookie.analyticsText")}</small></span></label>
+      </div></div>
+    <div className="cookie-consent__actions"><button type="button" className="cookie-consent__btn cookie-consent__btn--ghost" onClick={() => save(false)}>{t("cookie.reject")}</button><button type="button" className="cookie-consent__btn cookie-consent__btn--outline" onClick={() => save(analyticsEnabled)}>{t("cookie.save")}</button><button type="button" className="cookie-consent__btn cookie-consent__btn--primary" onClick={() => save(true)}>{t("cookie.accept")}</button></div>
+  </div></div>;
 }

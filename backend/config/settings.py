@@ -447,8 +447,20 @@ JAZZMIN_SETTINGS = {
         {"app": "api"},
     ],
     "icons": {
-        "api.contactmessage": "fas fa-envelope",
-        "api.project": "fas fa-diagram-project",
+        "api": "fas fa-layer-group",
+        "api.project": "fas fa-laptop-code",
+        "api.projectscreenshot": "fas fa-images",
+        "api.credential": "fas fa-award",
+        "api.contactdetails": "fas fa-address-card",
+        "api.contactmessage": "fas fa-envelope-open-text",
+        "api.analyticsevent": "fas fa-chart-line",
+        "auth": "fas fa-user-shield",
+        "auth.user": "fas fa-user",
+        "auth.group": "fas fa-users",
+        "axes": "fas fa-shield-alt",
+        "axes.accessattempt": "fas fa-user-lock",
+        "axes.accesslog": "fas fa-clipboard-list",
+        "axes.accessfailurelog": "fas fa-exclamation-triangle",
     },
 }
 

@@ -34,6 +34,18 @@ describe('Contact', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_API_URL', 'https://api.example.test');
     vi.stubEnv('VITE_TURNSTILE_SITEKEY', '');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({
+          email: '',
+          github_url: '',
+          linkedin_url: '',
+          telegram_url: '',
+        }),
+      })
+    );
   });
 
   it('shows client-side validation errors for empty required fields', async () => {
@@ -146,5 +158,37 @@ describe('Contact', () => {
       /please fix the highlighted fields/i
     );
     expect(screen.getByText(/use a different email address/i)).toBeInTheDocument();
+  });
+
+  it('renders contact links returned by the admin-backed API', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({
+        email: 'admin@example.com',
+        github_url: 'https://github.com/admin-user',
+        linkedin_url: 'https://linkedin.com/in/admin-user',
+        telegram_url: 'https://t.me/admin_user',
+      }),
+    });
+
+    vi.stubGlobal('fetch', fetchMock);
+    render(<Contact />);
+
+    expect(await screen.findByText('admin@example.com')).toHaveAttribute(
+      'href',
+      'mailto:admin@example.com'
+    );
+    expect(screen.getByText('github.com/admin-user')).toHaveAttribute(
+      'href',
+      'https://github.com/admin-user'
+    );
+    expect(screen.getByText('linkedin.com/in/admin-user')).toHaveAttribute(
+      'href',
+      'https://linkedin.com/in/admin-user'
+    );
+    expect(screen.getByText('@admin_user')).toHaveAttribute(
+      'href',
+      'https://t.me/admin_user'
+    );
   });
 });

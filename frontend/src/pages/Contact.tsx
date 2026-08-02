@@ -12,6 +12,13 @@ type Form = {
   hp?: string;
 };
 
+type ContactDetails = {
+  email: string;
+  github_url: string;
+  linkedin_url: string;
+  telegram_url: string;
+};
+
 type ContactFieldName = "name" | "email" | "message";
 
 type FieldErrors = Partial<Record<ContactFieldName, string>>;
@@ -98,6 +105,39 @@ function isErrorLike(x: unknown): x is { message?: string } {
 
 function isContactFieldName(value: string): value is ContactFieldName {
   return value === "name" || value === "email" || value === "message";
+}
+
+function isContactDetails(value: unknown): value is ContactDetails {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  const details = value as Record<string, unknown>;
+
+  return ["email", "github_url", "linkedin_url", "telegram_url"].every(
+    (field) => typeof details[field] === "string"
+  );
+}
+
+function linkLabel(value: string): string {
+  try {
+    const url = new URL(value);
+    return `${url.hostname.replace(/^www\./, "")}${url.pathname}`.replace(
+      /\/$/,
+      ""
+    );
+  } catch {
+    return value;
+  }
+}
+
+function telegramLabel(value: string): string {
+  try {
+    const username = new URL(value).pathname.replace(/^\/+|\/+$/g, "");
+    return username ? `@${username}` : linkLabel(value);
+  } catch {
+    return value;
+  }
 }
 
 function validateContactForm(form: Form, t: (key: string) => string): FieldErrors {
@@ -203,12 +243,40 @@ export default function Contact() {
   });
 
   const [serverFieldErrors, setServerFieldErrors] = useState<FieldErrors>({});
+  const [contactDetails, setContactDetails] = useState<ContactDetails | null>(null);
 
   const widgetRef = useRef<HTMLDivElement | null>(null);
   const widgetIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     document.title = "M.Petrykin — Contact";
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch(getApiUrl("/api/contact-details/"))
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to load contact details (${response.status})`);
+        }
+
+        return response.json() as Promise<unknown>;
+      })
+      .then((data) => {
+        if (!cancelled && isContactDetails(data)) {
+          setContactDetails(data);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setContactDetails(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const apiUrl = useMemo(() => {
@@ -628,93 +696,110 @@ export default function Contact() {
           </p>
         </form>
 
-        <aside
-          className="contact-card contact-aside"
-          aria-label={t("contact.contactWays")}
-        >
-          <h2>{t("contact.other")}</h2>
+        {contactDetails &&
+          Object.values(contactDetails).some((value) => value.trim()) && (
+          <aside
+            className="contact-card contact-aside"
+            aria-label={t("contact.contactWays")}
+          >
+            <h2>{t("contact.other")}</h2>
 
-          <ul className="link-list">
-            <li>
-              <a
-                href="mailto:m.petrykin@gmx.de"
-                className="link-item"
-                onClick={() =>
-                  trackOutboundLinkClick("email", "mailto:m.petrykin@gmx.de")
-                }
-              >
-                <span className="ico" aria-hidden>
-                  ✉
-                </span>
-                m.petrykin@gmx.de
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="https://github.com/p95max"
-                target="_blank"
-                rel="noreferrer"
-                className="link-item"
-                onClick={() =>
-                  trackOutboundLinkClick(
-                    "github_profile",
-                    "https://github.com/p95max"
-                  )
-                }
-              >
-                <span className="ico" aria-hidden>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
+            <ul className="link-list">
+              {contactDetails.email && (
+                <li>
+                  <a
+                    href={`mailto:${contactDetails.email}`}
+                    className="link-item"
+                    onClick={() =>
+                      trackOutboundLinkClick(
+                        "email",
+                        `mailto:${contactDetails.email}`
+                      )
+                    }
                   >
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
-                  </svg>
-                </span>
-                github.com/p95max
-              </a>
-            </li>
+                    <span className="ico" aria-hidden>
+                      ✉
+                    </span>
+                    {contactDetails.email}
+                  </a>
+                </li>
+              )}
 
-            <li>
-              <a
-                href="https://linkedin.com/in/p95max"
-                target="_blank"
-                rel="noreferrer"
-                className="link-item"
-                onClick={() =>
-                  trackOutboundLinkClick(
-                    "linkedin_profile",
-                    "https://linkedin.com/in/p95max"
-                  )
-                }
-              >
-                <span className="ico" aria-hidden>
-                  in
-                </span>
-                linkedin.com/in/p95max
-              </a>
-            </li>
+              {contactDetails.github_url && (
+                <li>
+                  <a
+                    href={contactDetails.github_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="link-item"
+                    onClick={() =>
+                      trackOutboundLinkClick(
+                        "github_profile",
+                        contactDetails.github_url
+                      )
+                    }
+                  >
+                    <span className="ico" aria-hidden>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                      >
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                      </svg>
+                    </span>
+                    {linkLabel(contactDetails.github_url)}
+                  </a>
+                </li>
+              )}
 
-            <li>
-              <a
-                href="https://t.me/max_p95"
-                target="_blank"
-                rel="noreferrer"
-                className="link-item"
-                onClick={() =>
-                  trackOutboundLinkClick("telegram", "https://t.me/max_p95")
-                }
-              >
-                <span className="ico" aria-hidden>
-                  ✈
-                </span>
-                @max_p95
-              </a>
-            </li>
-          </ul>
-        </aside>
+              {contactDetails.linkedin_url && (
+                <li>
+                  <a
+                    href={contactDetails.linkedin_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="link-item"
+                    onClick={() =>
+                      trackOutboundLinkClick(
+                        "linkedin_profile",
+                        contactDetails.linkedin_url
+                      )
+                    }
+                  >
+                    <span className="ico" aria-hidden>
+                      in
+                    </span>
+                    {linkLabel(contactDetails.linkedin_url)}
+                  </a>
+                </li>
+              )}
+
+              {contactDetails.telegram_url && (
+                <li>
+                  <a
+                    href={contactDetails.telegram_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="link-item"
+                    onClick={() =>
+                      trackOutboundLinkClick(
+                        "telegram",
+                        contactDetails.telegram_url
+                      )
+                    }
+                  >
+                    <span className="ico" aria-hidden>
+                      ✈
+                    </span>
+                    {telegramLabel(contactDetails.telegram_url)}
+                  </a>
+                </li>
+              )}
+            </ul>
+          </aside>
+        )}
       </div>
     </div>
   );

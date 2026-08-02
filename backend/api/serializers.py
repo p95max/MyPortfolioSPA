@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from .models import AnalyticsEvent, ContactMessage, Credential, Project
+from .models import AnalyticsEvent, ContactDetails, ContactMessage, Credential, Project
 from .utils.image_urls import normalize_screenshot_url
 
 
@@ -70,6 +70,12 @@ class CredentialSerializer(serializers.ModelSerializer):
             "skills",
             "is_featured",
         )
+
+
+class ContactDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactDetails
+        fields = ("email", "github_url", "linkedin_url", "telegram_url")
 
 
 class ContactMessageSerializer(serializers.ModelSerializer):

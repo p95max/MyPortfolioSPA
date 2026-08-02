@@ -12,12 +12,24 @@ from .utils.image_urls import build_public_image_url
 from .utils.admin_formatting import admin_badge
 from .models import (
     Credential,
+    ContactDetails,
     Project,
     ProjectScreenshot,
     ContactMessage,
     ContactMessageStatus,
     AnalyticsEvent,
 )
+
+
+@admin.register(ContactDetails)
+class ContactDetailsAdmin(admin.ModelAdmin):
+    fields = ("email", "github_url", "linkedin_url", "telegram_url")
+
+    def has_add_permission(self, request):
+        return not ContactDetails.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 def _is_valid_http_url(value: str) -> bool:

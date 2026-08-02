@@ -11,9 +11,10 @@ from django.template.loader import render_to_string
 
 from .analytics_notifications import notify_new_analytics_visitor
 from .analytics_geo import lookup_analytics_country
-from .models import AnalyticsEvent, Credential, CredentialType, Project
+from .models import AnalyticsEvent, ContactDetails, Credential, CredentialType, Project
 from .serializers import (
     AnalyticsEventSerializer,
+    ContactDetailsSerializer,
     ContactMessageSerializer,
     CredentialSerializer,
     ProjectSerializer,
@@ -80,6 +81,23 @@ class CredentialViewSet(viewsets.ReadOnlyModelViewSet):
             )
 
         return queryset.filter(credential_type=credential_type)
+
+
+@api_view(["GET"])
+def contact_details(request):
+    details = ContactDetails.objects.order_by("pk").first()
+
+    if details is None:
+        return Response(
+            {
+                "email": "",
+                "github_url": "",
+                "linkedin_url": "",
+                "telegram_url": "",
+            }
+        )
+
+    return Response(ContactDetailsSerializer(details).data)
 
 
 @api_view(["GET"])

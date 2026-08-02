@@ -135,6 +135,22 @@ class ContactMessageStatus(models.TextChoices):
     SPAM = "spam", "Spam"
 
 
+class ContactDetails(models.Model):
+    """Editable public contact links displayed on the portfolio contact page."""
+
+    email = models.EmailField(blank=True)
+    github_url = models.URLField(blank=True)
+    linkedin_url = models.URLField(blank=True)
+    telegram_url = models.URLField(blank=True)
+
+    class Meta:
+        verbose_name = "Contact details"
+        verbose_name_plural = "Contact details"
+
+    def __str__(self):
+        return "Public contact details"
+
+
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)

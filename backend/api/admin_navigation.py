@@ -7,17 +7,17 @@ ADMIN_GROUPS = (
     (
         "Content & settings",
         "content_settings",
-        {"ContactDetails", "HomepageContent", "LegalContent"},
+        ("HomepageContent", "LegalContent", "ContactDetails"),
     ),
     (
         "Portfolio",
         "portfolio_content",
-        {"Credential", "Project", "ProjectScreenshot"},
+        ("Project", "ProjectScreenshot", "Credential"),
     ),
     (
         "Communication & analytics",
         "communication_analytics",
-        {"AnalyticsEvent", "ContactMessage"},
+        ("ContactMessage", "AnalyticsEvent"),
     ),
 )
 

@@ -1,14 +1,34 @@
+from types import MethodType
+
 from django.conf import settings
 from django.contrib import admin
 from django.db import models
+from django.shortcuts import redirect
+from django.urls import reverse
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+from .models import ContactDetails
 
 
 settings.JAZZMIN_SETTINGS.setdefault("icons", {})[
     "api.homepagecontent"
 ] = "fas fa-home"
+
+
+def _singleton_changelist_view(model_admin, request, extra_context=None):
+    """Open a singleton model directly instead of showing a one-row list."""
+    instance = model_admin.model.objects.order_by("pk").first()
+    route = "change" if instance else "add"
+    args = (instance.pk,) if instance else ()
+    url = reverse(
+        f"{model_admin.admin_site.name}:"
+        f"{model_admin.model._meta.app_label}_"
+        f"{model_admin.model._meta.model_name}_{route}",
+        args=args,
+    )
+    return redirect(url)
 
 
 class HomepageContent(models.Model):
@@ -79,8 +99,19 @@ class HomepageContentAdmin(admin.ModelAdmin):
         "stack",
     )
 
+    def changelist_view(self, request, extra_context=None):
+        return _singleton_changelist_view(self, request, extra_context)
+
     def has_add_permission(self, request):
         return not HomepageContent.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+contact_details_admin = admin.site._registry.get(ContactDetails)
+if contact_details_admin is not None:
+    contact_details_admin.changelist_view = MethodType(
+        _singleton_changelist_view,
+        contact_details_admin,
+    )

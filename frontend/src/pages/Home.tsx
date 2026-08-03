@@ -91,14 +91,23 @@ export const Home = () => {
       };
     }
 
-    const suffix = language === "de" ? "de" : "en";
+    if (language === "de") {
+      return {
+        availability: content.availability_de,
+        greeting: content.greeting_de,
+        name: content.name,
+        role: content.role_de,
+        description: content.description_de,
+        stack: content.stack,
+      };
+    }
 
     return {
-      availability: content[`availability_${suffix}`],
-      greeting: content[`greeting_${suffix}`],
+      availability: content.availability_en,
+      greeting: content.greeting_en,
       name: content.name,
-      role: content[`role_${suffix}`],
-      description: content[`description_${suffix}`],
+      role: content.role_en,
+      description: content.description_en,
       stack: content.stack,
     };
   }, [content, language, t]);

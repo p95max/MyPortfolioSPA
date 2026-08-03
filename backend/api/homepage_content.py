@@ -66,38 +66,17 @@ def homepage_content(request):
 
 @admin.register(HomepageContent)
 class HomepageContentAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (
-            "English homepage text",
-            {
-                "fields": (
-                    "availability_en",
-                    "greeting_en",
-                    "role_en",
-                    "description_en",
-                )
-            },
-        ),
-        (
-            "German homepage text",
-            {
-                "fields": (
-                    "availability_de",
-                    "greeting_de",
-                    "role_de",
-                    "description_de",
-                )
-            },
-        ),
-        (
-            "Shared profile data",
-            {
-                "fields": (
-                    "name",
-                    "stack",
-                )
-            },
-        ),
+    fields = (
+        "availability_en",
+        "greeting_en",
+        "role_en",
+        "description_en",
+        "availability_de",
+        "greeting_de",
+        "role_de",
+        "description_de",
+        "name",
+        "stack",
     )
 
     def has_add_permission(self, request):

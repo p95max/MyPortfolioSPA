@@ -1,5 +1,6 @@
 from types import MethodType
 
+from django.conf import settings
 from django.contrib import admin
 
 
@@ -20,6 +21,29 @@ ADMIN_GROUPS = (
         ("ContactMessage", "AnalyticsEvent"),
     ),
 )
+
+GROUP_ICONS = {
+    "content_settings": "fas fa-sliders-h",
+    "portfolio_content": "fas fa-briefcase",
+    "communication_analytics": "fas fa-comments",
+}
+
+MODEL_ICON_ALIASES = {
+    "content_settings.homepagecontent": "fas fa-home",
+    "content_settings.legalcontent": "fas fa-user-shield",
+    "content_settings.contactdetails": "fas fa-address-card",
+    "portfolio_content.project": "fas fa-laptop-code",
+    "portfolio_content.projectscreenshot": "fas fa-images",
+    "portfolio_content.credential": "fas fa-award",
+    "communication_analytics.contactmessage": "fas fa-envelope-open-text",
+    "communication_analytics.analyticsevent": "fas fa-chart-line",
+}
+
+
+def _configure_group_icons():
+    icons = settings.JAZZMIN_SETTINGS.setdefault("icons", {})
+    icons.update(GROUP_ICONS)
+    icons.update(MODEL_ICON_ALIASES)
 
 
 def _group_api_admin_models(app_list):
@@ -79,6 +103,8 @@ def _get_grouped_app_list(self, request, app_label=None):
 
 def configure_admin_navigation():
     """Install the custom admin grouping once, including under autoreload."""
+    _configure_group_icons()
+
     if hasattr(admin.site, "_portfolio_original_get_app_list"):
         return
 

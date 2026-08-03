@@ -9,3 +9,4 @@ class ApiConfig(AppConfig):
         from . import checks  # noqa: F401
         from . import homepage_content  # noqa: F401
         from . import legal_content  # noqa: F401
+        from . import admin_navigation  # noqa: F401

@@ -1,8 +1,14 @@
+from django.conf import settings
 from django.contrib import admin
 from django.db import models
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+
+settings.JAZZMIN_SETTINGS.setdefault("icons", {})[
+    "api.homepagecontent"
+] = "fas fa-home"
 
 
 class HomepageContent(models.Model):
@@ -62,7 +68,7 @@ def homepage_content(request):
 class HomepageContentAdmin(admin.ModelAdmin):
     fieldsets = (
         (
-            "English",
+            "English homepage text",
             {
                 "fields": (
                     "availability_en",
@@ -73,7 +79,7 @@ class HomepageContentAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "German",
+            "German homepage text",
             {
                 "fields": (
                     "availability_de",
@@ -83,7 +89,15 @@ class HomepageContentAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Shared", {"fields": ("name", "stack")}),
+        (
+            "Shared profile data",
+            {
+                "fields": (
+                    "name",
+                    "stack",
+                )
+            },
+        ),
     )
 
     def has_add_permission(self, request):

@@ -10,3 +10,4 @@ class ApiConfig(AppConfig):
         from . import homepage_content  # noqa: F401
         from . import legal_content  # noqa: F401
         from . import admin_navigation  # noqa: F401
+        from . import analytics_country_inheritance  # noqa: F401

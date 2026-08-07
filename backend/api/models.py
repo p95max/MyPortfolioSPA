@@ -73,7 +73,6 @@ class Credential(models.Model):
         return f"{self.title} ({self.get_credential_type_display()})"
 
 
-
 class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -96,7 +95,6 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
-
 
 
 class ProjectScreenshot(models.Model):
@@ -127,7 +125,6 @@ class ProjectScreenshot(models.Model):
         return f"{label} ({self.pk})"
 
 
-
 class ContactMessageStatus(models.TextChoices):
     NEW = "new", "New"
     IN_PROGRESS = "in_progress", "In progress"
@@ -149,7 +146,6 @@ class ContactDetails(models.Model):
 
     def __str__(self):
         return "Public contact details"
-
 
 
 class ContactMessage(models.Model):
@@ -180,13 +176,13 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.name} <{self.email}>"
-    
-    
-    
+
+
 class AnalyticsEvent(models.Model):
     EVENT_PAGE_VIEW = "page_view"
     EVENT_PROJECT_VIEW = "project_view"
     EVENT_PROJECT_GITHUB_CLICK = "project_github_click"
+    EVENT_PROJECT_DEMO_CLICK = "project_demo_click"
     EVENT_CONTACT_SUBMIT = "contact_submit"
     EVENT_OUTBOUND_LINK_CLICK = "outbound_link_click"
     EVENT_CREDENTIAL_VIEW = "credential_view"
@@ -196,6 +192,7 @@ class AnalyticsEvent(models.Model):
         (EVENT_PAGE_VIEW, "Page view"),
         (EVENT_PROJECT_VIEW, "Project view"),
         (EVENT_PROJECT_GITHUB_CLICK, "Project GitHub click"),
+        (EVENT_PROJECT_DEMO_CLICK, "Project demo click"),
         (EVENT_CONTACT_SUBMIT, "Contact form submit"),
         (EVENT_OUTBOUND_LINK_CLICK, "Outbound link click"),
         (EVENT_CREDENTIAL_VIEW, "Credential view"),

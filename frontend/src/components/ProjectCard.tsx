@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
-  trackOutboundLinkClick,
+  trackProjectDemoClick,
   trackProjectGithubClick,
   trackProjectView,
 } from '../analytics';
@@ -219,7 +219,11 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
               rel="noreferrer"
               className="pc-link"
               onClick={() =>
-                trackOutboundLinkClick('project_demo', project.demoUrl || '')
+                trackProjectDemoClick(
+                  project.id,
+                  project.title,
+                  project.demoUrl || ''
+                )
               }
             >
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none">

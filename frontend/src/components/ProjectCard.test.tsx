@@ -2,11 +2,11 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { Project } from '../types';
-import { trackProjectView } from '../analytics';
+import { trackProjectDemoClick, trackProjectView } from '../analytics';
 import { ProjectCard } from './ProjectCard';
 
 vi.mock('../analytics', () => ({
-  trackOutboundLinkClick: vi.fn(),
+  trackProjectDemoClick: vi.fn(),
   trackProjectGithubClick: vi.fn(),
   trackProjectView: vi.fn(),
 }));
@@ -36,6 +36,19 @@ describe('ProjectCard', () => {
     );
     expect(screen.getByRole('link', { name: /live demo/i })).toHaveAttribute(
       'href',
+      project.demoUrl
+    );
+  });
+
+  it('tracks live demo clicks as a dedicated project event', async () => {
+    const user = userEvent.setup();
+    render(<ProjectCard project={project} />);
+
+    await user.click(screen.getByRole('link', { name: /live demo/i }));
+
+    expect(trackProjectDemoClick).toHaveBeenCalledWith(
+      project.id,
+      project.title,
       project.demoUrl
     );
   });

@@ -11,6 +11,7 @@ type AnalyticsEventType =
   | "page_view"
   | "project_view"
   | "project_github_click"
+  | "project_demo_click"
   | "contact_submit"
   | "outbound_link_click"
   | "credential_view"
@@ -373,6 +374,19 @@ export function trackProjectGithubClick(
     project_id: projectId,
     project_title: projectTitle,
     target: "project_github",
+    url_host: getUrlHost(url),
+  });
+}
+
+export function trackProjectDemoClick(
+  projectId: string,
+  projectTitle: string,
+  url: string
+): void {
+  trackAnalyticsEvent("project_demo_click", window.location.pathname, {
+    project_id: projectId,
+    project_title: projectTitle,
+    target: "project_demo",
     url_host: getUrlHost(url),
   });
 }

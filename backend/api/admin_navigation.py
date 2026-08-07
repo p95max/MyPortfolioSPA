@@ -2,6 +2,9 @@ from types import MethodType
 
 from django.conf import settings
 from django.contrib import admin
+from django.utils.html import format_html
+
+from .models import AnalyticsEvent
 
 
 ADMIN_GROUPS = (
@@ -44,6 +47,48 @@ def _configure_group_icons():
     icons = settings.JAZZMIN_SETTINGS.setdefault("icons", {})
     icons.update(GROUP_ICONS)
     icons.update(MODEL_ICON_ALIASES)
+
+
+def _configure_analytics_admin():
+    model_admin = admin.site._registry.get(AnalyticsEvent)
+    if model_admin is None:
+        return
+
+    admin_class = type(model_admin)
+    if hasattr(admin_class, "_portfolio_original_event_badge"):
+        return
+
+    admin_class._portfolio_original_event_badge = admin_class.event_badge
+    admin_class._portfolio_original_details_summary = admin_class.details_summary
+
+    @admin.display(description="Event", ordering="event_type")
+    def event_badge(self, obj):
+        if obj.event_type != AnalyticsEvent.EVENT_PROJECT_DEMO_CLICK:
+            return self._portfolio_original_event_badge(obj)
+
+        return format_html(
+            '<span style="'
+            'padding:4px 8px;'
+            'border-radius:999px;'
+            'background:#0284c7;'
+            'color:white;'
+            'font-weight:600;'
+            'font-size:12px;'
+            'white-space:nowrap;'
+            '">{}</span>',
+            obj.get_event_type_display(),
+        )
+
+    @admin.display(description="Details")
+    def details_summary(self, obj):
+        if obj.event_type == AnalyticsEvent.EVENT_PROJECT_DEMO_CLICK:
+            metadata = obj.metadata or {}
+            return metadata.get("project_title") or metadata.get("project_id") or "—"
+
+        return self._portfolio_original_details_summary(obj)
+
+    admin_class.event_badge = event_badge
+    admin_class.details_summary = details_summary
 
 
 def _group_api_admin_models(app_list):
@@ -102,8 +147,9 @@ def _get_grouped_app_list(self, request, app_label=None):
 
 
 def configure_admin_navigation():
-    """Install the custom admin grouping once, including under autoreload."""
+    """Install custom admin grouping and analytics presentation once."""
     _configure_group_icons()
+    _configure_analytics_admin()
 
     if hasattr(admin.site, "_portfolio_original_get_app_list"):
         return

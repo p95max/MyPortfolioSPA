@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { useTranslation } from "../i18n";
+import { applyTheme, getInitialTheme, type Theme } from "../theme";
 
 export const Navbar = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const { language, setLanguage, t } = useTranslation();
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
 
   useEffect(() => {
     setOpen(false);
@@ -51,6 +57,18 @@ export const Navbar = () => {
               </button>
             ))}
           </div>
+          <button
+            type="button"
+            className="theme-switch"
+            role="switch"
+            aria-checked={theme === "light"}
+            aria-label={theme === "light" ? t("nav.darkTheme") : t("nav.lightTheme")}
+            onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")}
+          >
+            <span className="theme-switch__sun" aria-hidden="true">☀</span>
+            <span className="theme-switch__thumb" aria-hidden="true" />
+            <span className="theme-switch__moon" aria-hidden="true">☾</span>
+          </button>
           <button
             className={`hamburger ${open ? "is-open" : ""}`}
             aria-label={t("nav.toggle")}

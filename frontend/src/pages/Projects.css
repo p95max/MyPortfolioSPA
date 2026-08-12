@@ -17,8 +17,8 @@
   z-index: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(0, 212, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 212, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
@@ -188,7 +188,7 @@
 .pp-tag-btn.active {
   border-color: transparent;
   background: var(--cyan, #00d4ff);
-  color: #090c11;
+  color: var(--on-accent);
   font-weight: 700;
 }
 
@@ -256,7 +256,7 @@
 .pp-tag-btn--all.active {
   border-color: transparent;
   background: #a855f7;
-  color: #090c11;
+  color: var(--on-accent);
 }
 
 /* Reusable accent style for important tags */
@@ -275,7 +275,7 @@
 .pp-tag-btn--accent.active {
   border-color: transparent;
   background: #44b78b;
-  color: #090c11;
+  color: var(--on-accent);
 }
 
 /* Project list */
@@ -337,7 +337,7 @@
 .pager-btn.active {
   border-color: transparent;
   background: var(--cyan, #00d4ff);
-  color: #090c11;
+  color: var(--on-accent);
   font-weight: 700;
 }
 
@@ -389,7 +389,7 @@
 .pp-tag-btn--clear {
   border-color: rgba(248, 113, 113, 0.35);
   background: rgba(248, 113, 113, 0.08);
-  color: #fca5a5;
+  color: var(--danger);
 }
 
 .pp-tag-btn--clear:hover {

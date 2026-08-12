@@ -217,7 +217,7 @@ export const ProjectCard: React.FC<Props> = ({ project }) => {
               href={project.demoUrl}
               target="_blank"
               rel="noreferrer"
-              className="pc-link"
+              className="pc-link pc-link--demo"
               onClick={() =>
                 trackProjectDemoClick(
                   project.id,

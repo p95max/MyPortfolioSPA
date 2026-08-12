@@ -76,12 +76,6 @@ export default function Snowfall() {
       spin: 0.004 + Math.random() * 0.01 // side-to-side wobble
     }));
 
-    const colorLight = "rgba(255,255,255,0.9)";
-    const colorDark = "rgba(255,255,255,0.85)";
-
-    const isDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ?? true;
-    const dot = isDark ? colorDark : colorLight;
-
     const onVis = () => {
       pausedRef.current = document.hidden;
       if (!pausedRef.current && rafRef.current == null) tick();
@@ -92,7 +86,9 @@ export default function Snowfall() {
       if (pausedRef.current) { rafRef.current = null; return; }
       ctx.clearRect(0, 0, width, height);
 
-      ctx.fillStyle = dot;
+      ctx.fillStyle = document.documentElement.dataset.theme === "light"
+        ? "rgba(0, 124, 159, 0.2)"
+        : "rgba(255, 255, 255, 0.85)";
       for (let i = 0; i < flakes.length; i++) {
         const f = flakes[i];
         f.a += f.spin;

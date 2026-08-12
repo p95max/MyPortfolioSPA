@@ -5,16 +5,6 @@
 
 /* ── Tokens ── */
 .page-home {
-  --bg:        #090c11;
-  --surface:   #0e1219;
-  --border:    rgba(255,255,255,0.07);
-  --cyan:      #00d4ff;
-  --amber:     #f5a623;
-  --text:      #e8edf4;
-  --muted:     #6b7d93;
-  --mono:      'JetBrains Mono', monospace;
-  --sans:      'Syne', sans-serif;
-
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
@@ -29,8 +19,8 @@
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
   z-index: 0;
@@ -73,7 +63,7 @@
   justify-content: space-between;
   padding: 20px 40px;
   border-bottom: 1px solid var(--border);
-  background: rgba(9,12,17,0.8);
+  background: var(--nav-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   animation: fadeDown 0.6s ease both;
@@ -232,7 +222,7 @@
 
 .btn-primary {
   background: var(--cyan);
-  color: #090c11;
+  color: var(--on-accent);
   box-shadow: 0 0 24px rgba(0,212,255,0.25);
 }
 .btn-primary:hover {

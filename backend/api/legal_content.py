@@ -22,6 +22,19 @@ class LegalContent(models.Model):
     privacy_html = models.TextField(
         help_text="Trusted HTML rendered on the privacy policy page.",
     )
+    responsible_name = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Name of the person or organisation responsible for the legal pages.",
+    )
+    responsible_address = models.TextField(
+        blank=True,
+        help_text="Postal address. Use one line per address line.",
+    )
+    responsible_email = models.EmailField(
+        blank=True,
+        help_text="Public email address shown on the legal pages.",
+    )
 
     cookie_eyebrow_en = models.CharField(max_length=100)
     cookie_title_en = models.CharField(max_length=200)
@@ -71,6 +84,9 @@ def legal_content(request):
 @admin.register(LegalContent)
 class LegalContentAdmin(admin.ModelAdmin):
     fields = (
+        "responsible_name",
+        "responsible_address",
+        "responsible_email",
         "impressum_html",
         "privacy_html",
         "cookie_eyebrow_en",

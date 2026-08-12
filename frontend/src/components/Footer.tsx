@@ -24,7 +24,7 @@ export default function Footer() {
         }}
       >
         <span style={{ color: '#6b7280' }}>
-          © {new Date().getFullYear()} MyPortfolio
+          © {new Date().getFullYear()} Maksym Petrykin
         </span>
 
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>

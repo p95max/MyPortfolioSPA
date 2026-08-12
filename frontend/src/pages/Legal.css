@@ -70,11 +70,20 @@
 }
 
 .legal-inner p,
-.legal-inner li {
+.legal-inner li,
+.legal-responsible-party address {
   font-size: 0.9rem;
   color: var(--muted, #6b7d93);
   line-height: 1.75;
   margin: 0 0 10px 0;
+}
+
+.legal-responsible-party address {
+  font-style: normal;
+}
+
+.legal-address {
+  white-space: pre-line;
 }
 
 .legal-inner ul {

@@ -4,6 +4,9 @@ import { getApiUrl } from "./apiBaseUrl";
 export type LegalContent = {
   impressum_html: string;
   privacy_html: string;
+  responsible_name?: string;
+  responsible_address?: string;
+  responsible_email?: string;
   cookie_eyebrow_en: string;
   cookie_title_en: string;
   cookie_text_en: string;

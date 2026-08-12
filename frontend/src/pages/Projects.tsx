@@ -9,8 +9,6 @@ import { useTranslation } from "../i18n";
 
 const USE_TEST_DATA = false;
 
-const ITEMS_PER_PAGE = 5;
-
 type ApiProjectScreenshot =
   | string
   | {
@@ -108,7 +106,6 @@ function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
@@ -149,10 +146,6 @@ function Projects() {
         setLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    setPage(0);
-  }, [selectedTags]);
 
   function toggleTag(tag: string): void {
     setSelectedTags((currentTags) => {
@@ -220,12 +213,6 @@ function Projects() {
       </div>
     );
   }
-
-  const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
-  const current = filteredProjects.slice(
-    page * ITEMS_PER_PAGE,
-    (page + 1) * ITEMS_PER_PAGE
-  );
 
   return (
     <div className="page-projects">
@@ -328,32 +315,16 @@ function Projects() {
             </button>
           </div>
         ) : (
-          <>
-            <div className="pp-list">
-              {current.map((project) => (
-                <ProjectCard key={project.id} project={{
-                  ...project,
-                  description: language === "de" && project.descriptionDe
-                    ? project.descriptionDe
-                    : project.description,
-                }} />
-              ))}
-            </div>
-
-            {totalPages > 1 && (
-              <div className="pager">
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setPage(i)}
-                    className={`pager-btn ${i === page ? "active" : ""}`}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </div>
-            )}
-          </>
+          <div className="pp-list">
+            {filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={{
+                ...project,
+                description: language === "de" && project.descriptionDe
+                  ? project.descriptionDe
+                  : project.description,
+              }} />
+            ))}
+          </div>
         )}
       </div>
     </div>

@@ -1,9 +1,12 @@
 import { resetPrivacyPreferences } from '../privacy';
 import './Footer.css';
 import { useTranslation } from '../i18n';
+import { useLegalContent } from '../legalContent';
 
 export default function Footer() {
   const { t } = useTranslation();
+  const legalContent = useLegalContent();
+  const responsibleName = legalContent?.responsible_name?.trim();
   return (
     <footer
       style={{
@@ -24,7 +27,7 @@ export default function Footer() {
         }}
       >
         <span style={{ color: '#6b7280' }}>
-          © {new Date().getFullYear()} Maksym Petrykin
+          © {new Date().getFullYear()}{responsibleName ? ` ${responsibleName}` : ''}
         </span>
 
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>

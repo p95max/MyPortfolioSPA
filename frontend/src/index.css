@@ -21,6 +21,8 @@
   --danger: #fca5a5;
   --danger-bg: rgba(248, 113, 113, 0.08);
   --shadow: rgba(0, 0, 0, 0.45);
+  --tooltip-bg: rgba(9, 12, 17, 0.96);
+  --tooltip-text: #e8edf4;
   --grid-line: rgba(0, 212, 255, 0.025);
   --table-heading: #121924;
   --table-row: rgba(255, 255, 255, 0.025);
@@ -57,6 +59,8 @@ html[data-theme="light"] {
   --danger: #bd3d36;
   --danger-bg: rgba(189, 61, 54, 0.08);
   --shadow: rgba(15, 23, 42, 0.16);
+  --tooltip-bg: #17212d;
+  --tooltip-text: #ffffff;
   --grid-line: rgba(0, 124, 159, 0.07);
   --table-heading: #e9eff5;
   --table-row: #f7f9fc;

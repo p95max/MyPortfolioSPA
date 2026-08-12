@@ -18,15 +18,15 @@
   padding: 6px 10px;
   border: 1px solid rgba(0, 212, 255, 0.22);
   border-radius: 8px;
-  background: rgba(9, 12, 17, 0.96);
-  color: var(--text, #e8edf4);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-text);
   font-family: var(--mono, 'JetBrains Mono', monospace);
   font-size: 0.68rem;
   font-weight: 700;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 12px 30px var(--shadow);
   transition:
     opacity 0.15s ease,
     transform 0.15s ease;
@@ -40,7 +40,7 @@
   z-index: 21;
   transform: translateX(-50%) translateY(4px);
   border: 5px solid transparent;
-  border-top-color: rgba(9, 12, 17, 0.96);
+  border-top-color: var(--tooltip-bg);
   opacity: 0;
   pointer-events: none;
   transition:

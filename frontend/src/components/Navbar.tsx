@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { useTranslation } from "../i18n";
 import { applyTheme, getInitialTheme, type Theme } from "../theme";
+import { trackLanguageChange, trackThemeChange } from "../analytics";
 
 export const Navbar = () => {
   const location = useLocation();
@@ -25,6 +26,23 @@ export const Navbar = () => {
     { to: "/credentials", label: t("nav.certificates") },
     { to: "/contact", label: t("nav.contact") },
   ];
+
+  const handleLanguageChange = (locale: "en" | "de") => {
+    if (locale === language) {
+      return;
+    }
+
+    trackLanguageChange(language, locale);
+    setLanguage(locale);
+  };
+
+  const handleThemeChange = () => {
+    setTheme((current) => {
+      const next = current === "dark" ? "light" : "dark";
+      trackThemeChange(current, next);
+      return next;
+    });
+  };
 
   return (
     <div className="nav-root">
@@ -50,7 +68,7 @@ export const Navbar = () => {
                 key={locale}
                 type="button"
                 className={language === locale ? "active" : ""}
-                onClick={() => setLanguage(locale)}
+                onClick={() => handleLanguageChange(locale)}
                 aria-pressed={language === locale}
               >
                 {locale.toUpperCase()}
@@ -63,7 +81,7 @@ export const Navbar = () => {
             role="switch"
             aria-checked={theme === "light"}
             aria-label={theme === "light" ? t("nav.darkTheme") : t("nav.lightTheme")}
-            onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")}
+            onClick={handleThemeChange}
           >
             <span className="theme-switch__sun" aria-hidden="true">☀</span>
             <span className="theme-switch__thumb" aria-hidden="true" />

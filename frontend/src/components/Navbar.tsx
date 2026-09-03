@@ -37,11 +37,9 @@ export const Navbar = () => {
   };
 
   const handleThemeChange = () => {
-    setTheme((current) => {
-      const next = current === "dark" ? "light" : "dark";
-      trackThemeChange(current, next);
-      return next;
-    });
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    trackThemeChange(theme, nextTheme);
+    setTheme(nextTheme);
   };
 
   return (

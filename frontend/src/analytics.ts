@@ -406,6 +406,7 @@ export function trackOutboundLinkClick(target: string, url: string): void {
   });
 }
 
+// Preference changes reuse the same consent-aware analytics transport.
 export function trackThemeChange(
   previousTheme: "dark" | "light",
   theme: "dark" | "light",

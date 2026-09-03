@@ -243,6 +243,10 @@ class AnalyticsEventSerializer(serializers.ModelSerializer):
             "issuer",
             "target",
             "url_host",
+            "previous_theme",
+            "theme",
+            "previous_language",
+            "selected_language",
         }
 
         cleaned = {}

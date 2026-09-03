@@ -15,7 +15,9 @@ type AnalyticsEventType =
   | "contact_submit"
   | "outbound_link_click"
   | "credential_view"
-  | "credential_link_click";
+  | "credential_link_click"
+  | "theme_change"
+  | "language_change";
 
 type AnalyticsMetadata = Record<string, string | number | boolean | null>;
 
@@ -401,6 +403,26 @@ export function trackOutboundLinkClick(target: string, url: string): void {
   trackAnalyticsEvent("outbound_link_click", window.location.pathname, {
     target,
     url_host: getUrlHost(url),
+  });
+}
+
+export function trackThemeChange(
+  previousTheme: "dark" | "light",
+  theme: "dark" | "light",
+): void {
+  trackAnalyticsEvent("theme_change", window.location.pathname, {
+    previous_theme: previousTheme,
+    theme,
+  });
+}
+
+export function trackLanguageChange(
+  previousLanguage: string,
+  language: string,
+): void {
+  trackAnalyticsEvent("language_change", window.location.pathname, {
+    previous_language: previousLanguage,
+    selected_language: language,
   });
 }
 

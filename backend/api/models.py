@@ -187,6 +187,8 @@ class AnalyticsEvent(models.Model):
     EVENT_OUTBOUND_LINK_CLICK = "outbound_link_click"
     EVENT_CREDENTIAL_VIEW = "credential_view"
     EVENT_CREDENTIAL_LINK_CLICK = "credential_link_click"
+    EVENT_THEME_CHANGE = "theme_change"
+    EVENT_LANGUAGE_CHANGE = "language_change"
 
     EVENT_TYPES = (
         (EVENT_PAGE_VIEW, "Page view"),
@@ -197,6 +199,8 @@ class AnalyticsEvent(models.Model):
         (EVENT_OUTBOUND_LINK_CLICK, "Outbound link click"),
         (EVENT_CREDENTIAL_VIEW, "Credential view"),
         (EVENT_CREDENTIAL_LINK_CLICK, "Credential link click"),
+        (EVENT_THEME_CHANGE, "Theme change"),
+        (EVENT_LANGUAGE_CHANGE, "Language change"),
     )
 
     event_type = models.CharField(

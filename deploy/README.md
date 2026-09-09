@@ -29,11 +29,14 @@ First add an SSH key for normal administration, verify it in a second terminal,
 then disable password authentication; do not risk closing the only working SSH
 session before verification.
 
-Commit and push the `prod` branch before downloading the bootstrap script.
+Choose the deployment branch first. The current VPS uses `vps-deploy`; set the
+same value in `PORTFOLIO_DEPLOY_BRANCH` in `/etc/portfolio/portfolio.env`.
+On a fresh VPS, replace `<branch>` below with that branch name:
+
 On the fresh VPS, run:
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/p95max/MyPortfolioSPA/prod/deploy/bootstrap-vps.sh
+curl -fsSLO https://raw.githubusercontent.com/p95max/MyPortfolioSPA/<branch>/deploy/bootstrap-vps.sh
 chmod 700 bootstrap-vps.sh
 ./bootstrap-vps.sh
 rm bootstrap-vps.sh
@@ -45,10 +48,10 @@ the required directories. It permits only SSH, HTTP, and HTTPS in UFW.
 For an SSH port other than 22, run `SSH_PORT=2222 ./bootstrap-vps.sh` so that
 the active SSH port is permitted before UFW is enabled.
 
-Clone the production branch as the deployment user:
+Clone the chosen deployment branch as the deployment user:
 
 ```bash
-sudo -u portfolio git clone -b prod https://github.com/p95max/MyPortfolioSPA.git /opt/myportfoliospa
+sudo -u portfolio git clone -b <branch> https://github.com/p95max/MyPortfolioSPA.git /opt/myportfoliospa
 cd /opt/myportfoliospa
 git branch --show-current
 ```
@@ -74,6 +77,7 @@ git branch --show-current
    ```
 
    Keep all production secrets only in that host file.
+   Set `PORTFOLIO_DEPLOY_BRANCH` to the branch cloned above.
 
 3. Put a TLS reverse proxy (for example Nginx with Certbot) in front of
    `127.0.0.1:8080`. Do not expose ports 8000, 8080, PostgreSQL, or Redis publicly.
@@ -156,6 +160,8 @@ sudo certbot renew --dry-run
 
 The internal frontend Nginx preserves the host proxy's `X-Forwarded-For` and
 `X-Forwarded-Proto` headers. Keep `DRF_NUM_PROXIES=1` in the production env.
+It also proxies the custom `DJANGO_ADMIN_URL` and Django `/static/` assets to
+the backend. Rebuild the frontend service after changing the admin URL.
 If Cloudflare proxies the origin, configure trusted Cloudflare IP ranges with
 Nginx `real_ip` directives before relying on client-IP throttling or analytics.
 

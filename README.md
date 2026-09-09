@@ -15,7 +15,7 @@ Public site: `https://p95max.dev`
 ### Backend
 
 - Python 3.12
-- Django 5.2
+- Django 6.1
 - Django REST Framework
 - PostgreSQL
 - Redis-compatible cache for shared throttling
@@ -168,7 +168,8 @@ Backend:
 cd backend
 poetry run python manage.py check
 poetry run python manage.py makemigrations --check --dry-run
-poetry run pytest --ds=config.test_settings --nomigrations -vv -ra --tb=short
+# Prevent the shared local .env from pointing tests at Docker Redis.
+REDIS_URL= poetry run pytest --ds=config.test_settings --nomigrations -vv -ra --tb=short
 ```
 
 Frontend:
@@ -194,25 +195,13 @@ npm run build
 
 ## Deployment
 
-Render configuration is stored in `render.yaml`.
+Production runs on a Netcup VPS using Docker Compose, host Nginx, and
+systemd operations timers. See [deploy/README.md](deploy/README.md) for the
+resource profile, TLS, backups, and deployment steps.
 
-Backend build:
-
-```text
-root: backend
-build: ./build.sh
-runtime: Gunicorn
-```
-
-Frontend build:
-
-```text
-root: frontend
-build: npm ci && npm run build
-publish: dist
-```
-
-Frontend variables must use the `VITE_` prefix. Backend secrets must never be exposed through frontend environment variables.
+`render.yaml` remains only as a legacy deployment/migration reference.
+Frontend variables must use the `VITE_` prefix. Backend secrets must never be
+exposed through frontend environment variables.
 
 ## License
 

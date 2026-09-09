@@ -373,10 +373,12 @@ def test_contact_subnet_throttle_groups_ipv4_addresses_by_24():
     first = SimpleNamespace(
         data={},
         META={"REMOTE_ADDR": "203.0.113.10"},
+        headers={},
     )
     second = SimpleNamespace(
         data={},
         META={"REMOTE_ADDR": "203.0.113.250"},
+        headers={},
     )
 
     assert throttle.get_cache_key(first, view=None) == throttle.get_cache_key(
@@ -390,10 +392,12 @@ def test_contact_subnet_throttle_groups_ipv6_addresses_by_48():
     first = SimpleNamespace(
         data={},
         META={"REMOTE_ADDR": "2001:db8:abcd:1::1"},
+        headers={},
     )
     second = SimpleNamespace(
         data={},
         META={"REMOTE_ADDR": "2001:db8:abcd:ffff::1"},
+        headers={},
     )
 
     assert throttle.get_cache_key(first, view=None) == throttle.get_cache_key(

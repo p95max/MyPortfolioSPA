@@ -9,7 +9,7 @@ The backend provides a read-only portfolio API, a contact form API, Django Admin
 ## Stack
 
 - Python 3.12
-- Django 5.2
+- Django 6.1
 - Django REST Framework
 - PostgreSQL
 - Redis cache support for throttling
@@ -75,7 +75,7 @@ when it runs outside Docker; Compose injects the same file into its containers.
 
 The backend supports two database modes.
 
-#### Production / Render-style
+#### External PostgreSQL / legacy hosted mode
 
 | Variable | Required | Description |
 |---|---:|---|
@@ -428,6 +428,10 @@ Default:
 /admin/
 ```
 
+In the VPS setup, the frontend Nginx container renders a proxy route from the
+same `DJANGO_ADMIN_URL` value. Rebuild the `frontend` service after changing
+this variable, otherwise the SPA fallback will handle the custom URL.
+
 Admin features:
 
 - Jazzmin theme.
@@ -506,7 +510,7 @@ The backend image:
 
 1. Uses `python:3.12-slim`.
 2. Installs system build dependencies.
-3. Installs Poetry 1.7.1.
+3. Installs Poetry 2.4.1.
 4. Installs dependencies from `pyproject.toml`.
 5. Copies the app.
 6. Runs `collectstatic`.
@@ -536,5 +540,6 @@ The backend image:
 - Keep `DJANGO_ADMIN_URL` with a trailing slash.
 - Ensure `DATABASE_URL` or local DB variables are configured, not both accidentally with conflicting values.
 - Use Redis in production if throttling must be consistent across multiple workers or restarts.
-- Current Docker Compose PostgreSQL port mapping should be checked. PostgreSQL normally listens on `5432` inside the container.
+- Production Compose binds PostgreSQL and Redis only to the internal Docker network; do not publish them on the host.
 - Do not put backend secrets into frontend build-time environment variables.
+- Django 6.1 reports that the legacy `EMAIL_*` configuration will be replaced by `MAILERS` before Django 7.0. This is not a production failure, but should be addressed before the next major Django upgrade.

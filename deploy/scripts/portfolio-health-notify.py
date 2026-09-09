@@ -33,7 +33,11 @@ def active(unit: str) -> bool:
 
 def api_is_healthy() -> bool:
     try:
-        with urllib.request.urlopen("http://127.0.0.1:8000/api/health/", timeout=8) as response:
+        request = urllib.request.Request(
+            "http://127.0.0.1:8000/api/health/",
+            headers={"X-Forwarded-Proto": "https"},
+        )
+        with urllib.request.urlopen(request, timeout=8) as response:
             return response.status == 200 and json.loads(response.read()).get("status") == "ok"
     except (OSError, ValueError, urllib.error.URLError):
         return False
@@ -46,7 +50,10 @@ def notify(text: str) -> None:
 def main() -> int:
     env = load_env()
     problems: list[str] = []
-    for unit in ("docker.service", "portfolio-telegram-bot.service"):
+    units = ["docker.service"]
+    if env.get("TELEGRAM_BOT_TOKEN"):
+        units.append("portfolio-telegram-bot.service")
+    for unit in units:
         if not active(unit):
             problems.append(f"service inactive: {unit}")
     if not api_is_healthy():

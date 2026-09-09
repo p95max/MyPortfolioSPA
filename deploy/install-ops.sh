@@ -5,6 +5,7 @@ PROJECT_DIR="${PROJECT_DIR:-/opt/myportfoliospa}"
 SYSTEMD_DIR="/etc/systemd/system"
 BIN_DIR="/usr/local/bin"
 SUDOERS_FILE="/etc/sudoers.d/portfolio-ops"
+ENV_FILE="${PORTFOLIO_ENV_FILE:-/etc/portfolio/portfolio.env}"
 
 cd "$PROJECT_DIR"
 id portfolio >/dev/null 2>&1 || {
@@ -17,7 +18,13 @@ sudo install -o root -g portfolio -m 0750 deploy/scripts/portfolio-* "$BIN_DIR/"
 sudo install -o root -g root -m 0440 deploy/sudoers/portfolio-ops "$SUDOERS_FILE"
 sudo visudo -cf "$SUDOERS_FILE"
 sudo systemctl daemon-reload
-sudo systemctl enable --now portfolio-telegram-bot.service
 sudo systemctl enable --now portfolio-auto-deploy.timer portfolio-backup-db.timer portfolio-health-monitor.timer
+
+if grep -qE '^TELEGRAM_BOT_TOKEN=.+$' "$ENV_FILE"; then
+    sudo systemctl enable --now portfolio-telegram-bot.service
+else
+    sudo systemctl disable --now portfolio-telegram-bot.service 2>/dev/null || true
+    echo "Telegram bot not enabled: TELEGRAM_BOT_TOKEN is empty."
+fi
 
 echo "Portfolio operations installed. Check: systemctl list-timers --all | grep portfolio"

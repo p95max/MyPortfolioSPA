@@ -2,7 +2,7 @@ services:
   db:
     image: postgres:15
     env_file:
-      - ./backend/.env.dev
+      - ./.env
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -41,7 +41,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./backend/.env.dev
+      - ./.env
     depends_on:
       db:
         condition: service_healthy

@@ -49,19 +49,14 @@ The frontend is a React + TypeScript SPA built with Vite. In Docker, the product
 
 ## Environment Variables
 
-Create:
+Use the shared project-root environment file:
 
 ```text
-frontend/.env
+.env
 ```
 
-Example:
-
-```env
-VITE_API_URL=http://localhost:8000
-VITE_TURNSTILE_SITEKEY=your-turnstile-site-key
-VITE_SNOW=auto
-```
+Create it with `cp .env.example .env`. Vite reads this file for direct local
+builds, and Docker Compose injects the same values into the frontend container.
 
 ### Variable reference
 

@@ -133,51 +133,16 @@ Swagger and ReDoc are available from the backend service:
 
 ## Local development
 
-### Backend environment
+### Shared environment
 
-Create `backend/.env.dev`:
+Create one project-root `.env` for Django, PostgreSQL, and Vite:
 
-```env
-DJANGO_SECRET_KEY=django-insecure-local-dev-key
-DJANGO_DEBUG=True
-DJANGO_ADMIN_URL=admin/
-
-POSTGRES_DB=portfolio_db
-POSTGRES_USER=portfolio_user
-POSTGRES_PASSWORD=portfolio_password
-DB_HOST=db
-DB_PORT=5432
-
-DJANGO_SUPERUSER_USERNAME=admin
-DJANGO_SUPERUSER_EMAIL=admin@example.com
-DJANGO_SUPERUSER_PASSWORD=adminpass
-
-ALLOWED_HOST=localhost
-EXTRA_ALLOWED_HOSTS=127.0.0.1
-CSRF_TRUSTED_ORIGINS=http://localhost:3000,http://localhost:8000
-CORS_ALLOWED_ORIGINS=http://localhost:3000
-
-TURNSTILE_SECRET=your-turnstile-secret
-FRONTEND_BASE_URL=http://localhost:3000
-BACKEND_BASE_URL=http://localhost:8000
-
-EMAIL_HOST_USER=your_email@gmail.com
-EMAIL_HOST_PASSWORD=your_gmail_app_password
-NOTIFY_EMAILS=your_email@gmail.com
-DISPLAY_TZ=Europe/Berlin
-
-REDIS_URL=
+```bash
+cp .env.example .env
 ```
 
-### Frontend environment
-
-Create `frontend/.env`:
-
-```env
-VITE_API_URL=http://localhost:8000
-VITE_TURNSTILE_SITEKEY=your-turnstile-site-key
-VITE_SNOW=auto
-```
+Edit `.env` if you need local credentials or different domains. Only `VITE_*`
+variables are passed to the browser; never put a secret in one of them.
 
 ### Run with Docker Compose
 

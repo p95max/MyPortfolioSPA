@@ -4,10 +4,8 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
-BACKEND_ENV="${PROJECT_ROOT}/backend/.env.dev"
-BACKEND_ENV_EXAMPLE="${PROJECT_ROOT}/backend/.env.docker.dev.example"
-FRONTEND_ENV="${PROJECT_ROOT}/frontend/.env"
-FRONTEND_ENV_EXAMPLE="${PROJECT_ROOT}/frontend/.env.docker.dev.example"
+ENV_FILE="${PROJECT_ROOT}/.env"
+ENV_FILE_EXAMPLE="${PROJECT_ROOT}/.env.example"
 FRONTEND_DIST="${PROJECT_ROOT}/frontend/dist"
 
 log() {
@@ -49,7 +47,7 @@ ensure_env_file() {
 
   [[ -f "$example" ]] || fail "Environment template not found: $example"
   cp "$example" "$destination"
-  log "Created ${destination#"${PROJECT_ROOT}/"} from its Docker development template"
+  log "Created ${destination#"${PROJECT_ROOT}/"} from the shared development template"
 }
 
 ensure_dist_permissions() {
@@ -71,8 +69,8 @@ ensure_dist_permissions() {
 configure_environment() {
   # The frontend is served by Nginx, which proxies /api to Django. Same-origin
   # requests work both on localhost and through a Codespaces forwarded port.
-  set_env_value "$FRONTEND_ENV" "VITE_API_URL" ""
-  set_env_value "$FRONTEND_ENV" "VITE_USE_API_PROXY" "true"
+  set_env_value "$ENV_FILE" "VITE_API_URL" ""
+  set_env_value "$ENV_FILE" "VITE_USE_API_PROXY" "true"
 
   if [[ -n "${CODESPACE_NAME:-}" && -n "${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-}" ]]; then
     local codespace_host
@@ -81,21 +79,21 @@ configure_environment() {
     codespace_host="${CODESPACE_NAME}-3000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}"
     codespace_origin="https://${codespace_host}"
 
-    set_env_value "$BACKEND_ENV" "ALLOWED_HOST" "$codespace_host"
-    set_env_value "$BACKEND_ENV" "EXTRA_ALLOWED_HOSTS" "localhost,127.0.0.1,web"
-    set_env_value "$BACKEND_ENV" "CSRF_TRUSTED_ORIGINS" "$codespace_origin"
-    set_env_value "$BACKEND_ENV" "CORS_ALLOWED_ORIGINS" "$codespace_origin"
-    set_env_value "$BACKEND_ENV" "FRONTEND_BASE_URL" "$codespace_origin"
-    set_env_value "$BACKEND_ENV" "BACKEND_BASE_URL" "$codespace_origin"
+    set_env_value "$ENV_FILE" "ALLOWED_HOST" "$codespace_host"
+    set_env_value "$ENV_FILE" "EXTRA_ALLOWED_HOSTS" "localhost,127.0.0.1,web"
+    set_env_value "$ENV_FILE" "CSRF_TRUSTED_ORIGINS" "$codespace_origin"
+    set_env_value "$ENV_FILE" "CORS_ALLOWED_ORIGINS" "$codespace_origin"
+    set_env_value "$ENV_FILE" "FRONTEND_BASE_URL" "$codespace_origin"
+    set_env_value "$ENV_FILE" "BACKEND_BASE_URL" "$codespace_origin"
 
     APP_URL="${codespace_origin}/"
   else
-    set_env_value "$BACKEND_ENV" "ALLOWED_HOST" "localhost"
-    set_env_value "$BACKEND_ENV" "EXTRA_ALLOWED_HOSTS" "127.0.0.1,web"
-    set_env_value "$BACKEND_ENV" "CSRF_TRUSTED_ORIGINS" "http://localhost:3000,http://localhost:8000"
-    set_env_value "$BACKEND_ENV" "CORS_ALLOWED_ORIGINS" "http://localhost:3000,http://localhost:8000"
-    set_env_value "$BACKEND_ENV" "FRONTEND_BASE_URL" "http://localhost:3000"
-    set_env_value "$BACKEND_ENV" "BACKEND_BASE_URL" "http://localhost:8000"
+    set_env_value "$ENV_FILE" "ALLOWED_HOST" "localhost"
+    set_env_value "$ENV_FILE" "EXTRA_ALLOWED_HOSTS" "127.0.0.1,web"
+    set_env_value "$ENV_FILE" "CSRF_TRUSTED_ORIGINS" "http://localhost:3000,http://localhost:8000"
+    set_env_value "$ENV_FILE" "CORS_ALLOWED_ORIGINS" "http://localhost:3000,http://localhost:8000"
+    set_env_value "$ENV_FILE" "FRONTEND_BASE_URL" "http://localhost:3000"
+    set_env_value "$ENV_FILE" "BACKEND_BASE_URL" "http://localhost:8000"
 
     APP_URL="http://localhost:3000/"
   fi
@@ -132,7 +130,7 @@ load_local_fixtures() {
   local load_fixtures
   local attempt
 
-  load_fixtures="$(grep -E '^LOAD_FIXTURES=' "$BACKEND_ENV" | tail -n 1 | cut -d= -f2- | tr '[:upper:]' '[:lower:]')"
+  load_fixtures="$(grep -E '^LOAD_FIXTURES=' "$ENV_FILE" | tail -n 1 | cut -d= -f2- | tr '[:upper:]' '[:lower:]')"
 
   if [[ "$load_fixtures" != "true" && "$load_fixtures" != "1" && "$load_fixtures" != "yes" ]]; then
     log "Skipping fixtures because LOAD_FIXTURES is not enabled"
@@ -170,8 +168,7 @@ main() {
   require_command sed
   docker compose version >/dev/null 2>&1 || fail "Docker Compose v2 is required"
 
-  ensure_env_file "$BACKEND_ENV" "$BACKEND_ENV_EXAMPLE"
-  ensure_env_file "$FRONTEND_ENV" "$FRONTEND_ENV_EXAMPLE"
+  ensure_env_file "$ENV_FILE" "$ENV_FILE_EXAMPLE"
   configure_environment
   ensure_dist_permissions
   build_frontend

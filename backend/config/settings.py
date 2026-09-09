@@ -16,8 +16,10 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-if os.path.exists(BASE_DIR / ".env.dev"):
-    load_dotenv(BASE_DIR / ".env.dev")
+PROJECT_ENV_FILE = BASE_DIR.parent / ".env"
+
+if PROJECT_ENV_FILE.exists():
+    load_dotenv(PROJECT_ENV_FILE)
 
 
 def split_env_list(name: str) -> list[str]:

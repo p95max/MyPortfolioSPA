@@ -62,7 +62,7 @@ services:
       dockerfile: Dockerfile.prod
       args:
         VITE_API_URL: ${VITE_API_URL:-}
-        VITE_USE_API_PROXY: "true"
+        VITE_USE_API_PROXY: ${VITE_USE_API_PROXY:-true}
         VITE_TURNSTILE_SITEKEY: ${VITE_TURNSTILE_SITEKEY:-}
         VITE_SNOW: ${VITE_SNOW:-auto}
     restart: unless-stopped

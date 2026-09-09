@@ -50,50 +50,14 @@ The backend provides a read-only portfolio API, a contact form API, Django Admin
 
 ## Environment File
 
-For Docker-based local development, create:
+For local development, use the shared project-root environment file:
 
 ```text
-backend/.env.dev
+.env
 ```
 
-The Django settings load `backend/.env.dev` automatically when the file exists.
-
-Example:
-
-```env
-DJANGO_SECRET_KEY=django-insecure-local-dev-key
-DJANGO_DEBUG=True
-DJANGO_ADMIN_URL=admin/
-
-POSTGRES_DB=portfolio_db
-POSTGRES_USER=portfolio_user
-POSTGRES_PASSWORD=portfolio_password
-DB_HOST=db
-DB_PORT=5432
-
-DJANGO_SUPERUSER_USERNAME=admin
-DJANGO_SUPERUSER_EMAIL=admin@example.com
-DJANGO_SUPERUSER_PASSWORD=adminpass
-
-ALLOWED_HOST=localhost
-EXTRA_ALLOWED_HOSTS=127.0.0.1
-CSRF_TRUSTED_ORIGINS=http://localhost:3000,http://localhost:8000
-CORS_ALLOWED_ORIGINS=http://localhost:3000
-
-TURNSTILE_SECRET=your-turnstile-secret
-FRONTEND_BASE_URL=http://localhost:3000
-
-EMAIL_HOST=smtp.gmail.com
-EMAIL_HOST_USER=your_email@gmail.com
-EMAIL_HOST_PASSWORD=your_gmail_app_password
-NOTIFY_EMAILS=your_email@gmail.com
-DISPLAY_TZ=Europe/Berlin
-
-REDIS_URL=
-DRF_NUM_PROXIES=0
-TRUST_ANALYTICS_GEO_HEADERS=False
-ANALYTICS_GEOIP_LOOKUP_ENABLED=False
-```
+Create it with `cp .env.example .env`. Django loads this file automatically
+when it runs outside Docker; Compose injects the same file into its containers.
 
 ---
 

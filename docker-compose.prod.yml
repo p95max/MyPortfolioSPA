@@ -100,6 +100,11 @@ services:
         VITE_TURNSTILE_SITEKEY: ${VITE_TURNSTILE_SITEKEY:-}
         VITE_SNOW: ${VITE_SNOW:-auto}
     restart: unless-stopped
+    environment:
+      DJANGO_ADMIN_URL: ${DJANGO_ADMIN_URL:-admin/}
+      # Limit envsubst to the template variable. Nginx variables ($host, $uri,
+      # etc.) must remain intact in the generated configuration.
+      NGINX_ENVSUBST_FILTER: '^DJANGO_ADMIN_URL$'
     depends_on:
       web:
         condition: service_healthy

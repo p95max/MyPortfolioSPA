@@ -21,7 +21,10 @@ RUN npm run build
 
 FROM nginx:1.27-alpine
 
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# The official Nginx image renders files in /etc/nginx/templates at startup.
+# This keeps the non-public Django admin path configurable through the shared
+# production env file without expanding Nginx runtime variables such as $host.
+COPY nginx/nginx.conf /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80

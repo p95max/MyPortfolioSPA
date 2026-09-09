@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - prod
+      - vps-deploy
   pull_request:
     branches:
       - prod
+      - vps-deploy
 
 permissions:
   contents: read
@@ -45,7 +47,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.14"
           cache: pip
 
       - name: Install Poetry

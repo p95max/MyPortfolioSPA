@@ -407,7 +407,6 @@ files = [
 
 [package.dependencies]
 psycopg-binary = {version = "3.3.5", optional = true, markers = "implementation_name != \"pypy\" and extra == \"binary\""}
-typing-extensions = {version = ">=4.6", markers = "python_version < \"3.13\""}
 tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 
 [package.extras]
@@ -750,19 +749,6 @@ dev = ["build", "hatch"]
 doc = ["sphinx"]
 
 [[package]]
-name = "typing-extensions"
-version = "4.15.0"
-description = "Backported and Experimental Type Hints for Python 3.9+"
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-markers = "python_version == \"3.12\""
-files = [
-    {file = "typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548"},
-    {file = "typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466"},
-]
-
-[[package]]
 name = "tzdata"
 version = "2025.2"
 description = "Provider of IANA time zone data"
@@ -822,5 +808,5 @@ brotli = ["brotli"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = "^3.12"
-content-hash = "e08bc9e521f0cf6baeacc472d91834fab8bfbe45fd9748994393a9ec091331af"
+python-versions = "^3.14"
+content-hash = "0f02b5bf525269bab735da09188cbedadc8a46d1cf9cba78f47b1b1b2d781393"

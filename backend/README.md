@@ -8,7 +8,7 @@ The backend provides a read-only portfolio API, a contact form API, Django Admin
 
 ## Stack
 
-- Python 3.12
+- Python 3.14
 - Django 6.1
 - Django REST Framework
 - PostgreSQL
@@ -508,7 +508,7 @@ When `DJANGO_DEBUG=False`, the following production security settings are enable
 
 The backend image:
 
-1. Uses `python:3.12-slim`.
+1. Uses `python:3.14-slim`.
 2. Installs system build dependencies.
 3. Installs Poetry 2.4.1.
 4. Installs dependencies from `pyproject.toml`.

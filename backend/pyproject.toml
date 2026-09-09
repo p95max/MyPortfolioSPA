@@ -6,7 +6,7 @@ authors = ["maxx_PC <m.petrykin@gmx.de>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.14"
 django = "^6.1.1"
 djangorestframework = "^3.16.1"
 django-cors-headers = "^4.7.0"

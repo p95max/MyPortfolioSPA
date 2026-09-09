@@ -14,7 +14,7 @@ Public site: `https://p95max.dev`
 
 ### Backend
 
-- Python 3.12
+- Python 3.14
 - Django 6.1
 - Django REST Framework
 - PostgreSQL

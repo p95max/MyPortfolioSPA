@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY pyproject.toml poetry.lock* /app/
 
-RUN pip install --upgrade pip && pip install "poetry==1.7.1"
+RUN pip install --upgrade pip && pip install "poetry==2.4.1"
 RUN poetry install --no-interaction --no-ansi
 
 COPY entrypoint.sh /app/entrypoint.sh

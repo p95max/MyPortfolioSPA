@@ -15,8 +15,8 @@ read_env() {
 }
 
 echo "== Git =="
-git status --short
-git log -1 --oneline
+git -c safe.directory="$PROJECT_DIR" status --short
+git -c safe.directory="$PROJECT_DIR" log -1 --oneline
 
 echo "== Compose configuration =="
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" config --quiet

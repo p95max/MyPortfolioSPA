@@ -57,7 +57,9 @@ log "Applying migrations and deployment checks"
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T web python manage.py migrate --noinput
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" exec -T web python manage.py check --deploy --fail-level ERROR
 
-if ! curl --fail --silent --show-error --max-time 15 http://127.0.0.1:8000/api/health/ >/dev/null; then
+if ! curl --fail --silent --show-error --max-time 15 \
+    --header 'X-Forwarded-Proto: https' \
+    http://127.0.0.1:8000/api/health/ >/dev/null; then
     echo "API health check failed after deploy." >&2
     exit 1
 fi

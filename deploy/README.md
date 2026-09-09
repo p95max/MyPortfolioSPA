@@ -94,6 +94,13 @@ git branch --show-current
    bash deploy/install-ops.sh
    ```
 
+## Weekly off-site Neon backup
+
+Set `NEON_BACKUP_DATABASE_URL` in `/etc/portfolio/portfolio.env` to a dedicated
+Neon backup database. `portfolio-backup-neon.timer` runs each Sunday at 04:15,
+replaces that database atomically with a fresh local snapshot, and verifies
+principal table counts. The Neon target must not be used by the live app.
+
 ## Telegram security
 
 Set every Telegram variable in `/etc/portfolio/portfolio.env` before starting the bot:

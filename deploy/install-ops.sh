@@ -18,7 +18,7 @@ sudo install -o root -g portfolio -m 0750 deploy/scripts/portfolio-* "$BIN_DIR/"
 sudo install -o root -g root -m 0440 deploy/sudoers/portfolio-ops "$SUDOERS_FILE"
 sudo visudo -cf "$SUDOERS_FILE"
 sudo systemctl daemon-reload
-sudo systemctl enable --now portfolio-auto-deploy.timer portfolio-backup-db.timer portfolio-health-monitor.timer
+sudo systemctl enable --now portfolio-auto-deploy.timer portfolio-backup-db.timer portfolio-backup-neon.timer portfolio-health-monitor.timer
 
 if grep -qE '^TELEGRAM_BOT_TOKEN=.+$' "$ENV_FILE"; then
     sudo systemctl enable --now portfolio-telegram-bot.service

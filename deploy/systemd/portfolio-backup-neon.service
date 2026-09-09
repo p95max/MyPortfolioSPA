@@ -1,0 +1,11 @@
+[Unit]
+Description=Replicate Portfolio PostgreSQL backup to Neon
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=portfolio
+Group=portfolio
+Environment=PORTFOLIO_ENV_FILE=/etc/portfolio/portfolio.env
+ExecStart=/usr/bin/flock -n /tmp/portfolio-backup-neon.lock /usr/local/bin/portfolio-backup-neon.sh

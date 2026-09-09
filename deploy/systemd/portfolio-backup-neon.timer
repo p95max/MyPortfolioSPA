@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Portfolio off-site Neon backup weekly
+
+[Timer]
+OnCalendar=Sun *-*-* 04:15:00
+Persistent=true
+Unit=portfolio-backup-neon.service
+
+[Install]
+WantedBy=timers.target

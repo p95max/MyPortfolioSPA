@@ -7,6 +7,52 @@ This directory adapts the safe operations model from Argus for Portfolio:
 - systemd runs deploy, backup, and health-monitor timers outside the application containers.
 - Deploy commands never execute user-provided shell text.
 
+## Netcup pico (1 GB RAM) profile
+
+The production Compose file is tuned for the stated 1 vCPU / 1 GB VPS:
+
+- Gunicorn uses one worker and two threads through `MEMORY_LIMIT=512`.
+- Redis is limited to 64 MB with `allkeys-lru` eviction.
+- PostgreSQL uses conservative memory settings: 128 MB shared buffers, 384 MB
+  effective cache size, 4 MB work memory, 64 MB maintenance work memory, and
+  30 connections.
+- Docker JSON logs rotate at 10 MB × 3 files per container.
+- Backups require at least 1 GB of free disk space before they start.
+
+Do not set any `VITE_*` variable to a secret: Vite embeds those values in the
+browser bundle.
+
+## VPS bootstrap
+
+Run these steps from the Netcup web console or an existing root SSH session.
+First add an SSH key for normal administration, verify it in a second terminal,
+then disable password authentication; do not risk closing the only working SSH
+session before verification.
+
+Commit and push the `prod` branch before downloading the bootstrap script.
+On the fresh VPS, run:
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/p95max/MyPortfolioSPA/prod/deploy/bootstrap-vps.sh
+chmod 700 bootstrap-vps.sh
+./bootstrap-vps.sh
+rm bootstrap-vps.sh
+```
+
+It installs Docker Engine and Compose v2, Nginx, Certbot, UFW, a 2 GB swap
+file, a 100 MB persistent journal cap, the `portfolio` deployment user, and
+the required directories. It permits only SSH, HTTP, and HTTPS in UFW.
+For an SSH port other than 22, run `SSH_PORT=2222 ./bootstrap-vps.sh` so that
+the active SSH port is permitted before UFW is enabled.
+
+Clone the production branch as the deployment user:
+
+```bash
+sudo -u portfolio git clone -b prod https://github.com/p95max/MyPortfolioSPA.git /opt/myportfoliospa
+cd /opt/myportfoliospa
+git branch --show-current
+```
+
 ## Initial VPS bootstrap
 
 1. Create a non-root deployment account and add it to Docker's group:
@@ -67,6 +113,44 @@ Schedule a maintenance window. Take a `pg_dump` from Render, restore it into the
 PostgreSQL container before switching DNS, run `python manage.py migrate`, then verify
 `/api/health/`, `/api/projects/`, the contact form, and Django Admin. Keep Render live
 until the Netcup backup and rollback path have been tested.
+
+Use a custom-format dump so restoration is deterministic:
+
+```bash
+pg_dump --format=custom --no-owner --no-acl "$RENDER_DATABASE_URL" > portfolio-render.dump
+docker cp portfolio-render.dump "$(docker compose -f docker-compose.prod.yml ps -q db)":/tmp/portfolio-render.dump
+docker compose --env-file /etc/portfolio/portfolio.env -f docker-compose.prod.yml exec -T db \
+  pg_restore -U portfolio_user -d portfolio_db --clean --if-exists --no-owner /tmp/portfolio-render.dump
+docker compose --env-file /etc/portfolio/portfolio.env -f docker-compose.prod.yml exec -T web \
+  python manage.py migrate --noinput
+```
+
+Before DNS cutover, check projects, certificates, contacts, analytics, admin
+users, and recent events — not only the health endpoint. Keep the Render stack
+available for rollback for several days.
+
+## Host Nginx and TLS
+
+After cloning, create the host Nginx configuration with the supplied template:
+
+```bash
+cd /opt/myportfoliospa
+sudo deploy/configure-host-nginx.sh p95max.dev www.p95max.dev
+```
+
+It exposes only host Nginx and proxies it to `127.0.0.1:8080`; Docker ports
+8000, 8080, PostgreSQL, and Redis remain private. Once DNS points at the VPS,
+obtain and verify the certificate:
+
+```bash
+sudo certbot --nginx -d p95max.dev -d www.p95max.dev
+sudo certbot renew --dry-run
+```
+
+The internal frontend Nginx preserves the host proxy's `X-Forwarded-For` and
+`X-Forwarded-Proto` headers. Keep `DRF_NUM_PROXIES=1` in the production env.
+If Cloudflare proxies the origin, configure trusted Cloudflare IP ranges with
+Nginx `real_ip` directives before relying on client-IP throttling or analytics.
 
 ## Operations
 

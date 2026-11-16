@@ -130,8 +130,15 @@ async def _save_preferences(
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    if update.effective_message:
-        await update.effective_message.reply_text(WELCOME, parse_mode=ParseMode.HTML)
+    if not update.effective_message or not update.effective_user:
+        return
+    config, cache, _ = _dependencies(context)
+    current = await _preferences(update.effective_user.id, config, cache)
+    await update.effective_message.reply_text(
+        f"{WELCOME}\n\n{settings_text(current)}",
+        parse_mode=ParseMode.HTML,
+        reply_markup=settings_keyboard(current, update.effective_user.id),
+    )
 
 
 async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 
+from aiohttp.web import AppRunner
 from telegram import BotCommand
 from telegram.ext import (
     Application,
@@ -27,6 +28,7 @@ from .handlers import (
     start,
 )
 from .tankerkoenig import TankerkoenigClient
+from .web_app import start_web_app_server
 
 
 LOGGER = logging.getLogger(__name__)
@@ -43,11 +45,20 @@ async def _post_init(application: Application) -> None:
             BotCommand("help", "Show help"),
         ]
     )
+    config: Config = application.bot_data["config"]
+    application.bot_data["web_app_runner"] = await start_web_app_server(
+        application,
+        bot_token=config.telegram_bot_token,
+        port=config.web_app_port,
+    )
 
 
 async def _post_shutdown(application: Application) -> None:
+    runner: AppRunner | None = application.bot_data.get("web_app_runner")
     client: TankerkoenigClient | None = application.bot_data.get("tankerkoenig")
     cache: Cache = application.bot_data["cache"]
+    if runner is not None:
+        await runner.cleanup()
     if client is not None:
         await client.close()
     await cache.close()

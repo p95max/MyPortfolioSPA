@@ -13,15 +13,24 @@ async def test_nearby_requests_location_in_private_chat() -> None:
         effective_message=message,
         effective_chat=SimpleNamespace(type="private"),
     )
-    context = SimpleNamespace(bot=SimpleNamespace(username="chemnitz_fuel_bot"))
+    context = SimpleNamespace(
+        bot=SimpleNamespace(username="chemnitz_fuel_bot"),
+        application=SimpleNamespace(
+            bot_data={
+                "config": SimpleNamespace(
+                    web_app_url="https://p95max.dev/fuel-location/"
+                )
+            }
+        ),
+    )
 
     await nearby(update, context)
 
     message.reply_text.assert_awaited_once()
     keyboard = message.reply_text.await_args.kwargs["reply_markup"]
-    button = keyboard.keyboard[0][0]
-    assert button.request_location is True
-    assert keyboard.is_persistent is True
+    button = keyboard.inline_keyboard[0][0]
+    assert button.web_app.url == "https://p95max.dev/fuel-location/"
+    assert "Desktop & Mobile" in button.text
 
 
 @pytest.mark.asyncio

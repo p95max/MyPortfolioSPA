@@ -8,10 +8,9 @@ from typing import cast
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
-    KeyboardButton,
-    ReplyKeyboardMarkup,
     ReplyKeyboardRemove,
     Update,
+    WebAppInfo,
 )
 from telegram.constants import ChatType, ParseMode
 from telegram.ext import ContextTypes
@@ -25,6 +24,9 @@ from .tankerkoenig import TankerkoenigClient, TankerkoenigError, UpstreamRateLim
 
 LOGGER = logging.getLogger(__name__)
 SETTINGS_RADIUS_OPTIONS = (1, 3, 5, 10, 15, 25)
+PRICE_SOURCE_UNAVAILABLE = (
+    "⏳ Fuel prices are temporarily unavailable. Please try again later."
+)
 
 WELCOME = (
     "⛽ <b>Chemnitz Fuel Bot</b>\n\n"
@@ -44,7 +46,7 @@ ABOUT = (
     "• Deine Auswahl von Kraftstoffart und Suchradius.\n"
     "• Befehle und Button-Klicks, die du an den Bot sendest.\n"
     "• Deinen aktuellen Standort nur dann, wenn du ihn über „Standort teilen“ "
-    "aktiv sendest.\n\n"
+    "oder die Mini App aktiv freigibst.\n\n"
     "💾 <b>Was wird gespeichert?</b>\n"
     "• In Redis auf dem Server: Telegram-ID, gewählte Kraftstoffart und Radius. "
     "Diese Einstellungen bleiben gespeichert, bis du /delete_me verwendest.\n"
@@ -282,10 +284,7 @@ async def _send_prices(
         )
         return
     if client is None:
-        await update.effective_message.reply_text(
-            "⏳ The price source is not active yet: the Tankerkönig API key is "
-            "still awaiting approval. The bot will work after the administrator adds it."
-        )
+        await update.effective_message.reply_text(PRICE_SOURCE_UNAVAILABLE)
         return
     try:
         stations = await client.search(
@@ -349,17 +348,18 @@ async def nearby(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             f"Open {private_chat} and send /nearby there."
         )
         return
-    keyboard = ReplyKeyboardMarkup(
-        [[KeyboardButton("📍 Share location", request_location=True)]],
-        resize_keyboard=True,
-        one_time_keyboard=False,
-        is_persistent=True,
-        input_field_placeholder="Tap the button to share your location",
+    config = cast(Config, context.application.bot_data["config"])
+    keyboard = InlineKeyboardMarkup(
+        [[
+            InlineKeyboardButton(
+                "📍 Share location (Desktop & Mobile)",
+                web_app=WebAppInfo(url=config.web_app_url),
+            )
+        ]]
     )
     await update.effective_message.reply_text(
-        "Tap <b>📍 Share location</b> below. Your location is used only for this "
-        "search.\n\nIf Telegram Desktop does not show the location button, use Telegram "
-        "on your phone or send a location from the attachment menu.",
+        "Tap the button below to share your location securely. The Mini App works "
+        "in Telegram Desktop and on mobile. Your location is used only for this search.",
         parse_mode=ParseMode.HTML,
         reply_markup=keyboard,
     )

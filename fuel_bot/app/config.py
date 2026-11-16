@@ -45,6 +45,8 @@ class Config:
     upstream_interval_seconds: int
     user_rate_limit: int
     user_rate_window_seconds: int
+    web_app_url: str
+    web_app_port: int
     log_level: str
     api_url: str = "https://creativecommons.tankerkoenig.de/json/list.php"
 
@@ -63,6 +65,13 @@ class Config:
         if radius > 25:
             raise ValueError("DEFAULT_RADIUS_KM must not exceed 25")
 
+        web_app_url = os.getenv(
+            "LOCATION_WEB_APP_URL",
+            "https://p95max.dev/fuel-location/",
+        ).strip()
+        if not web_app_url.startswith("https://"):
+            raise ValueError("LOCATION_WEB_APP_URL must use HTTPS")
+
         return cls(
             telegram_bot_token=token,
             tankerkoenig_api_key=api_key,
@@ -79,5 +88,7 @@ class Config:
             user_rate_window_seconds=_int_env(
                 "USER_RATE_WINDOW_SECONDS", 360, 1
             ),
+            web_app_url=web_app_url,
+            web_app_port=_int_env("WEB_APP_PORT", 8081, 1),
             log_level=os.getenv("LOG_LEVEL", "INFO").strip().upper(),
         )

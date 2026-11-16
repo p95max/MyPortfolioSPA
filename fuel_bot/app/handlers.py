@@ -13,7 +13,7 @@ from telegram import (
     ReplyKeyboardRemove,
     Update,
 )
-from telegram.constants import ParseMode
+from telegram.constants import ChatType, ParseMode
 from telegram.ext import ContextTypes
 
 from .cache import Cache
@@ -338,15 +338,28 @@ async def cheap(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def nearby(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    if not update.effective_message:
+    if not update.effective_message or not update.effective_chat:
+        return
+    if update.effective_chat.type != ChatType.PRIVATE:
+        username = context.bot.username
+        private_chat = f"@{username}" if username else "the bot's private chat"
+        await update.effective_message.reply_text(
+            "Telegram allows location request buttons only in private chats. "
+            f"Open {private_chat} and send /nearby there."
+        )
         return
     keyboard = ReplyKeyboardMarkup(
         [[KeyboardButton("📍 Share location", request_location=True)]],
         resize_keyboard=True,
-        one_time_keyboard=True,
+        one_time_keyboard=False,
+        is_persistent=True,
+        input_field_placeholder="Tap the button to share your location",
     )
     await update.effective_message.reply_text(
-        "Share your location using the button below. It is used only for this search.",
+        "Tap <b>📍 Share location</b> below. Your location is used only for this "
+        "search.\n\nIf Telegram Desktop does not show the location button, use Telegram "
+        "on your phone or send a location from the attachment menu.",
+        parse_mode=ParseMode.HTML,
         reply_markup=keyboard,
     )
 

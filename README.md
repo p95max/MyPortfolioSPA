@@ -40,6 +40,13 @@ The project is designed as a practical full-stack portfolio service: projects ar
 - PostgreSQL container for local development
 - Render deployment configuration for backend and frontend
 
+### Fuel Bot
+
+- Standalone public Telegram bot in `fuel_bot/`
+- On-demand Tankerkönig price lookup for Chemnitz
+- Redis cache, global upstream rate gate, and per-user anti-spam limit
+- Works in a waiting mode until a Tankerkönig API key is approved
+
 ---
 
 ## Main Features
@@ -131,6 +138,12 @@ https://myportfoliospa-1.onrender.com/
 │   ├── env.example
 │   ├── package.json
 │   └── vite.config.ts
+├── fuel_bot/
+│   ├── app/
+│   ├── tests/
+│   ├── Dockerfile
+│   ├── env.example
+│   └── pyproject.toml
 ├── nginx/
 │   └── default.conf
 ├── docker-compose.yml
@@ -212,6 +225,10 @@ cd ..
 ```bash
 docker compose up -d --build
 ```
+
+For the Telegram bot, copy `fuel_bot/env.example` to `fuel_bot/.env` and set
+`TELEGRAM_BOT_TOKEN`. Add `TANKERKOENIG_API_KEY` after the application has been
+manually approved. See `fuel_bot/README.md` for commands and API-policy details.
 
 ### 6. Apply fixtures, if needed
 

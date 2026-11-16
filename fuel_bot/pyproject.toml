@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "chemnitz-fuel-bot"
+version = "0.1.0"
+description = "Public Telegram bot for on-demand fuel price analysis in Chemnitz"
+authors = ["Max <m.petrykin@gmx.de>"]
+readme = "README.md"
+packages = [{ include = "app" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+python-telegram-bot = "^22.8"
+redis = "^8.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.2.0"
+pytest-asyncio = "^1.5.0"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
+
+[build-system]
+requires = ["poetry-core>=2.5,<3"]
+build-backend = "poetry.core.masonry.api"

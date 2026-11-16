@@ -1,4 +1,18 @@
 services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - mynetwork
+
   db:
     image: postgres:15
     env_file:
@@ -39,8 +53,25 @@ services:
     networks:
       - mynetwork
 
+  fuel_bot:
+    build:
+      context: ./fuel_bot
+      dockerfile: Dockerfile
+    env_file:
+      - path: ./fuel_bot/.env
+        required: false
+    environment:
+      REDIS_URL: redis://redis:6379/1
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - mynetwork
+
 volumes:
   pgdata:
+  redisdata:
 
 networks:
   mynetwork:

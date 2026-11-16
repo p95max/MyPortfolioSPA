@@ -77,7 +77,7 @@ class Config:
             ),
             user_rate_limit=_int_env("USER_RATE_LIMIT", 10, 1),
             user_rate_window_seconds=_int_env(
-                "USER_RATE_WINDOW_SECONDS", 60, 1
+                "USER_RATE_WINDOW_SECONDS", 360, 1
             ),
             log_level=os.getenv("LOG_LEVEL", "INFO").strip().upper(),
         )

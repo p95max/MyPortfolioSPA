@@ -20,12 +20,12 @@ LOGGER = logging.getLogger(__name__)
 
 WELCOME = (
     "⛽ <b>Chemnitz Fuel Bot</b>\n\n"
-    "Показываю актуальные цены на топливо по запросу и считаю возможную экономию.\n\n"
-    "/cheap — дешёвые АЗС в Хемнице\n"
-    "/nearby — поиск рядом с геолокацией\n"
-    "/settings — топливо и радиус\n"
-    "/about — источник данных и приватность\n"
-    "/delete_me — удалить сохранённые настройки"
+    "I show current fuel prices on demand and calculate potential savings.\n\n"
+    "/cheap — cheapest stations in Chemnitz\n"
+    "/nearby — search near your location\n"
+    "/settings — fuel type and radius\n"
+    "/about — data source and privacy\n"
+    "/delete_me — delete saved settings"
 )
 
 
@@ -70,9 +70,9 @@ def parse_fuel_and_radius(
         try:
             candidate = int(normalized)
         except ValueError as exc:
-            raise ValueError("Использование: /cheap diesel 8") from exc
+            raise ValueError("Usage: /cheap diesel 8") from exc
         if not 1 <= candidate <= 25:
-            raise ValueError("Радиус должен быть от 1 до 25 км.")
+            raise ValueError("Radius must be between 1 and 25 km.")
         radius = candidate
     return UserPreferences(fuel_type=fuel_type, radius_km=radius)
 
@@ -86,12 +86,12 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not update.effective_message:
         return
     text = (
-        "ℹ️ <b>О боте</b>\n\n"
-        "Цены запрашиваются только по действию пользователя и кэшируются на 5 минут. "
-        "Бот не создаёт архив цен. Настройки хранятся по Telegram ID; точная "
-        "геолокация не записывается в журналы.\n\n"
-        "Источник: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K. "
-        "Лицензия данных: CC BY 4.0. Данные предоставляются без гарантии точности и доступности."
+        "ℹ️ <b>About this bot</b>\n\n"
+        "Prices are requested only after a user action and cached for 5 minutes. "
+        "The bot does not build a price archive. Settings are stored by Telegram ID; "
+        "precise locations are not written to application logs.\n\n"
+        "Source: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K. "
+        "Data license: CC BY 4.0. Accuracy and availability are not guaranteed."
     )
     await update.effective_message.reply_text(
         text, parse_mode=ParseMode.HTML, disable_web_page_preview=True
@@ -113,13 +113,13 @@ async def settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             f"fuel:user:{update.effective_user.id}:preferences",
             {"fuel_type": current.fuel_type, "radius_km": current.radius_km},
         )
-        prefix = "✅ Настройки сохранены.\n"
+        prefix = "✅ Settings saved.\n"
     else:
-        prefix = "⚙️ Текущие настройки:\n"
+        prefix = "⚙️ Current settings:\n"
     await update.effective_message.reply_text(
-        f"{prefix}Топливо: {FUEL_LABELS[current.fuel_type]}\n"
-        f"Радиус: {current.radius_km} км\n\n"
-        "Изменить: /settings diesel 8"
+        f"{prefix}Fuel: {FUEL_LABELS[current.fuel_type]}\n"
+        f"Radius: {current.radius_km} km\n\n"
+        "Change: /settings diesel 8"
     )
 
 
@@ -129,7 +129,7 @@ async def delete_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     _, cache, _ = _dependencies(context)
     await cache.delete(f"fuel:user:{update.effective_user.id}:preferences")
     await update.effective_message.reply_text(
-        "✅ Сохранённые настройки удалены. История местоположений не ведётся."
+        "✅ Saved settings deleted. Location history is not stored."
     )
 
 
@@ -147,13 +147,13 @@ async def _send_prices(
     config, cache, client = _dependencies(context)
     if not await _allowed(update.effective_user.id, config, cache):
         await update.effective_message.reply_text(
-            "Слишком много запросов. Попробуйте снова через минуту."
+            "Too many requests. Please try again later."
         )
         return
     if client is None:
         await update.effective_message.reply_text(
-            "⏳ Источник цен ещё не активирован: API-ключ Tankerkönig ожидает проверки. "
-            "Бот уже готов и заработает после добавления ключа администратором."
+            "⏳ The price source is not active yet: the Tankerkönig API key is "
+            "still awaiting approval. The bot will work after the administrator adds it."
         )
         return
     try:
@@ -165,13 +165,13 @@ async def _send_prices(
         )
     except UpstreamRateLimited:
         await update.effective_message.reply_text(
-            "Источник допускает только один новый запрос в минуту. "
-            "Повторите через минуту — кэшированные запросы доступны сразу."
+            "The data source allows only one new request per minute. "
+            "Please retry in a minute; cached searches remain available immediately."
         )
         return
     except TankerkoenigError:
         await update.effective_message.reply_text(
-            "Не удалось получить цены от Tankerkönig. Попробуйте позже."
+            "Could not retrieve prices from Tankerkönig. Please try again later."
         )
         return
     await update.effective_message.reply_text(
@@ -211,12 +211,12 @@ async def nearby(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not update.effective_message:
         return
     keyboard = ReplyKeyboardMarkup(
-        [[KeyboardButton("📍 Отправить геолокацию", request_location=True)]],
+        [[KeyboardButton("📍 Share location", request_location=True)]],
         resize_keyboard=True,
         one_time_keyboard=True,
     )
     await update.effective_message.reply_text(
-        "Отправьте геолокацию кнопкой ниже. Она нужна только для текущего поиска.",
+        "Share your location using the button below. It is used only for this search.",
         reply_markup=keyboard,
     )
 
@@ -236,7 +236,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         context,
         lat=point.latitude,
         lng=point.longitude,
-        title="рядом с вами",
+        title="Near you",
         preferences=preferences,
     )
 

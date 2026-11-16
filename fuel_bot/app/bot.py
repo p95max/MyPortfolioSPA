@@ -28,12 +28,12 @@ LOGGER = logging.getLogger(__name__)
 async def _post_init(application: Application) -> None:
     await application.bot.set_my_commands(
         [
-            BotCommand("cheap", "Дешёвые АЗС в Хемнице"),
-            BotCommand("nearby", "АЗС рядом с геолокацией"),
-            BotCommand("settings", "Топливо и радиус"),
-            BotCommand("about", "Источник данных и приватность"),
-            BotCommand("delete_me", "Удалить сохранённые настройки"),
-            BotCommand("help", "Справка"),
+            BotCommand("cheap", "Cheapest stations in Chemnitz"),
+            BotCommand("nearby", "Stations near your location"),
+            BotCommand("settings", "Fuel type and search radius"),
+            BotCommand("about", "Data source and privacy"),
+            BotCommand("delete_me", "Delete saved settings"),
+            BotCommand("help", "Show help"),
         ]
     )
 

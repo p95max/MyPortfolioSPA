@@ -7,7 +7,7 @@ from html import escape
 from .models import PriceAnalysis, Station
 
 
-FUEL_LABELS = {"diesel": "Дизель", "e5": "Super E5", "e10": "Super E10"}
+FUEL_LABELS = {"diesel": "Diesel", "e5": "Super E5", "e10": "Super E10"}
 
 
 def format_price_report(
@@ -18,23 +18,23 @@ def format_price_report(
     if not available:
         return (
             f"⛽ <b>{escape(title)}</b>\n\n"
-            "В выбранном радиусе нет АЗС с доступной ценой.\n\n"
-            "Данные: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K, CC BY 4.0"
+            "No stations with an available price were found within this radius.\n\n"
+            "Data: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K, CC BY 4.0"
         )
 
     analysis = PriceAnalysis.from_stations(available)
     shown = available[:5]
     lines = [
         f"⛽ <b>{escape(FUEL_LABELS[fuel_type])} · {escape(title)}</b>",
-        f"Радиус: {radius_km} км · АЗС с ценой: {len(available)}",
+        f"Radius: {radius_km} km · Stations with prices: {len(available)}",
         "",
     ]
     for index, station in enumerate(shown, start=1):
-        state = "" if station.is_open else " · возможно закрыта"
+        state = "" if station.is_open else " · possibly closed"
         lines.extend(
             [
                 f"<b>{index}. {escape(station.display_name)}</b>",
-                f"{station.price:.3f} €/л · {station.distance_km:.1f} км{state}",
+                f"{station.price:.3f} €/L · {station.distance_km:.1f} km{state}",
                 escape(station.address),
                 "",
             ]
@@ -42,13 +42,13 @@ def format_price_report(
 
     lines.extend(
         [
-            "📊 <b>Короткий анализ</b>",
-            f"Медиана: {analysis.median:.3f} €/л",
-            f"Разброс: {analysis.spread:.3f} €/л",
-            f"Экономия между минимумом и максимумом на 50 л: {analysis.saving_for_50l:.2f} €",
+            "📊 <b>Quick analysis</b>",
+            f"Median: {analysis.median:.3f} €/L",
+            f"Price spread: {analysis.spread:.3f} €/L",
+            f"Potential saving between the lowest and highest price for 50 L: {analysis.saving_for_50l:.2f} €",
             "",
-            "Показаны 5 самых дешёвых вариантов по вашему запросу.",
-            "Данные: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K, CC BY 4.0",
+            "Showing the 5 cheapest options matching your request.",
+            "Data: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K, CC BY 4.0",
         ]
     )
     return "\n".join(lines)

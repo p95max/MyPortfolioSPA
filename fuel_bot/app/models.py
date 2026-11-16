@@ -21,7 +21,7 @@ class Station:
 
     @property
     def display_name(self) -> str:
-        return self.brand or self.name or "АЗС без названия"
+        return self.brand or self.name or "Unnamed station"
 
     @property
     def address(self) -> str:

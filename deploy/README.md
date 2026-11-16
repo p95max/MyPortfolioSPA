@@ -91,6 +91,18 @@ git branch --show-current
    docker compose --env-file "$PORTFOLIO_ENV_FILE" -f docker-compose.prod.yml up -d --build
    ```
 
+   The public fuel bot uses a separate environment file so it cannot consume
+   updates intended for the allowlisted host operations bot:
+
+   ```bash
+   sudo install -o root -g portfolio -m 0640 \
+     fuel_bot/env.example /etc/portfolio/fuel-bot.env
+   sudoedit /etc/portfolio/fuel-bot.env
+   ```
+
+   Set `TELEGRAM_BOT_TOKEN` in that file to the public fuel bot token. Add
+   `TANKERKOENIG_API_KEY` after Tankerkönig approves it.
+
 5. Install the host operations files:
 
    ```bash

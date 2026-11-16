@@ -24,6 +24,14 @@ docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" config --quiet
 echo "== Runtime =="
 /usr/local/bin/portfolio-status.sh
 
+if docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" \
+    ps --status running --services | grep -qx fuel_bot; then
+    echo "Fuel bot: running"
+else
+    echo "Fuel bot: FAILED" >&2
+    exit 1
+fi
+
 echo "== Storage =="
 df -h / /var/backups/portfolio
 docker system df

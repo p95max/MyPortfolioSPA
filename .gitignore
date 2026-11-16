@@ -82,3 +82,5 @@ htmlcov/
 
 # Docker local volumes/backups
 *.sqlite3
+.docker/
+.lesshst

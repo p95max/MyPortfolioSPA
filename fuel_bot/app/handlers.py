@@ -36,6 +36,41 @@ WELCOME = (
     "/delete_me — delete saved settings"
 )
 
+ABOUT = (
+    "ℹ️ <b>Datenschutz &amp; Datenverarbeitung</b>\n\n"
+    "<b>Welche Daten verarbeitet der Bot?</b>\n"
+    "• Deine numerische Telegram-ID, damit Einstellungen deinem Konto zugeordnet "
+    "und Anfragelimits eingehalten werden können.\n"
+    "• Deine Auswahl von Kraftstoffart und Suchradius.\n"
+    "• Befehle und Button-Klicks, die du an den Bot sendest.\n"
+    "• Deinen aktuellen Standort nur dann, wenn du ihn über „Standort teilen“ "
+    "aktiv sendest.\n\n"
+    "<b>Was wird gespeichert?</b>\n"
+    "• In Redis auf dem Server: Telegram-ID, gewählte Kraftstoffart und Radius. "
+    "Diese Einstellungen bleiben gespeichert, bis du /delete_me verwendest.\n"
+    "• Für den Missbrauchsschutz: ein Zähler je Telegram-ID. Er wird automatisch "
+    "nach 360 Sekunden gelöscht.\n"
+    "• Suchergebnisse werden 5 Minuten zwischengespeichert. Bei Standortabfragen "
+    "enthält der Cache nur auf drei Dezimalstellen gerundete Koordinaten (ca. 110 m), "
+    "Radius, Kraftstoffart und Tankstellenergebnisse. Dieser Cache ist nicht mit "
+    "deiner Telegram-ID verknüpft.\n\n"
+    "<b>Was wird nicht dauerhaft gespeichert?</b>\n"
+    "Name, Benutzername, Telefonnummer, Nachrichtenverlauf, exakter Standort und "
+    "eine persönliche Preis- oder Standort-Historie werden vom Bot nicht dauerhaft "
+    "gespeichert. Der Bot hat keinen Zugriff auf deine IP-Adresse.\n\n"
+    "<b>Weitergabe an Dienste</b>\n"
+    "Für eine Preissuche erhält Tankerkönig die Suchkoordinaten, den Radius und die "
+    "Kraftstoffart. Telegram-ID, Profilinformationen und Telefonnummer werden nicht "
+    "an Tankerkönig übermittelt. Telegram verarbeitet deine Kommunikation mit dem Bot "
+    "nach den eigenen Datenschutzbestimmungen. Es werden keine Werbe- oder "
+    "Analyse-Dienste eingesetzt.\n\n"
+    "<b>Löschen</b>\n"
+    "Mit /delete_me löschst du deine gespeicherten Einstellungen. Temporäre "
+    "Rate-Limit- und Suchdaten laufen automatisch ab.\n\n"
+    "Datenquelle: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K · "
+    "Lizenz: CC BY 4.0. Preisgenauigkeit und Verfügbarkeit sind nicht garantiert."
+)
+
 
 def _dependencies(context: ContextTypes.DEFAULT_TYPE) -> tuple[Config, Cache, TankerkoenigClient | None]:
     config = cast(Config, context.application.bot_data["config"])
@@ -144,16 +179,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not update.effective_message:
         return
-    text = (
-        "ℹ️ <b>About this bot</b>\n\n"
-        "Prices are requested only after a user action and cached for 5 minutes. "
-        "The bot does not build a price archive. Settings are stored by Telegram ID; "
-        "precise locations are not written to application logs.\n\n"
-        "Source: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K. "
-        "Data license: CC BY 4.0. Accuracy and availability are not guaranteed."
-    )
     await update.effective_message.reply_text(
-        text, parse_mode=ParseMode.HTML, disable_web_page_preview=True
+        ABOUT, parse_mode=ParseMode.HTML, disable_web_page_preview=True
     )
 
 

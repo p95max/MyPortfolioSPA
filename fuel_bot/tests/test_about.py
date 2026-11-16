@@ -8,6 +8,8 @@ def test_about_explains_personal_data_in_german() -> None:
     assert "5 Minuten" in ABOUT
     assert "gerundete Koordinaten" in ABOUT
     assert "Mini App" in ABOUT
+    assert "Telegram Desktop" in ABOUT
+    assert "native Telegram-Standortbutton" in ABOUT
     assert "nicht an Tankerkönig übermittelt" in ABOUT
     assert "/delete_me" in ABOUT
     assert "👨‍💻 Entwickler: @p95max" in ABOUT

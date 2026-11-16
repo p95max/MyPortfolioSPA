@@ -5,9 +5,19 @@ PROJECT_DIR="${PROJECT_DIR:-/opt/myportfoliospa}"
 ENV_FILE="${PORTFOLIO_ENV_FILE:-/etc/portfolio/portfolio.env}"
 COMPOSE_FILE="${COMPOSE_FILE:-$PROJECT_DIR/docker-compose.prod.yml}"
 REMOTE_NAME="${REMOTE_NAME:-origin}"
-DEPLOY_BRANCH="${PORTFOLIO_DEPLOY_BRANCH:-prod}"
 TELEGRAM_BIN="${TELEGRAM_BIN:-/usr/local/bin/portfolio-telegram.py}"
 RESULT="failed"
+
+read_env() {
+    local line
+    line="$(grep -E "^$1=" "$ENV_FILE" | tail -n 1 || true)"
+    printf '%s' "${line#*=}" | tr -d '\r' | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//"
+}
+
+configured_branch="$(read_env PORTFOLIO_DEPLOY_BRANCH)"
+DEPLOY_BRANCH="${PORTFOLIO_DEPLOY_BRANCH:-${configured_branch:-prod}}"
+configured_label="$(read_env PORTFOLIO_ENV_LABEL)"
+ENV_LABEL="${PORTFOLIO_ENV_LABEL:-${configured_label:-PROD}}"
 
 log() { printf '[%s] %s\n' "$(date -Is)" "$*"; }
 notify() { [ -x "$TELEGRAM_BIN" ] && "$TELEGRAM_BIN" send --message "$1" || true; }
@@ -16,9 +26,9 @@ finish() {
     status=$?
     trap - EXIT
     if [ "$status" -eq 0 ]; then
-        notify "[${PORTFOLIO_ENV_LABEL:-PROD}] deploy ${RESULT}: $(git -C "$PROJECT_DIR" rev-parse --short HEAD)"
+        notify "[$ENV_LABEL] deploy ${RESULT}: $(git -C "$PROJECT_DIR" rev-parse --short HEAD)"
     else
-        notify "[${PORTFOLIO_ENV_LABEL:-PROD}] deploy FAILED (exit ${status}). Inspect: journalctl -u portfolio-auto-deploy.service"
+        notify "[$ENV_LABEL] deploy FAILED (exit ${status}). Inspect: journalctl -u portfolio-auto-deploy.service"
     fi
     exit "$status"
 }

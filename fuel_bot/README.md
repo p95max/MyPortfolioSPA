@@ -4,9 +4,6 @@ Standalone public Telegram bot that retrieves current fuel prices from the
 Tankerkönig API on demand. It is intentionally independent from the Django
 backend and React frontend, but shares the repository's Docker network.
 
-Application modules live in `app/`; there is no duplicated `fuel_bot/fuel_bot`
-package path.
-
 ## MVP commands
 
 - `/cheap [diesel|e5|e10] [radius]` — cheapest open stations around Chemnitz.

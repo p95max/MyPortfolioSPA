@@ -68,7 +68,8 @@ ABOUT = (
     "Mit /delete_me löschst du deine gespeicherten Einstellungen. Temporäre "
     "Rate-Limit- und Suchdaten laufen automatisch ab.\n\n"
     "⛽ Datenquelle: <a href=\"https://www.tankerkoenig.de\">Tankerkönig</a> / MTS-K · "
-    "Lizenz: CC BY 4.0. Preisgenauigkeit und Verfügbarkeit sind nicht garantiert."
+    "Lizenz: CC BY 4.0. Preisgenauigkeit und Verfügbarkeit sind nicht garantiert.\n\n"
+    "👨‍💻 Entwickler: @p95max"
 )
 
 

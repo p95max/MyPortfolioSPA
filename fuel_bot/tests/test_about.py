@@ -9,5 +9,6 @@ def test_about_explains_personal_data_in_german() -> None:
     assert "gerundete Koordinaten" in ABOUT
     assert "nicht an Tankerkönig übermittelt" in ABOUT
     assert "/delete_me" in ABOUT
+    assert "👨‍💻 Entwickler: @p95max" in ABOUT
     for section_emoji in ("📥", "💾", "🚫", "🔄", "🗑️", "⛽"):
         assert section_emoji in ABOUT

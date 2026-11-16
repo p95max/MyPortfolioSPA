@@ -27,4 +27,6 @@ RUN useradd --create-home --uid 10001 botuser \
 
 USER botuser
 
+EXPOSE 8081
+
 CMD ["python", "-m", "app.main"]

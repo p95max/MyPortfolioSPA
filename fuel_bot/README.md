@@ -7,7 +7,7 @@ backend and React frontend, but shares the repository's Docker network.
 ## MVP commands
 
 - `/cheap [diesel|e5|e10] [radius]` — cheapest open stations around Chemnitz.
-- `/nearby` — request a Telegram location and search around it.
+- `/nearby` — open the signed Telegram Mini App location picker and search nearby.
 - `/settings [diesel|e5|e10] [radius]` — view or save personal defaults.
 - `/delete_me` — delete saved personal defaults.
 - `/about` — data source, license, and privacy information.
@@ -24,8 +24,9 @@ cp fuel_bot/env.example fuel_bot/.env
 ```
 
 Set `TELEGRAM_BOT_TOKEN`. `TANKERKOENIG_API_KEY` may stay empty while the
-application is under manual review; commands that need live prices will explain
-that the source is not active yet.
+application is under manual review; commands that need live prices return a
+neutral temporary-unavailability message. `LOCATION_WEB_APP_URL` must be an
+HTTPS URL that serves `frontend/public/fuel-location/`.
 
 Run only the bot and its cache:
 
@@ -47,4 +48,6 @@ Fuel data is supplied by [Tankerkönig](https://creativecommons.tankerkoenig.de/
 under CC BY 4.0 and originates from MTS-K. The service does not poll in the
 background or build a price archive. Telegram user preferences are stored in
 Redis; location searches are cached only temporarily and precise locations are
-not added to application logs.
+not added to application logs. The Mini App backend validates Telegram's signed
+`initData`, rejects sessions older than ten minutes and prevents query replay
+before sending the location back through `answerWebAppQuery`.

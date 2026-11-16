@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' https://telegram.org; style-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Share location · Chemnitz Fuel Bot</title>
+    <link rel="stylesheet" href="/fuel-location/styles.css" />
+    <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+    <script src="/fuel-location/app.js" defer></script>
+  </head>
+  <body>
+    <main class="card" aria-labelledby="title">
+      <div class="icon" aria-hidden="true">📍</div>
+      <h1 id="title">Share your location</h1>
+      <p>
+        Your location is used once to find nearby fuel stations. It is not added
+        to a personal location history.
+      </p>
+      <button id="share-button" type="button" disabled>Share current location</button>
+      <button id="settings-button" class="secondary" type="button" hidden>
+        Open location settings
+      </button>
+      <p id="status" class="status" role="status" aria-live="polite">
+        Connecting to Telegram…
+      </p>
+    </main>
+  </body>
+</html>

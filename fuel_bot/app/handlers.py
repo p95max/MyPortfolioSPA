@@ -46,7 +46,10 @@ ABOUT = (
     "• Deine Auswahl von Kraftstoffart und Suchradius.\n"
     "• Befehle und Button-Klicks, die du an den Bot sendest.\n"
     "• Deinen aktuellen Standort nur dann, wenn du ihn über „Standort teilen“ "
-    "oder die Mini App aktiv freigibst.\n\n"
+    "oder die Mini App aktiv freigibst.\n"
+    "• In Telegram Desktop wird der Standort über die Mini App angefragt, weil "
+    "der native Telegram-Standortbutton dort nicht verfügbar ist. Dieselbe Mini App "
+    "kann auch auf Mobilgeräten verwendet werden.\n\n"
     "💾 <b>Was wird gespeichert?</b>\n"
     "• In Redis auf dem Server: Telegram-ID, gewählte Kraftstoffart und Radius. "
     "Diese Einstellungen bleiben gespeichert, bis du /delete_me verwendest.\n"
@@ -352,14 +355,15 @@ async def nearby(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = InlineKeyboardMarkup(
         [[
             InlineKeyboardButton(
-                "📍 Share location (Desktop & Mobile)",
+                "🖥 Share location on Desktop",
                 web_app=WebAppInfo(url=config.web_app_url),
             )
         ]]
     )
     await update.effective_message.reply_text(
-        "Tap the button below to share your location securely. The Mini App works "
-        "in Telegram Desktop and on mobile. Your location is used only for this search.",
+        "<b>Telegram Desktop:</b> use the button below to share your location "
+        "securely. The Mini App also works on mobile. Your location is used only "
+        "for this search.",
         parse_mode=ParseMode.HTML,
         reply_markup=keyboard,
     )

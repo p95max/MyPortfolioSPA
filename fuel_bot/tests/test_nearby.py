@@ -30,7 +30,8 @@ async def test_nearby_requests_location_in_private_chat() -> None:
     keyboard = message.reply_text.await_args.kwargs["reply_markup"]
     button = keyboard.inline_keyboard[0][0]
     assert button.web_app.url == "https://p95max.dev/fuel-location/"
-    assert "Desktop & Mobile" in button.text
+    assert button.text == "🖥 Share location on Desktop"
+    assert "Telegram Desktop" in message.reply_text.await_args.args[0]
 
 
 @pytest.mark.asyncio

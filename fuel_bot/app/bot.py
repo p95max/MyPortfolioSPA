@@ -5,7 +5,13 @@ from __future__ import annotations
 import logging
 
 from telegram import BotCommand
-from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from telegram.ext import (
+    Application,
+    CallbackQueryHandler,
+    CommandHandler,
+    MessageHandler,
+    filters,
+)
 
 from .cache import Cache, RedisCache
 from .config import Config
@@ -17,6 +23,7 @@ from .handlers import (
     location,
     nearby,
     settings,
+    settings_callback,
     start,
 )
 from .tankerkoenig import TankerkoenigClient
@@ -73,6 +80,12 @@ def build_application(config: Config, cache: Cache | None = None) -> Application
     application.add_handler(CommandHandler(["start", "help"], start))
     application.add_handler(CommandHandler("about", about))
     application.add_handler(CommandHandler("settings", settings))
+    application.add_handler(
+        CallbackQueryHandler(
+            settings_callback,
+            pattern=r"^settings:\d+:(fuel|radius):",
+        )
+    )
     application.add_handler(CommandHandler("delete_me", delete_me))
     application.add_handler(CommandHandler("cheap", cheap))
     application.add_handler(CommandHandler("nearby", nearby))

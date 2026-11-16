@@ -46,7 +46,10 @@ def main() -> None:
     config = Config.from_env()
     configure_logging(config)
     application = build_application(config)
-    application.run_polling(allowed_updates=["message"], drop_pending_updates=True)
+    application.run_polling(
+        allowed_updates=["message", "callback_query"],
+        drop_pending_updates=True,
+    )
 
 
 if __name__ == "__main__":

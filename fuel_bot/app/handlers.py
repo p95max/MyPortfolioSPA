@@ -5,7 +5,14 @@ from __future__ import annotations
 import logging
 from typing import cast
 
-from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from telegram import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
+    Update,
+)
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 
@@ -17,6 +24,7 @@ from .tankerkoenig import TankerkoenigClient, TankerkoenigError, UpstreamRateLim
 
 
 LOGGER = logging.getLogger(__name__)
+SETTINGS_RADIUS_OPTIONS = (1, 3, 5, 10, 15, 25)
 
 WELCOME = (
     "⛽ <b>Chemnitz Fuel Bot</b>\n\n"
@@ -77,6 +85,50 @@ def parse_fuel_and_radius(
     return UserPreferences(fuel_type=fuel_type, radius_km=radius)
 
 
+def settings_keyboard(
+    preferences: UserPreferences, user_id: int
+) -> InlineKeyboardMarkup:
+    fuel_buttons = [
+        InlineKeyboardButton(
+            f"{'✅ ' if preferences.fuel_type == fuel_type else ''}{FUEL_LABELS[fuel_type]}",
+            callback_data=f"settings:{user_id}:fuel:{fuel_type}",
+        )
+        for fuel_type in FUEL_TYPES
+    ]
+    radius_buttons = [
+        InlineKeyboardButton(
+            f"{'✅ ' if preferences.radius_km == radius else ''}{radius} km",
+            callback_data=f"settings:{user_id}:radius:{radius}",
+        )
+        for radius in SETTINGS_RADIUS_OPTIONS
+    ]
+    return InlineKeyboardMarkup(
+        [fuel_buttons, radius_buttons[:3], radius_buttons[3:]]
+    )
+
+
+def settings_text(preferences: UserPreferences, *, saved: bool = False) -> str:
+    heading = "✅ Settings updated:" if saved else "⚙️ Current settings:"
+    return (
+        f"{heading}\n"
+        f"Fuel: {FUEL_LABELS[preferences.fuel_type]}\n"
+        f"Radius: {preferences.radius_km} km\n\n"
+        "Choose fuel type and search radius:"
+    )
+
+
+async def _save_preferences(
+    user_id: int, preferences: UserPreferences, cache: Cache
+) -> None:
+    await cache.set_json(
+        f"fuel:user:{user_id}:preferences",
+        {
+            "fuel_type": preferences.fuel_type,
+            "radius_km": preferences.radius_km,
+        },
+    )
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_message:
         await update.effective_message.reply_text(WELCOME, parse_mode=ParseMode.HTML)
@@ -109,17 +161,61 @@ async def settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         except ValueError as exc:
             await update.effective_message.reply_text(str(exc))
             return
-        await cache.set_json(
-            f"fuel:user:{update.effective_user.id}:preferences",
-            {"fuel_type": current.fuel_type, "radius_km": current.radius_km},
-        )
-        prefix = "✅ Settings saved.\n"
-    else:
-        prefix = "⚙️ Current settings:\n"
+        await _save_preferences(update.effective_user.id, current, cache)
     await update.effective_message.reply_text(
-        f"{prefix}Fuel: {FUEL_LABELS[current.fuel_type]}\n"
-        f"Radius: {current.radius_km} km\n\n"
-        "Change: /settings diesel 8"
+        settings_text(current, saved=bool(context.args)),
+        reply_markup=settings_keyboard(current, update.effective_user.id),
+    )
+
+
+async def settings_callback(
+    update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    query = update.callback_query
+    if not query or not query.data or not update.effective_user:
+        return
+
+    parts = query.data.split(":")
+    if len(parts) != 4 or parts[0] != "settings":
+        await query.answer("Invalid settings action.", show_alert=True)
+        return
+
+    try:
+        menu_user_id = int(parts[1])
+    except ValueError:
+        await query.answer("Invalid settings action.", show_alert=True)
+        return
+    if menu_user_id != update.effective_user.id:
+        await query.answer("Open your own /settings menu.", show_alert=True)
+        return
+
+    config, cache, _ = _dependencies(context)
+    current = await _preferences(update.effective_user.id, config, cache)
+    setting, value = parts[2], parts[3]
+    if setting == "fuel" and value in FUEL_TYPES:
+        updated = UserPreferences(fuel_type=value, radius_km=current.radius_km)
+    elif setting == "radius":
+        try:
+            radius = int(value)
+        except ValueError:
+            radius = 0
+        if radius not in SETTINGS_RADIUS_OPTIONS:
+            await query.answer("Invalid radius.", show_alert=True)
+            return
+        updated = UserPreferences(fuel_type=current.fuel_type, radius_km=radius)
+    else:
+        await query.answer("Invalid settings action.", show_alert=True)
+        return
+
+    if updated == current:
+        await query.answer("Already selected.")
+        return
+
+    await _save_preferences(update.effective_user.id, updated, cache)
+    await query.answer("Saved")
+    await query.edit_message_text(
+        settings_text(updated, saved=True),
+        reply_markup=settings_keyboard(updated, update.effective_user.id),
     )
 
 

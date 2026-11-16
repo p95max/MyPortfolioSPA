@@ -11,7 +11,7 @@ def test_config_accepts_missing_tankerkoenig_key(monkeypatch: pytest.MonkeyPatch
 
     assert config.tankerkoenig_api_key is None
     assert config.default_fuel_type == "diesel"
-    assert config.default_radius_km == 8
+    assert config.default_radius_km == 5
 
 
 def test_config_rejects_radius_over_api_limit(monkeypatch: pytest.MonkeyPatch) -> None:

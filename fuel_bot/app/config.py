@@ -59,7 +59,7 @@ class Config:
         if fuel_type not in FUEL_TYPES:
             raise ValueError("DEFAULT_FUEL_TYPE must be diesel, e5, or e10")
 
-        radius = _int_env("DEFAULT_RADIUS_KM", 8, 1)
+        radius = _int_env("DEFAULT_RADIUS_KM", 5, 1)
         if radius > 25:
             raise ValueError("DEFAULT_RADIUS_KM must not exceed 25")
 
